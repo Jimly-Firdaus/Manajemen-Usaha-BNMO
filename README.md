@@ -14,7 +14,7 @@ cd ../bin
 java logic.main     # if your main entry point is called `main`
 ```
 
-# Filename and Foldername (aside composables files)
+# Filename (aside composables files)
 All in PascalCase format
 
 # Java variables & function name convention
