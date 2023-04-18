@@ -20,5 +20,20 @@ public class TestUser {
         System.out.println(testVIP.getPhoneNumber());
         System.out.println(testVIP.getPoint());
         System.out.println(testVIP.getDiscountRate());
+
+        /* Test Upgrade */
+        Customer cst = new Customer(1);
+        cst.makePayment();
+        Member mmb = cst.upgradeToMember("abc", "123"); /* Upgrade to Member */
+
+        System.out.println(mmb.getId());
+        System.out.println(mmb.getName());
+        System.out.println(mmb.getPhoneNumber());
+        VIP vip = mmb.upgradeToVIP(mmb.getName(), mmb.getPhoneNumber()); /* Upgrade to VIP */
+
+        System.out.println(vip.getId());
+        System.out.println(vip.getName());
+        System.out.println(vip.getPhoneNumber());
+        System.out.println(vip.getDiscountRate());
     }
 }
