@@ -1,8 +1,16 @@
 # Manajemen_Usaha_BNMO
 Tugas Besar II IF2210 Pemrograman Berorientasi Objek
 
+# Prerequisites
+[Maven v3.6.x](https://maven.apache.org/download.cgi)
 
-# How to compile and pipe all class files to bin 
+# Project setup
+After cloning this repo, run:
+```bash
+mvn install         # to enable lombok annotations and other stuff inside pom.xml
+```
+
+## How to compile and pipe all `.class` files to bin 
 ```bash
 cd src
 javac -d ../bin ./logic/*.java
