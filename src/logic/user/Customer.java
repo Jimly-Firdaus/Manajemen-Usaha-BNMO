@@ -30,5 +30,11 @@ public class Customer implements Payable {
     public void makePayment() {
         this.setMadeFirstPurchase(true);
     }
+
+    /* Upgrade to Member*/
+    /* Can only be used if madeFirstPurchase = true */
+    public Member upgradeToMember(String name, String phoneNumber) {
+        return new Member(this.getId(), name, phoneNumber);
+    }
 }
 

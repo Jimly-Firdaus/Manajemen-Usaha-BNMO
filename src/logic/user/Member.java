@@ -44,4 +44,9 @@ public class Member extends Customer {
     public float convertPointToDiscount() {
         return this.point; /* 1 point = 1 Rupiah */
     }
+
+    /* Upgrade to VIP */
+    public VIP upgradeToVIP(String name, String phoneNumber) {
+        return new VIP(this.getId(), name, phoneNumber);
+    }
 }
