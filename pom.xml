@@ -27,6 +27,11 @@
         <version>1.18.26</version>
         <scope>provided</scope>
     </dependency>
+    <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>10.15.2.0</version>
+    </dependency>
     <!-- Add your dependencies here -->
   </dependencies>
 
