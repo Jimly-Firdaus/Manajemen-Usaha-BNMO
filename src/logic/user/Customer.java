@@ -1,4 +1,5 @@
 /* Customer Class */
+import Interface.Payable;
 
 public class Customer implements Payable {
     /* Attributes */
@@ -30,3 +31,4 @@ public class Customer implements Payable {
         this.setMadeFirstPurchase(true);
     }
 }
+
