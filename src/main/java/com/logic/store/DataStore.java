@@ -2,27 +2,20 @@ package com.logic.store;
 
 import lombok.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import com.logic.store.interfaces.*;
+import java.util.List;
 
 @Value
-@NoArgsConstructor
-public class DataStore{
-    
-    public void convertFromJSON() {
+@AllArgsConstructor
+public class DataStore implements Storeable {
+    Parseable parser;
 
+    public <T> void storeData(List<T> data) {
+        parser.writeData(data);
     }
 
-    public void convertFromXML() {
-
-    }
-
-    public void convertFromOBJ() {
-
+    public <T> List<T> getData(Class<T> classType) {
+        return parser.readData(classType);
     }
 
 }
