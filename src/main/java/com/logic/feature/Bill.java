@@ -1,5 +1,8 @@
 package com.logic.feature;
+import lombok.*;
 
+@Setter
+@Getter
 class Bill {
     /*Attribute */
     private ListOfProduct basket;

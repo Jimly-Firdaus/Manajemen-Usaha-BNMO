@@ -28,7 +28,7 @@ class ListOfProduct {
     }
 
     public void addProduct(Product product){
-        this.productList.put(product.getName(), product);
+        this.productList.put(product.getProductName(), product);
     }
 
     public void removeProduct(String productName){
