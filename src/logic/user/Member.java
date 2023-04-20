@@ -1,6 +1,7 @@
 /* Member Class */
 import java.util.ArrayList;
 import logic.feature.Payment;
+import lombok.NonNull;
 
 public class Member extends Customer {
     /* Attributes */
@@ -56,5 +57,15 @@ public class Member extends Customer {
     /* Upgrade to VIP */
     public VIP upgradeToVIP(String name, String phoneNumber) {
         return new VIP(this.getId(), name, phoneNumber);
+    }
+
+    /* Add Payment to Payment History */
+    public void addPayment(@NonNull Payment payment) {
+        this.paymentHistory.add(payment);
+    }
+
+    /* Remove Payment from Payment History */
+    public void removePayment(@NonNull Payment payment) {
+        this.paymentHistory.remove(payment);
     }
 }
