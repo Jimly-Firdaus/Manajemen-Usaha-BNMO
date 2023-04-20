@@ -23,6 +23,11 @@ import java.util.*;
 public class ParserXML implements Parseable {
     private String filename;
 
+    /**
+     * @brief Reads data from an XML file and returns it as a list.
+     * @param type The class type of the data to be read.
+     * @return A list of data read from the file.
+     */
     public <T> List<T> readData(Class<T> type) {
         List<T> data = new ArrayList<>();
 
@@ -30,15 +35,21 @@ public class ParserXML implements Parseable {
             File file = new File(filename);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
+            // Parse XML
             Document doc = db.parse(file);
             doc.getDocumentElement().normalize();
+
+            // Get a list of elements with the tag name of the input type
             NodeList nodeList = doc.getElementsByTagName(type.getSimpleName());
+
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Element element = (Element) nodeList.item(i);
                 T item = type.getDeclaredConstructor().newInstance();
                 for (Field field : type.getDeclaredFields()) {
                     field.setAccessible(true);
                     String value = element.getElementsByTagName(field.getName()).item(0).getTextContent();
+                    
+                    // Set the value of the field based on its type
                     if (field.getType() == float.class) {
                         field.set(item, Float.parseFloat(value));
                     } else if (field.getType() == int.class) {
@@ -60,13 +71,21 @@ public class ParserXML implements Parseable {
         return data;
     }
 
+    /**
+     * @brief Writes a list of data to an XML file.
+     * @param data The list of data to be written.
+     */
     public <T> void writeData(List<T> data) {
         try {
+            // Create XML
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.newDocument();
+
+            // Create root then append to document
             Element rootElement = doc.createElement("data");
             doc.appendChild(rootElement);
+
             for (T item : data) {
                 Element element = doc.createElement(item.getClass().getSimpleName());
                 for (Field field : item.getClass().getDeclaredFields()) {
@@ -78,6 +97,8 @@ public class ParserXML implements Parseable {
                 }
                 rootElement.appendChild(element);
             }
+            
+            // Write XML to file
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
