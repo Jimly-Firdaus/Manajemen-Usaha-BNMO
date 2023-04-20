@@ -2,13 +2,14 @@ package com.logic.feature;
 import lombok.*;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 class Product {
     /*Attribute */
     private int count;
-    private String productName;
+    @NonNull private String productName;
     private float basePrice;
     private float boughtPrice;
-    private String category;
+    @NonNull private String category;
 }

@@ -1,6 +1,7 @@
 package com.logic.feature;
 import lombok.*;
 
+@NoArgsConstructor
 @Setter
 @Getter
 class Bill {
