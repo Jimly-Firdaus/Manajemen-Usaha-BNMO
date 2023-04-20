@@ -1,4 +1,4 @@
-package logic.store.interfaces;
+package com.logic.store.interfaces;
 
 public interface Parser {
     public void convertFromJSON();

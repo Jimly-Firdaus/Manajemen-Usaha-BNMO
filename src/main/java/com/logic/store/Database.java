@@ -1,22 +1,42 @@
-package logic.store;
+package com.logic.store;
 
 import lombok.*;
 
-import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+import java.io.IOException;
+import java.io.InputStream;
+import com.logic.store.interfaces.*;
 
-import logic.store.interfaces.*;
-
-@NoArgsConstructor
-@Value
-public class Database implements Parser, Storable {
+// @Value
+public class Database {
+    private String dbUrl;
+    private String dbUsername;
+    private String dbPassword;
     static {
         try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            Class.forName("org.mariadb.jdbc.Driver");
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Database() {
+        // Load configuration from properties file
+        Properties props = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            props.load(input);
+            this.dbUrl = props.getProperty("db.url");
+            this.dbUsername = props.getProperty("db.username");
+            this.dbPassword = props.getProperty("db.password");
+            System.out.println(dbUrl);
+            System.out.println(dbUsername);
+            System.out.println(dbPassword);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -28,22 +48,19 @@ public class Database implements Parser, Storable {
      * @throws SQLException
      */
     public Connection getConnection() throws SQLException {
-        String url = "jdbc:mariadb://localhost:3306/myDatabase";
-        Connection conn = DriverManager.getConnection(url);
+        Connection conn = DriverManager.getConnection(this.dbUrl, this.dbUsername, this.dbPassword);
         return conn;
     }
 
-    @NonNull
-    @Nullable
     public void createtable(String tableName, String colConstraint) {
         Connection conn = null;
         PreparedStatement queryStmt = null;
         try {
             conn = this.getConnection();
-            String sql = "CREATE TABLE ? (?)";
+            String sql = "CREATE TABLE " + tableName + " (" + colConstraint + ")";
             queryStmt = conn.prepareStatement(sql);
-            queryStmt.setString(1, tableName);
-            queryStmt.setString(2, colConstraint);
+            // queryStmt.setString(1, tableName);
+            // queryStmt.setString(2, colConstraint);
             queryStmt.execute();
         } catch (SQLException e) {
             System.err.println("An error occured when creating table: " + e.getMessage());
@@ -149,4 +166,5 @@ public class Database implements Parser, Storable {
             }
         }
     }
+
 }

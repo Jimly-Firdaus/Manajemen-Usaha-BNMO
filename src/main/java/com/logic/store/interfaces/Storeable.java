@@ -1,4 +1,4 @@
-package logic.store.interfaces;
+package com.logic.store.interfaces;
 
 public interface Storeable {
     public void storeData();
