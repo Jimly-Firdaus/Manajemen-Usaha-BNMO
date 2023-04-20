@@ -28,9 +28,9 @@
         <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>org.mariadb.jdbc</groupId>
-        <artifactId>mariadb-java-client</artifactId>
-        <version>2.7.4</version>
+        <groupId>org.xerial</groupId>
+        <artifactId>sqlite-jdbc</artifactId>
+        <version>3.41.2.1</version>
     </dependency>
     <!-- Add your dependencies here -->
   </dependencies>
