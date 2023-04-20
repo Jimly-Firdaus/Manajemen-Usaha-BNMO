@@ -4,7 +4,7 @@ import lombok.*;
 import java.util.*;
 
 
-class ListOfProduct {
+public class ListOfProduct {
     /*Attribute */
     private Map<String, Product> productList;
 

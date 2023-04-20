@@ -4,7 +4,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-class Product {
+public class Product {
     /*Attribute */
     private int count;
     private String productName;
