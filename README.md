@@ -3,8 +3,10 @@ Tugas Besar II IF2210 Pemrograman Berorientasi Objek
 
 # Prerequisites
 [Maven v3.6.x](https://maven.apache.org/download.cgi)
+
 [Amazon Corretto OpenJDK](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html)
 
+After install `amazon corretto` dont forget to add to system env variables & update path (Replace JAVA_HOME value to amazon corretto open jdk path)
 # Project setup
 After cloning this repo, run:
 ```bash
