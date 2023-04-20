@@ -22,7 +22,7 @@ cd target
 ```
 3. Run the .jar
 ```
-java -jar tubesOOP2-1.0-packed.jar
+java -jar tubesOOP2-1.0-jar-with-dependecies.jar
 ```
 
 # Filename (aside composables files)
