@@ -3,6 +3,7 @@ Tugas Besar II IF2210 Pemrograman Berorientasi Objek
 
 # Prerequisites
 [Maven v3.6.x](https://maven.apache.org/download.cgi)
+[Amazon Corretto OpenJDK](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html)
 
 # Project setup
 After cloning this repo, run:
@@ -14,7 +15,7 @@ mvn clean install         # to enable lombok annotations and other stuff inside 
 # How to run
 1. Build the project (make sure you are in the same dir as pom.xml)
 ```bash
-mvn clean install
+mvn clean test javafx:run
 ```
 2. Go to target/
 ```
