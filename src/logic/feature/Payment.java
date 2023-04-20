@@ -1,4 +1,6 @@
-class Payment {
+package logic.feature;
+
+public class Payment {
     /*Attribute */
     private int userID;
     private ListOfProduct boughtItems;

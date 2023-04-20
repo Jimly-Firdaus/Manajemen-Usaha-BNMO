@@ -1,3 +1,4 @@
+/* VIP Class */
 public class VIP extends Member {
     /* Attributes */
     protected float discountRate;

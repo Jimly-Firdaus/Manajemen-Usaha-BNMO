@@ -1,8 +1,13 @@
+/* Member Class */
+import java.util.ArrayList;
+import logic.feature.Payment;
+
 public class Member extends Customer {
     /* Attributes */
     protected String name;
     protected String phoneNumber;
     protected float point;
+    protected ArrayList<Payment> paymentHistory;
 
     /* Constructor */
     public Member(int id, String name, String phoneNumber) {
@@ -10,8 +15,7 @@ public class Member extends Customer {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.point = 0;
-        /* To Do */
-        /* paymentHistory: Payment[] */
+        this.paymentHistory = new ArrayList<Payment>();
     }
 
     /* Getter */
@@ -25,6 +29,10 @@ public class Member extends Customer {
 
     public float getPoint() {
         return this.point;
+    }
+
+    public ArrayList<Payment> getPaymentHistory() {
+        return this.paymentHistory;
     }
 
     /* Setter */
