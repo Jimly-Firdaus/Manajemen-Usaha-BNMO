@@ -12,31 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import com.logic.store.interfaces.*;
 
-// @Value
+@Value
+@NoArgsConstructor
 public class Database {
-    private String dbUrl;
-    private String dbUsername;
-    private String dbPassword;
+    private String dbUrl = "jdbc:sqlite:../BNMO.db";
     static {
         try {
-            Class.forName("org.mariadb.jdbc.Driver");
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public Database() {
-        // Load configuration from properties file
-        Properties props = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
-            props.load(input);
-            this.dbUrl = props.getProperty("db.url");
-            this.dbUsername = props.getProperty("db.username");
-            this.dbPassword = props.getProperty("db.password");
-            System.out.println(dbUrl);
-            System.out.println(dbUsername);
-            System.out.println(dbPassword);
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -48,19 +31,20 @@ public class Database {
      * @throws SQLException
      */
     public Connection getConnection() throws SQLException {
-        Connection conn = DriverManager.getConnection(this.dbUrl, this.dbUsername, this.dbPassword);
-        return conn;
+        try (Connection conn = DriverManager.getConnection(this.dbUrl)) {
+            System.out.println("Connected to SQLite database");
+            return conn;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     public void createtable(String tableName, String colConstraint) {
-        Connection conn = null;
         PreparedStatement queryStmt = null;
-        try {
-            conn = this.getConnection();
-            String sql = "CREATE TABLE " + tableName + " (" + colConstraint + ")";
+        try (Connection conn = DriverManager.getConnection(this.dbUrl)) {
+            String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + colConstraint + ")";
             queryStmt = conn.prepareStatement(sql);
-            // queryStmt.setString(1, tableName);
-            // queryStmt.setString(2, colConstraint);
             queryStmt.execute();
         } catch (SQLException e) {
             System.err.println("An error occured when creating table: " + e.getMessage());
@@ -72,24 +56,14 @@ public class Database {
                     System.err.println("An error occured when closing statement: " + e.getMessage());
                 }
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    System.err.println("An error occured when closing connection: " + e.getMessage());
-                }
-            }
         }
     }
 
     public void insertData(String tableName, String tableCol, String values) {
-        Connection conn = null;
         PreparedStatement queryStmt = null;
-        try {
-            conn = this.getConnection();
-            String sql = "INSERT INTO " + tableName + " (" + tableCol + ") VALUES (?)";
+        try (Connection conn = DriverManager.getConnection(this.dbUrl)) {
+            String sql = "INSERT INTO " + tableName + " (" + tableCol + ") VALUES (" + values + ")";
             queryStmt = conn.prepareStatement(sql);
-            queryStmt.setString(1, values);
             queryStmt.execute();
         } catch (SQLException e) {
             System.err.println("An error occured when inserting value: " + e.getMessage());
@@ -101,21 +75,12 @@ public class Database {
                     System.err.println("An error occured when closing statement: " + e.getMessage());
                 }
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    System.err.println("An error occured when closing connection: " + e.getMessage());
-                }
-            }
         }
     }
 
     public void updateData(String tableName, String newValues, String condition) {
-        Connection conn = null;
         Statement query = null;
-        try {
-            conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(this.dbUrl)) {
             query = conn.createStatement();
             String sql = "UPDATE " + tableName + " SET " + newValues + " WHERE " + condition;
             query.executeUpdate(sql);
@@ -129,21 +94,12 @@ public class Database {
                     System.err.println("An error occurred when closing statement: " + e.getMessage());
                 }
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    System.err.println("An error occurred when closing connection: " + e.getMessage());
-                }
-            }
         }
     }
 
     public void deleteData(String tableName, String condition) {
-        Connection conn = null;
         Statement query = null;
-        try {
-            conn = this.getConnection();
+        try (Connection conn = DriverManager.getConnection(this.dbUrl)) {
             query = conn.createStatement();
             String sql = "DELETE FROM " + tableName + " WHERE " + condition;
             query.executeUpdate(sql);
@@ -157,14 +113,6 @@ public class Database {
                     System.err.println("An error occurred when closing statement: " + e.getMessage());
                 }
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    System.err.println("An error occurred when closing connection: " + e.getMessage());
-                }
-            }
         }
     }
-
 }
