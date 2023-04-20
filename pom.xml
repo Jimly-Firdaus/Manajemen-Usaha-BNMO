@@ -6,7 +6,7 @@
 
 <groupId>com.binomo</groupId>
 <artifactId>tubesOOP2</artifactId>
-<version>1.0.0</version>
+<version>1.0</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,7 +47,7 @@
             </manifest>
           </archive>
           <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
+            <descriptorRef>packed</descriptorRef>
           </descriptorRefs>
         </configuration>
         <executions>
