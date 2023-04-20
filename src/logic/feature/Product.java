@@ -37,7 +37,7 @@ public class Product {
     public String getCategory() {
         return category;
     }
-    
+
     public void setCount(int count) {
         this.count = count;
     }
