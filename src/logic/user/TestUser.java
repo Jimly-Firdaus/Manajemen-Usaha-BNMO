@@ -29,6 +29,7 @@ public class TestUser {
         System.out.println(mmb.getId());
         System.out.println(mmb.getName());
         System.out.println(mmb.getPhoneNumber());
+        System.out.println(mmb.getPaymentHistory());
         VIP vip = mmb.upgradeToVIP(mmb.getName(), mmb.getPhoneNumber()); /* Upgrade to VIP */
 
         System.out.println(vip.getId());
