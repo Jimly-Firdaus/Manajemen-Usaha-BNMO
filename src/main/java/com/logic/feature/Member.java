@@ -1,6 +1,6 @@
 /* Member Class */
+package com.logic.feature;
 import java.util.ArrayList;
-import logic.feature.Payment;
 import lombok.NonNull;
 
 public class Member extends Customer {

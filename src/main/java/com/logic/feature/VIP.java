@@ -1,4 +1,6 @@
 /* VIP Class */
+package com.logic.feature;
+
 public class VIP extends Member {
     /* Attributes */
     protected float discountRate;

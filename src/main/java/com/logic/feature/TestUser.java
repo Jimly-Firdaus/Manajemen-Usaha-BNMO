@@ -1,3 +1,4 @@
+package com.logic.feature;
 public class TestUser {
     /* Tester */
     public static void main(String[] args) {

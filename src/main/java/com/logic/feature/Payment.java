@@ -1,4 +1,4 @@
-package logic.feature;
+package com.logic.feature;
 
 public class Payment {
     /*Attribute */

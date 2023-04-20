@@ -1,8 +1,8 @@
-package logic.feature;
+package com.logic.feature;
 // import logic.feature.Product;
 import java.util.*;
 
-import lombok.NoArgsConstructor;
+// import lombok.NoArgsConstructor;
 
 class ListOfProduct {
     /*Attribute */

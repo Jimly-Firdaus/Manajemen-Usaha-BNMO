@@ -1,5 +1,6 @@
 /* Customer Class */
-import Interface.Payable;
+package com.logic.feature;
+import com.logic.feature.Interface.Payable;
 
 public class Customer implements Payable {
     /* Attributes */
