@@ -1,3 +1,5 @@
+package com.logic.feature;
+
 class Bill {
     /*Attribute */
     private ListOfProduct basket;
@@ -5,7 +7,7 @@ class Bill {
     private boolean isFixed;
 
     /*Method */
-    public Product searchProduct(string productName){
+    public Product searchProduct(String productName){
         return this.basket.searchProduct(productName);
     }
 
@@ -13,7 +15,7 @@ class Bill {
         this.basket.addProduct(product);
     }
 
-    public void removeProduct(string productName){
+    public void removeProduct(String productName){
         this.basket.removeProduct(productName);
     }
 

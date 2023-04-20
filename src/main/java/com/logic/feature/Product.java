@@ -1,4 +1,4 @@
-package logic.feature;
+package com.logic.feature;
 
 class Product {
     /*Attribute */
