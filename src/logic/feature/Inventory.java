@@ -43,14 +43,14 @@ public class Inventory {
     public void removeInventoryProduct(Product product) {
         if (this.storage.containsKey(product.getName())) {
             // Product Found, remove product
-            return this.storage.remove(product.getName());
+            this.storage.remove(product.getName());
         } // Product not found, do nothing
     }
 
     public void updateInventoryProduct(Product product) {
         if (this.storage.containsKey(product.getName())) {
             // Product Found, update product
-            return this.storage.put(product.getName(), product);
+            this.storage.put(product.getName(), product);
         } // Product Not Found, do nothing
     }
 }
