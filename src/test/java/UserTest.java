@@ -1,7 +1,11 @@
+import org.junit.Test;
+import static org.junit.Assert.*;
 import com.logic.feature.Customer;
 import com.logic.feature.Member;
 import com.logic.feature.VIP;
-public class TestUser {
+
+public class UserTest {
+    @Test
     /* Tester */
     public static void main(String[] args) {
         /* Test Customer */
@@ -35,9 +39,10 @@ public class TestUser {
         System.out.println(mmb.getPaymentHistory());
         VIP vip = mmb.upgradeToVIP(mmb.getName(), mmb.getPhoneNumber()); /* Upgrade to VIP */
 
-        System.out.println(vip.getId());
-        System.out.println(vip.getName());
-        System.out.println(vip.getPhoneNumber());
-        System.out.println(vip.getDiscountRate());
+        testVIP = new VIP(1, "abc", "123");
+        assertEquals(vip.getId(), testVIP.getId());
+        assertEquals(vip.getName(), testVIP.getName());
+        assertEquals(vip.getPhoneNumber(), testVIP.getPhoneNumber());
+        assertEquals(vip.getPaymentHistory(), testVIP.getPaymentHistory());
     }
 }

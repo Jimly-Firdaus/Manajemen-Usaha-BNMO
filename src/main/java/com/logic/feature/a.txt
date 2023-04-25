@@ -1,0 +1,3 @@
+javac user/TestUser.java feature/Payment.java feature/Product.java feature/ListOfProduct.java user/Customer.java user/Member.java user/VIP.java user/Interface/Payable.java
+
+javac -cp src src/logic/user/TestUser.java src/logic/user/Member.java src/logic/user/Customer.java src/logic/user/VIP.java src/logic/user/Interface/Payable.java 
