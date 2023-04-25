@@ -5,17 +5,13 @@ import java.util.*;
 import com.logic.feature.Bill;
 import com.logic.constant.Payment;
 
+@NoArgsConstructor
 @Setter
 @Getter
 class Printer{
     /*Attribute */
-    private ArrayList<Payment> paymentList;
-    private ArrayList<Bill> billList;
-
-    public Printer(){
-        this.paymentList = new ArrayList<Payment>();
-        this.billList = new ArrayList<Bill>();
-    }
+    private ArrayList<Payment> paymentList = new ArrayList<Payment>();
+    private ArrayList<Bill> billList = new ArrayList<Bill>();
 
     public Payment getCertainPayment(int idx){
         if(idx < this.paymentList.size()){
