@@ -11,7 +11,7 @@ public class UserTest {
         /* Test Customer */
         Customer testCst = new Customer(10);
         System.out.println(testCst.getId());
-        System.out.println(testCst.getMadeFirstPurchase());
+        System.out.println(testCst.isMadeFirstPurchase());
 
         /* Test Member  */
         Member testMmb = new Member(100, "xyz", "67890");

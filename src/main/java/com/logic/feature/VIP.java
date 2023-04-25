@@ -1,5 +1,9 @@
 /* VIP Class */
 package com.logic.feature;
+import lombok.*;
+
+@Getter
+@Setter
 
 public class VIP extends Member {
     /* Attributes */
@@ -10,16 +14,6 @@ public class VIP extends Member {
         super(id, name, phoneNumber);
         this.discountRate = 10;
     }
-
-    /* Getter */
-    public float getDiscountRate() {
-        return this.discountRate;
-    }
     
-    /* Setter */
-    public void setDiscountRate(float discountRate) {
-        this.discountRate = discountRate;
-    }
-
     /* Other Methods */
 }

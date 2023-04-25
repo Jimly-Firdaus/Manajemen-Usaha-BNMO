@@ -2,7 +2,9 @@
 package com.logic.feature;
 import com.logic.constant.Payment;
 import java.util.ArrayList;
-import lombok.NonNull;
+import lombok.*;
+
+@Getter
 
 public class Member extends Customer {
     /* Attributes */
@@ -18,23 +20,6 @@ public class Member extends Customer {
         this.phoneNumber = phoneNumber;
         this.point = 0;
         this.paymentHistory = new ArrayList<Payment>();
-    }
-
-    /* Getter */
-    public String getName() {
-        return this.name;
-    }
-
-    public String getPhoneNumber() {
-        return this.phoneNumber;
-    }
-
-    public float getPoint() {
-        return this.point;
-    }
-
-    public ArrayList<Payment> getPaymentHistory() {
-        return this.paymentHistory;
     }
 
     /* Setter */
