@@ -1,16 +1,12 @@
-package logic.feature;
+package com.logic.feature;
 
 import java.util.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@NoArgsConstructor
 public class Inventory {
     // Attributes
-    private Map<String, Product> storage;
-
-    // Constructor
-    public Inventory() {
-        this.storage = new HashMap<String, Product>();
-    }
+    private Map<String, Product> storage = new HashMap<String, Product>();
 
     // Method
     public int getInventoryCount() {
@@ -28,29 +24,29 @@ public class Inventory {
     }
 
     public void addInventoryProduct(Product newProduct) {
-        Product productFound = this.searchInventoryProduct(newProduct.getName());
+        Product productFound = this.searchInventoryProduct(newProduct.getProductName());
         if (productFound != null && productFound.isEquals(newProduct)) {
             // The product already exists in storage
             // Add count of product
-            productFound.setCount(productFound.getCount() + newProduct.getCount());
+            productFound.updateCount(newProduct.getCount());
         } else {
             // productFound == null || productFound.isEquals(newProduct)
             // Product not in storage, add a new product
-            this.storage.put(newProduct.getName(), newProduct);
+            this.storage.put(newProduct.getProductName(), newProduct);
         }
     }
 
     public void removeInventoryProduct(Product product) {
-        if (this.storage.containsKey(product.getName())) {
+        if (this.storage.containsKey(product.getProductName())) {
             // Product Found, remove product
-            this.storage.remove(product.getName());
+            this.storage.remove(product.getProductName());
         } // Product not found, do nothing
     }
 
     public void updateInventoryProduct(Product product) {
-        if (this.storage.containsKey(product.getName())) {
+        if (this.storage.containsKey(product.getProductName())) {
             // Product Found, update product
-            this.storage.put(product.getName(), product);
+            this.storage.put(product.getProductName(), product);
         } // Product Not Found, do nothing
     }
 
