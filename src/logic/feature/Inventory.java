@@ -28,7 +28,7 @@ public class Inventory {
     }
 
     public void addInventoryProduct(Product newProduct) {
-        Product productFound = this.searchInventoryProduct(newProduct.productName);
+        Product productFound = this.searchInventoryProduct(newProduct.getName());
         if (productFound != null && productFound.isEquals(newProduct)) {
             // The product already exists in storage
             // Add count of product
@@ -52,5 +52,18 @@ public class Inventory {
             // Product Found, update product
             this.storage.put(product.getName(), product);
         } // Product Not Found, do nothing
+    }
+
+    public void printInventory() {
+        if (getInventoryCount() == 0) {
+            System.out.println("Empty Inventory");
+        } else {
+            System.out.println("Product in inventory:");
+            int i = 1;
+            for (String key : this.storage.keySet()) {
+                System.out.println(i + ". " + key);
+                i++;
+            }
+        }
     }
 }
