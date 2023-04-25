@@ -1,6 +1,9 @@
-package com.logic.feature;
+package com.logic.output;
 import lombok.*;
 import java.util.*;
+
+import com.logic.feature.Bill;
+import com.logic.feature.Payment;
 
 @Setter
 @Getter
