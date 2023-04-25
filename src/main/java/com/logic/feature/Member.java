@@ -1,5 +1,6 @@
 /* Member Class */
 package com.logic.feature;
+import com.logic.constant.Payment;
 import java.util.ArrayList;
 import lombok.NonNull;
 

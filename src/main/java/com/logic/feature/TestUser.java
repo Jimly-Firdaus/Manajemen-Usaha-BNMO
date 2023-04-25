@@ -1,4 +1,5 @@
 package com.logic.feature;
+import com.logic.constant.Payment;
 public class TestUser {
     /* Tester */
     public static void main(String[] args) {
