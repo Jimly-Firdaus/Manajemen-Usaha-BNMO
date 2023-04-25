@@ -1,17 +1,12 @@
 package com.logic.feature;
 
-import lombok.*;
 import java.util.*;
+import lombok.*;
 
-
-class ListOfProduct {
+@NoArgsConstructor
+public class ListOfProduct {
     /*Attribute */
-    private Map<String, Product> productList;
-
-    /*Constructor */
-    public ListOfProduct(){
-        this.productList = new HashMap<String, Product>();
-    }
+    private Map<String, Product> productList = new HashMap<String, Product>();
 
     /*Method */
     public int getProductCount(){

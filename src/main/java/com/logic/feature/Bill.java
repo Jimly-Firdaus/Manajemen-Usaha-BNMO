@@ -4,7 +4,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
-class Bill {
+public class Bill {
     /*Attribute */
     private ListOfProduct basket;
     private int idCustomer;
