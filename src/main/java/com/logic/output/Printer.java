@@ -3,7 +3,7 @@ import lombok.*;
 import java.util.*;
 
 import com.logic.feature.Bill;
-import com.logic.feature.Payment;
+import com.logic.constant.Payment;
 
 @Setter
 @Getter
