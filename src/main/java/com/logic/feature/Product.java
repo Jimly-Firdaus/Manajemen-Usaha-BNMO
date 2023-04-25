@@ -24,4 +24,9 @@ public class Product {
         return this.productName.equals(productCompare.productName) && this.basePrice == productCompare.basePrice
                 && this.boughtPrice == productCompare.boughtPrice && this.category.equals(productCompare.category);
     }
+
+    public void printProduct() {
+        System.out.println("Name : " + this.productName + "\tCount : " + this.count + "\tCategory : " + this.category
+                + "\tBasePrice : " + this.basePrice + "\tBoughtPrice : " + this.boughtPrice);
+    }
 }

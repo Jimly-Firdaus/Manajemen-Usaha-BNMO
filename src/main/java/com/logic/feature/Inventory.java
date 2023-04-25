@@ -57,7 +57,8 @@ public class Inventory {
             System.out.println("Product in inventory:");
             int i = 1;
             for (Map.Entry<String, Product> entry : this.storage.entrySet()) {
-                System.out.println(i + ". " + entry.getKey() + " count: " + entry.getValue().getCount());
+                System.out.print(i + ". ");
+                entry.getValue().printProduct();
                 i++;
             }
         }
