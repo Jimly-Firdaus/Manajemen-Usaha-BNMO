@@ -1,5 +1,6 @@
-package com.logic.feature;
-import com.logic.constant.Payment;
+import com.logic.feature.Customer;
+import com.logic.feature.Member;
+import com.logic.feature.VIP;
 public class TestUser {
     /* Tester */
     public static void main(String[] args) {
