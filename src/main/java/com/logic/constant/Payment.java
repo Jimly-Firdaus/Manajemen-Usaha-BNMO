@@ -1,10 +1,13 @@
-package com.logic.feature;
+package com.logic.constant;
+
+import com.logic.feature.ListOfProduct;
+
 import lombok.*;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Setter
+@AllArgsConstructor
 @Getter
+@Setter
 class Payment {
     /*Attribute */
     private int userID;
