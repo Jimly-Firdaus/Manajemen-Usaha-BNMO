@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-class Payment {
+public class Payment {
     /*Attribute */
     private int userID;
     private ListOfProduct boughtItems;
