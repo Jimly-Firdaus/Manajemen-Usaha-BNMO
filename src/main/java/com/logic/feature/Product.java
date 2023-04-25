@@ -1,24 +1,20 @@
 package com.logic.feature;
 
+import lombok.*;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Product {
-    /*Attribute */
     private int count;
-    private String productName;
+    @NonNull private String productName;
     private float basePrice;
     private float boughtPrice;
-    private String category;
+    @NonNull private String category;
 
-    /*Constructor */
-    public Product(int count, String productName, float basePrice, float boughtPrice, String category){
-        this.count = count;
-        this.productName = productName;
-        this.basePrice = basePrice;
-        this.boughtPrice = boughtPrice;
-        this.category = category;
-    }
-
-    /*Method */
-    public String getName(){
-        return this.productName;
+    public void updateCount(int amount) {
+        count += amount;
     }
 }
