@@ -1,10 +1,8 @@
-package logic.feature;
-// import logic.feature.Product;
+package com.logic.feature;
+
 import java.util.*;
 
-import lombok.NoArgsConstructor;
-
-class ListOfProduct {
+public class ListOfProduct {
     /*Attribute */
     private Map<String, Product> productList;
 

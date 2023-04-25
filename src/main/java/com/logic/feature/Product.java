@@ -1,6 +1,6 @@
-package logic.feature;
+package com.logic.feature;
 
-class Product {
+public class Product {
     /*Attribute */
     private int count;
     private String productName;
