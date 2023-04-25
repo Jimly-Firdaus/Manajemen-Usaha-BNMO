@@ -1,11 +1,11 @@
 import org.junit.Test;
-import static org.junit.Assert.*;
-import java.util.*;
+//import static org.junit.Assert.*;
+//import java.util.*;
 import com.logic.feature.*;
 
 public class InventoryTest {
     @Test
-    public static void testInventory(String[] args) {
+    public void testInventory() {
         Product product1 = new Product(5, "Alpha", 100, 100, "desc-1");
         Product product2 = new Product(5, "Beta", 100, 100, "desc-2");
         Product product3 = new Product(5, "Gamma", 100, 100, "desc-3");
