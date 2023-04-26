@@ -40,6 +40,7 @@ public class InventoryTest {
         assertEquals(res.getProductName(), newProduct.getProductName());
         assertEquals(res.getCount(), newProduct.getCount());
         assertEquals(res.getCategory(), newProduct.getCategory());
+        inventory.printInventory();
 
         // Test search product in inventory
         System.out.println("\nSearching test");
