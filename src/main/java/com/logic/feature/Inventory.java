@@ -36,17 +36,18 @@ public class Inventory {
         }
     }
 
-    public void removeInventoryProduct(Product product) {
-        if (this.storage.containsKey(product.getProductName())) {
+    public void removeInventoryProduct(String productName) {
+        if (this.storage.containsKey(productName)) {
             // Product Found, remove product
-            this.storage.remove(product.getProductName());
+            this.storage.remove(productName);
         } // Product not found, do nothing
     }
 
-    public void updateInventoryProduct(Product product) {
-        if (this.storage.containsKey(product.getProductName())) {
+    public void updateInventoryProduct(String oldProductName, Product newProduct) {
+        if (this.storage.containsKey(oldProductName)) {
             // Product Found, update product
-            this.storage.put(product.getProductName(), product);
+            this.removeInventoryProduct(oldProductName);
+            this.storage.put(newProduct.getProductName(), newProduct);
         } // Product Not Found, do nothing
     }
 

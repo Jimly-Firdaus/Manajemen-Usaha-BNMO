@@ -1,6 +1,6 @@
 import org.junit.Test;
-//import static org.junit.Assert.*;
-//import java.util.*;
+import static org.junit.Assert.*;
+import java.util.*;
 import com.logic.feature.*;
 
 public class InventoryTest {
@@ -14,6 +14,7 @@ public class InventoryTest {
         inventory.printInventory();
 
         // Test add product to inventory
+        System.out.println("\nAdding test");
         inventory.addInventoryProduct(product1);
         inventory.printInventory();
         inventory.addInventoryProduct(product2);
@@ -24,16 +25,25 @@ public class InventoryTest {
         inventory.addInventoryProduct(product3);
 
         // Test remove product
-        inventory.removeInventoryProduct(product2);
+        System.out.println("\nRemove Test");
+        inventory.removeInventoryProduct(product2.getProductName());
         inventory.printInventory();
 
         // Test update inventory
-        product1.setCount(100);
-        inventory.updateInventoryProduct(product1);
-        inventory.printInventory();
+        System.out.println("\nUpdate Test");
+        String oldProductName = product1.getProductName();
+        product1.setCount(50);
+        product1.setProductName("Tetha");
+        Product newProduct = product1;
+        inventory.updateInventoryProduct(oldProductName, product1);
+        Product res = inventory.searchInventoryProduct(product1.getProductName());
+        assertEquals(res.getProductName(), newProduct.getProductName());
+        assertEquals(res.getCount(), newProduct.getCount());
+        assertEquals(res.getCategory(), newProduct.getCategory());
 
         // Test search product in inventory
-        Product res = inventory.searchInventoryProduct(product2.getProductName());
+        System.out.println("\nSearching test");
+        res = inventory.searchInventoryProduct(product2.getProductName());
         if (res == null)
             System.out.println("Product Not Found");
         else
