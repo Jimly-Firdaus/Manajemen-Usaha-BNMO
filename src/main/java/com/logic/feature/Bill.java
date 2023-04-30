@@ -9,6 +9,7 @@ public class Bill {
     private ListOfProduct basket;
     private int idCustomer;
     private boolean isFixed;
+    private boolean isDone;
 
     /*Method */
     public Product searchProduct(String productName){
