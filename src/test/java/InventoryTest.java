@@ -1,6 +1,5 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
-import java.util.*;
 import com.logic.feature.*;
 
 public class InventoryTest {

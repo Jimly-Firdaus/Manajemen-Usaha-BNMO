@@ -1,6 +1,7 @@
 /* Customer Class */
 package com.logic.feature;
-import com.logic.feature.Interface.Payable;
+import com.logic.feature.interfaces.Payable;
+
 import lombok.*;
 
 @Getter
