@@ -1,8 +1,6 @@
 # Manajemen_Usaha_BNMO
 Tugas Besar II IF2210 Pemrograman Berorientasi Objek
 
-# Prerequisites
-[Maven v3.6.x](https://maven.apache.org/download.cgi)
 
 # Project setup
 After cloning this repo, run:
