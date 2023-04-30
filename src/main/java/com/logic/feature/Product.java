@@ -29,4 +29,9 @@ public class Product {
         System.out.println("Name : " + this.productName + "\tCount : " + this.count + "\tCategory : " + this.category
                 + "\tBasePrice : " + this.basePrice + "\tBoughtPrice : " + this.boughtPrice);
     }
+
+    @Override
+    public String toString() {
+        return productName + " (count = " + count + ", basePrice = " + basePrice + ", boughtPrice = " + boughtPrice + ", category = " + category + ")";
+    }
 }
