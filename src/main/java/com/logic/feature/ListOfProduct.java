@@ -1,17 +1,12 @@
 package com.logic.feature;
-
-import lombok.*;
 import java.util.*;
+import lombok.*;
 
-
+@NoArgsConstructor
+@Getter
 public class ListOfProduct {
     /*Attribute */
-    private Map<String, Product> productList;
-
-    /*Constructor */
-    public ListOfProduct(){
-        this.productList = new HashMap<String, Product>();
-    }
+    private Map<String, Product> productList = new HashMap<String, Product>();
 
     /*Method */
     public int getProductCount(){
@@ -43,6 +38,17 @@ public class ListOfProduct {
                 System.out.println(key);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        int i = 1;
+        for (Product product : productList.values()) {
+            sb.append(i).append(". ").append(product.toString()).append(",\n");
+            i++;
+        }
+        return sb.toString();
     }
 
     public static void main(String[] args) {

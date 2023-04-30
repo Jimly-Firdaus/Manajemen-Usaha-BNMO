@@ -2,16 +2,25 @@
 Tugas Besar II IF2210 Pemrograman Berorientasi Objek
 
 
-# How to compile and pipe all class files to bin 
+# Project setup
+After cloning this repo, run:
 ```bash
-cd src
-javac -d ../bin ./logic/*.java
+mvn clean install         # to enable lombok annotations and other stuff inside pom.xml
 ```
+## Install `Lombok Annotations Support for VS Code` if you are using VSCODE as IDE
 
-then go to bin and run
+# How to run
+1. Build the project (make sure you are in the same dir as pom.xml)
 ```bash
-cd ../bin
-java logic.main     # if your main entry point is called `main`
+mvn clean install
+```
+2. Go to target/
+```
+cd target
+```
+3. Run the .jar
+```
+java -jar tubesOOP2-1.0-jar-with-dependecies.jar
 ```
 
 # Filename (aside composables files)
