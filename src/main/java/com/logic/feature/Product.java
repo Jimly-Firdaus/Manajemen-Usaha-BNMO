@@ -9,12 +9,29 @@ import lombok.*;
 @Setter
 public class Product {
     private int count;
-    @NonNull private String productName;
+    @NonNull
+    private String productName;
     private float basePrice;
     private float boughtPrice;
-    @NonNull private String category;
+    @NonNull
+    private String category;
 
     public void updateCount(int amount) {
         count += amount;
+    }
+
+    public boolean isEquals(Product productCompare) {
+        return this.productName.equals(productCompare.productName) && this.basePrice == productCompare.basePrice
+                && this.boughtPrice == productCompare.boughtPrice && this.category.equals(productCompare.category);
+    }
+
+    public void printProduct() {
+        System.out.println("Name : " + this.productName + "\tCount : " + this.count + "\tCategory : " + this.category
+                + "\tBasePrice : " + this.basePrice + "\tBoughtPrice : " + this.boughtPrice);
+    }
+
+    @Override
+    public String toString() {
+        return productName + " (count = " + count + ", basePrice = " + basePrice + ", boughtPrice = " + boughtPrice + ", category = " + category + ")";
     }
 }
