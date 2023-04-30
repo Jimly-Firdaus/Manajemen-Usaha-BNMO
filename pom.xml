@@ -6,7 +6,7 @@
 
 <groupId>com.binomo</groupId>
 <artifactId>tubesOOP2</artifactId>
-<version>1.0.0</version>
+<version>1.0</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,17 +30,18 @@
     <dependency>
         <groupId>org.json</groupId>
         <artifactId>json</artifactId>
-        <version>20220924</version>
+        <version>20230227</version>
     </dependency>
     <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>16</version>
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itextpdf</artifactId>
+      <version>5.5.13.2</version>
     </dependency>
     <!-- Add your dependencies here -->
   </dependencies>
 
   <build>
+    <!-- <sourceDirectory>com</sourceDirectory> -->
     <plugins>
         <plugin>
             <groupId>org.openjfx</groupId>
@@ -50,6 +51,28 @@
                 <mainClass>com.Main</mainClass>
             </configuration>
         </plugin>
+      <!-- <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.Main</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin> -->
     </plugins>
   </build>
 </project>
