@@ -26,7 +26,7 @@ public class PrinterTest {
         Printer.printBills(bills);
 
         // Check that the output file was created
-        File file = new File("Bills.pdf");
+        File file = new File("../Bills.pdf");
         assertTrue(file.exists());
     }
 }
