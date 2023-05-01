@@ -23,7 +23,7 @@ public class PrinterTest {
         };
 
         // Call the method to run on other thread
-        Thread printer = new Printer<>(bills, "../Biils.pdf");
+        Thread printer = new Printer<>(bills, "../Bills.pdf");
         printer.start();
 
         // Check that the output file was created
