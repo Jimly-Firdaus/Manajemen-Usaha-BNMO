@@ -22,8 +22,9 @@ public class PrinterTest {
             bills.add(new Bill(lsProduct, i + 100, i % 2 == 0 ? false : true, false));
         };
 
-        // Call the method being tested
-        Printer.printBills(bills);
+        // Call the method to run on other thread
+        Thread printer = new Printer<>(bills, "../Biils.pdf");
+        printer.start();
 
         // Check that the output file was created
         File file = new File("../Bills.pdf");
