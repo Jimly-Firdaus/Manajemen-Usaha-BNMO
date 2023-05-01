@@ -1,16 +1,19 @@
 package com;
+
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
+// import javafx.scene.Scene;
+// import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import com.gui.Router;
+
 public class Main extends Application {
+    // private StackPane root = new StackPane();
+
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Hello, World!");
-        Scene scene = new Scene(label, 400, 200);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        Router router = new Router(primaryStage);
+        router.gotoMainPage();
     }
 
     public static void main(String[] args) {
