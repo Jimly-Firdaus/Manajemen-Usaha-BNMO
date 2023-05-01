@@ -12,6 +12,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setMinWidth(1440);
+        primaryStage.setMinHeight(800);
+
         Router router = new Router(primaryStage);
         router.gotoMainPage();
     }
