@@ -15,7 +15,7 @@ mvn clean install         # to enable lombok annotations and other stuff inside 
 # How to run
 1. Build the project (make sure you are in the same dir as pom.xml)
 ```bash
-mvn clean test javafx:run
+mvn clean install
 ```
 2. Go to target/
 ```
