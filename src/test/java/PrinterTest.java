@@ -23,11 +23,17 @@ public class PrinterTest {
         };
 
         // Call the method to run on other thread
-        Thread printer = new Printer<>(bills, "../Bills.pdf");
+        Thread printer = new Printer<>(bills, "Bills-Test.pdf");
         printer.start();
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         // Check that the output file was created
-        File file = new File("../Bills.pdf");
+        File file = new File("Bills-Test.pdf");
         assertTrue(file.exists());
     }
 }
