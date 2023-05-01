@@ -1,23 +1,18 @@
 package com.gui.pages;
-import javafx.application.Application;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
+import com.gui.interfaces.PageSwitcher;
 
-public class RegistrationPage extends Application {
+public class RegistrationPage extends VBox {
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Member Registration");
-
+    public RegistrationPage(PageSwitcher pageCaller) {
         // For Fonts
         Font titleFont = Font.font("Georgia", FontWeight.BOLD,18);
         Font textFont = Font.font("Times New Roman", 15);
@@ -82,13 +77,8 @@ public class RegistrationPage extends Application {
             phoneField.clear();
         });
 
-        // Create a scene and add the grid pane to it
-        Scene scene = new Scene(container, 720, 405);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
+        // Append to VBox    
+        getChildren().addAll(container);
+        this.setAlignment(Pos.CENTER);
     }
 }
