@@ -1,11 +1,14 @@
 package com.logic.feature;
+
 import lombok.*;
+
+import com.logic.feature.interfaces.IBill;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-public class Bill {
+public class Bill implements IBill {
     /*Attribute */
     private ListOfProduct basket;
     private int idCustomer;
