@@ -1,15 +1,17 @@
 package com.logic.constant;
 
+import lombok.*;
+
+import com.logic.constant.interfaces.IPayment;
 import com.logic.feature.ListOfProduct;
 import com.logic.feature.Product;
 
-import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Payment {
+public class Payment implements IPayment {
     /*Attribute */
     private int userID;
     private ListOfProduct boughtItems;

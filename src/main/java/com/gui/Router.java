@@ -2,9 +2,13 @@ package com.gui;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.util.List;
 
 import com.gui.interfaces.PageSwitcher;
 import com.gui.pages.*;
+
+import com.logic.feature.interfaces.IBill;
+import com.logic.constant.interfaces.IPayment;
 
 public class Router implements PageSwitcher {
     private Stage stage;
@@ -21,8 +25,8 @@ public class Router implements PageSwitcher {
         stage.show();
     }
 
-    public void gotoPageLaporan() {
-        PageLaporan pageLaporan = new PageLaporan(this);
+    public void gotoPageLaporan(List<IBill> lsBills, List<IPayment> lsPayments) {
+        PageLaporan pageLaporan = new PageLaporan(this, lsBills, lsPayments, this.stage);
         pageLaporan.setPrefSize(1080, 608);
         Scene scene = new Scene(pageLaporan);
         stage.setScene(scene);

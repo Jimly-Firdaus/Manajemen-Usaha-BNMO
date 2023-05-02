@@ -1,16 +1,33 @@
 package com.gui.pages;
 
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.geometry.Pos;
+import java.util.List;
+import java.io.File;
 
 import com.gui.components.*;
 import com.gui.interfaces.PageSwitcher;
 
+import com.logic.output.Printer;
+import com.logic.feature.interfaces.IBill;
+import com.logic.constant.interfaces.IPayment;
+
 public class PageLaporan extends VBox {
-    public PageLaporan(PageSwitcher pageCaller) {
+    List<IBill> listBills;
+    List<IPayment> listPayments;
+    Stage stage;
+
+    public PageLaporan(PageSwitcher pageCaller, List<IBill> lsBills, List<IPayment> lsPayments, Stage stage) {
+        // keep this as reference for updates
+        this.listBills = lsBills;
+        this.listPayments = lsPayments;
+        this.stage = stage;
+
         // Label label = new Label("Laporan");
         BaseButton button = new BaseButton("Go back to main");
         button.setOnAction(event -> pageCaller.gotoMainPage());
@@ -45,13 +62,19 @@ public class PageLaporan extends VBox {
     }
 
     public void handlePrintEvent(String option) {
-        if (option.equals("Cetak Laporan Penjualan")) {
-
-        } 
-        else if (option.equals("Cetak Fixed Bill Pelanggan")) {
-
-        } else {
-            // TODO: prompt error to user
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select output directory");
+        File file = fileChooser.showSaveDialog(this.stage);
+        if (file != null) {
+            String outputPathName = file.getAbsolutePath();
+            if (option.equals("Cetak Laporan Penjualan")) {
+                Thread printer = new Printer<>(this.listPayments, outputPathName);
+                printer.start();
+            } 
+            else if (option.equals("Cetak Fixed Bill Pelanggan")) {
+                Thread printer = new Printer<>(this.listBills, outputPathName);
+                printer.start();
+            }
         }
     }
 
