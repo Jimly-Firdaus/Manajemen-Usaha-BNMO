@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import java.util.List;
 import java.io.File;
 
@@ -32,10 +33,9 @@ public class PageLaporan extends VBox {
         BaseButton button = new BaseButton("Go back to main");
         button.setOnAction(event -> pageCaller.gotoMainPage());
 
-        BaseCard card = new BaseCard("Card title", "Card content");
+        BaseCard card = new BaseCard("Pilih Jenis Laporan yang Ingin Dicetak", "");
 
         VBox header = new VBox();
-        header.setPrefHeight(175);
         Label headerLabel = new Label("Laporan");
         String headerLabelStyle =   "-fx-text-fill: #212121;\n" + 
                                     "-fx-padding: 10px 20px;\n" +
@@ -43,21 +43,22 @@ public class PageLaporan extends VBox {
         headerLabel.setStyle(headerLabelStyle);
         header.getChildren().addAll(headerLabel, button);
         header.setAlignment(Pos.CENTER);
+        header.setPrefHeight(175);
 
         VBox body = new VBox();
-        Label option = new Label("Pilih jenis laporan yang ingin dicetak");
+        Label option = new Label("Please select one:");
         String opt1 = "Cetak Laporan Penjualan";
         String opt2 = "Cetak Fixed Bill Pelanggan";
         BaseButton printBtn = new BaseButton("Cetak laporan!");
-        BaseToggle togglerBox = new BaseToggle(opt1, opt2, printBtn);
+        BaseToggle togglerBox = new BaseToggle(opt1, opt2, printBtn, false);
         printBtn.setOnAction(event -> this.handlePrintEvent(togglerBox.getSelected()));
 
         card.getChildren().addAll(option, togglerBox);
+        card.setAlignment(Pos.CENTER);
         body.getChildren().addAll(card, printBtn);
         body.setAlignment(Pos.CENTER);
-        
+        VBox.setMargin(printBtn, new Insets(50, 0, 0, 0));
         getChildren().addAll(header, body);
-        VBox.setVgrow(body, Priority.ALWAYS);
         setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
