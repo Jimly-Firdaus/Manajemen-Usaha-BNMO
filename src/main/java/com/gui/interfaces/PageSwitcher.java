@@ -5,4 +5,5 @@ public interface PageSwitcher {
     void gotoPageLaporan();
     void gotoRegistrationPage();
     void gotoUpdateInfoPage();
+    void gotoMembershipDeactivationPage();
 }
