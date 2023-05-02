@@ -21,13 +21,13 @@ public class Router implements PageSwitcher {
         stage.show();
     }
 
-    // public void gotoPageLaporan() {
-    //     PageLaporan pageLaporan = new PageLaporan(this);
-    //     pageLaporan.setPrefSize(1080, 608);
-    //     Scene scene = new Scene(pageLaporan);
-    //     stage.setScene(scene);
-    //     stage.show();
-    // }
+    public void gotoPageLaporan() {
+        PageLaporan pageLaporan = new PageLaporan(this);
+        pageLaporan.setPrefSize(1080, 608);
+        Scene scene = new Scene(pageLaporan);
+        stage.setScene(scene);
+        stage.show();
+    }
 
     // Add your pages below here
     public void gotoRegistrationPage() {
