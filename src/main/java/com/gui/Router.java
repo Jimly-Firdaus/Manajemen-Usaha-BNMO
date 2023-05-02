@@ -18,7 +18,7 @@ public class Router implements PageSwitcher {
     }
 
     public void gotoMainPage() {
-        _MainPage mainPage = new _MainPage(this);
+        MainPage mainPage = new MainPage(this);
         mainPage.setPrefSize(1080, 608);
         Scene scene = new Scene(mainPage);
         stage.setTitle("Home");
