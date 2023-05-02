@@ -18,9 +18,10 @@ public class Router implements PageSwitcher {
     }
 
     public void gotoMainPage() {
-        MainPage mainPage = new MainPage(this);
+        _MainPage mainPage = new _MainPage(this);
         mainPage.setPrefSize(1080, 608);
         Scene scene = new Scene(mainPage);
+        stage.setTitle("Home");
         stage.setScene(scene);
         stage.show();
     }
@@ -29,6 +30,7 @@ public class Router implements PageSwitcher {
         PageLaporan pageLaporan = new PageLaporan(this, lsBills, lsPayments, this.stage);
         pageLaporan.setPrefSize(1080, 608);
         Scene scene = new Scene(pageLaporan);
+        stage.setTitle("Laporan");
         stage.setScene(scene);
         stage.show();
     }
@@ -38,6 +40,7 @@ public class Router implements PageSwitcher {
         RegistrationPage pageRegister = new RegistrationPage(this);
         pageRegister.setPrefSize(1080, 608);
         Scene scene = new Scene(pageRegister);
+        stage.setTitle("Register");
         stage.setScene(scene);
         stage.show();
     }
