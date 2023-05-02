@@ -41,5 +41,21 @@ public class Router implements PageSwitcher {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void gotoUpdateInfoPage() {
+        UpdateInfoPage pageUpdateInfo = new UpdateInfoPage(this);
+        pageUpdateInfo.setPrefSize(1080, 608);
+        Scene scene = new Scene(pageUpdateInfo);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void gotoMembershipDeactivationPage() {
+        MembershipDeactivationPage pageMembershipDeactivation = new MembershipDeactivationPage(this);
+        pageMembershipDeactivation.setPrefSize(1080, 608);
+        Scene scene = new Scene(pageMembershipDeactivation);
+        stage.setScene(scene);
+        stage.show();
+    }
     
 }

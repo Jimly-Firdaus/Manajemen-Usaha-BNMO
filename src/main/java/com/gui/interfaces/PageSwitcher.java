@@ -9,4 +9,6 @@ public interface PageSwitcher {
     void gotoMainPage();
     void gotoPageLaporan(List<IBill> lsBills, List<IPayment> lsPayments);
     void gotoRegistrationPage();
+    void gotoUpdateInfoPage();
+    void gotoMembershipDeactivationPage();
 }
