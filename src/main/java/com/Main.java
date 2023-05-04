@@ -55,7 +55,9 @@ public class Main extends Application {
         halaman2.setOnAction(event -> createNewTab("Update Info"));
         MenuItem halaman5 = new MenuItem("Deactivate Membership");
         halaman2.setOnAction(event -> createNewTab("Deactivate Membership"));
-        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5);
+        MenuItem halaman6 = new MenuItem("User Page");
+        halaman6.setOnAction(event -> createNewTab("User Page"));
+        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6);
         menuBar.getMenus().add(halamanMenu);
         menuBar.setPadding(new Insets(10));
 
@@ -89,6 +91,8 @@ public class Main extends Application {
             tab.setContent(new UpdateInfoPage(router));
         } else if (menuName.equals("Deactivate Membership")) {
             tab.setContent(new MembershipDeactivationPage(router));
+        } else if (menuName.equals("User Page")){
+            tab.setContent(new UserPage(router));
         } else {
             tab.setContent(new Label("Lanjutkan"));
         }
