@@ -11,4 +11,5 @@ public interface PageSwitcher {
     void gotoRegistrationPage();
     void gotoUpdateInfoPage();
     void gotoMembershipDeactivationPage();
+    void gotoUserPage();
 }
