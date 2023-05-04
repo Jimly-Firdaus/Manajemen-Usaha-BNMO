@@ -61,4 +61,11 @@ public class Router implements PageSwitcher {
         stage.show();
     }
     
+    public void gotoUserPage(){
+        UserPage page = new UserPage(this);
+        page.setPrefSize(1080, 608);
+        Scene scene = new Scene(page);
+        stage.setScene(scene);
+        stage.show();
+    }
 }
