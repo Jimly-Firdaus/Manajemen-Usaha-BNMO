@@ -50,11 +50,11 @@ public class Main extends Application {
         MenuItem halaman2 = new MenuItem("Laporan");
         halaman2.setOnAction(event -> createNewTab("Laporan"));
         MenuItem halaman3 = new MenuItem("Registration");
-        halaman2.setOnAction(event -> createNewTab("Registration"));
+        halaman3.setOnAction(event -> createNewTab("Registration"));
         MenuItem halaman4 = new MenuItem("Update Info");
-        halaman2.setOnAction(event -> createNewTab("Update Info"));
+        halaman4.setOnAction(event -> createNewTab("Update Info"));
         MenuItem halaman5 = new MenuItem("Deactivate Membership");
-        halaman2.setOnAction(event -> createNewTab("Deactivate Membership"));
+        halaman5.setOnAction(event -> createNewTab("Deactivate Membership"));
         MenuItem halaman6 = new MenuItem("User Page");
         halaman6.setOnAction(event -> createNewTab("User Page"));
         halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6);
@@ -80,11 +80,6 @@ public class Main extends Application {
 
         if (menuName.equals("Dashboard")) {
             tab.setContent(new MainPage(router));
-        /*
-        * } else if (menuName.equals("Laporan")) {
-         * tab.setContent(new PageLaporan(router, null, null, primaryStage));
-         * Sesuaikan cara panggil lsBlls dan lsPayment
-         */
         } else if (menuName.equals("Registration")) {
             tab.setContent(new RegistrationPage(router));
         } else if (menuName.equals("Update Info")) {
