@@ -12,4 +12,5 @@ public interface PageSwitcher {
     Node gotoRegistrationPage();
     Node gotoUpdateInfoPage();
     Node gotoMembershipDeactivationPage();
+    Node gotoUserPage();
 }

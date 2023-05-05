@@ -60,4 +60,9 @@ public class Router implements PageSwitcher {
         return pageMembershipDeactivation;
     }
     
+    public Node gotoUserPage(){
+        UserPage page = new UserPage(this);
+        page.setPrefSize(1080, 608);
+        return page;
+    }
 }

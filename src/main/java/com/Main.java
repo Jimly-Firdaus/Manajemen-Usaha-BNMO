@@ -47,13 +47,17 @@ public class Main extends Application {
         // Set Item in Menu
         MenuItem halaman1 = new MenuItem("Dashboard");
         halaman1.setOnAction(event -> createNewTab("Dashboard"));
-        MenuItem halaman2 = new MenuItem("Membership");
-        halaman2.setOnAction(event -> createNewTab("Membership"));
-        MenuItem halaman3 = new MenuItem("Halaman 3");
-        halaman3.setOnAction(event -> createNewTab("Halaman 3"));
-        MenuItem laporan = new MenuItem("Laporan");
-        laporan.setOnAction(event -> createNewTab("Laporan"));
-        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, laporan);
+        MenuItem halaman2 = new MenuItem("Laporan");
+        halaman2.setOnAction(event -> createNewTab("Laporan"));
+        MenuItem halaman3 = new MenuItem("Registration");
+        halaman2.setOnAction(event -> createNewTab("Registration"));
+        MenuItem halaman4 = new MenuItem("Update Info");
+        halaman2.setOnAction(event -> createNewTab("Update Info"));
+        MenuItem halaman5 = new MenuItem("Deactivate Membership");
+        halaman2.setOnAction(event -> createNewTab("Deactivate Membership"));
+        MenuItem halaman6 = new MenuItem("User Page");
+        halaman6.setOnAction(event -> createNewTab("User Page"));
+        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6);
         menuBar.getMenus().add(halamanMenu);
         menuBar.setPadding(new Insets(10));
 
@@ -76,12 +80,22 @@ public class Main extends Application {
 
         if (menuName.equals("Dashboard")) {
             tab.setContent(new MainPage(router));
-        } else if (menuName.equals("Membership")) {
-            tab.setContent(new MembershipDeactivationPage(router));
+        /*
+        * } else if (menuName.equals("Laporan")) {
+         * tab.setContent(new PageLaporan(router, null, null, primaryStage));
+         * Sesuaikan cara panggil lsBlls dan lsPayment
+         */
+        } else if (menuName.equals("Registration")) {
+            tab.setContent(new RegistrationPage(router));
+        } else if (menuName.equals("Update Info")) {
+            tab.setContent(router.gotoUpdateInfoPage());
+        } else if (menuName.equals("Deactivate Membership")) {
+            tab.setContent(router.gotoMembershipDeactivationPage());
         } else if (menuName.equals("Laporan")) {
             tab.setContent(router.gotoPageLaporan(null, null));
-        } 
-        else {
+        } else if (menuName.equals("User Page")){
+            tab.setContent(router.gotoUserPage());
+        } else {
             tab.setContent(new Label("Lanjutkan"));
         }
 
