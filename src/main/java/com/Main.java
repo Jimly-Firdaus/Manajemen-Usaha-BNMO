@@ -51,7 +51,9 @@ public class Main extends Application {
         halaman2.setOnAction(event -> createNewTab("Membership"));
         MenuItem halaman3 = new MenuItem("Halaman 3");
         halaman3.setOnAction(event -> createNewTab("Halaman 3"));
-        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3);
+        MenuItem laporan = new MenuItem("Laporan");
+        laporan.setOnAction(event -> createNewTab("Laporan"));
+        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, laporan);
         menuBar.getMenus().add(halamanMenu);
         menuBar.setPadding(new Insets(10));
 
@@ -76,7 +78,10 @@ public class Main extends Application {
             tab.setContent(new MainPage(router));
         } else if (menuName.equals("Membership")) {
             tab.setContent(new MembershipDeactivationPage(router));
-        } else {
+        } else if (menuName.equals("Laporan")) {
+            tab.setContent(router.gotoPageLaporan(null, null));
+        } 
+        else {
             tab.setContent(new Label("Lanjutkan"));
         }
 
