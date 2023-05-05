@@ -10,15 +10,16 @@ import java.util.List;
 import com.gui.interfaces.PageSwitcher;
 import com.gui.pages.*;
 
-import com.logic.feature.interfaces.IBill;
+import com.logic.feature.Bill;
 import com.logic.constant.interfaces.IPayment;
+import com.logic.feature.interfaces.IBill;
 
 @Data
 public class Router implements PageSwitcher {
     private Stage stage;
     private String inputPath = "";
-    private List<IBill> systemBills;
-    private List<IPayment> systemPayments;
+    private List<Bill> systemBills;
+    // private List<Payment> systemPayments;
 
 
     // TODO : Find a way to share resources to all pages by references
@@ -67,7 +68,7 @@ public class Router implements PageSwitcher {
     }
 
     public Node gotoSettingsPage(){
-        PageSettings pageSettings = new PageSettings(this, this.inputPath, this.stage);
+        PageSettings pageSettings = new PageSettings(this, this.inputPath, this.systemBills, this.stage);
         pageSettings.setPrefSize(1080, 608);
         return pageSettings;
     }
