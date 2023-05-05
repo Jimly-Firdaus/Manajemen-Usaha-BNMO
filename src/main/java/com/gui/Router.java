@@ -72,4 +72,10 @@ public class Router implements PageSwitcher {
         pageSettings.setPrefSize(1080, 608);
         return pageSettings;
     }
+
+    public Node gotoShoppingPage(){
+        ShoppingPage pageShopping = new ShoppingPage(this);
+        pageShopping.setPrefSize(1080, 608);
+        return pageShopping;
+    }
 }
