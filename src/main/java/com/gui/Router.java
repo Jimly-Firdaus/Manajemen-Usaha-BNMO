@@ -21,8 +21,6 @@ public class Router implements PageSwitcher {
     private List<IPayment> systemPayments;
 
 
-
-
     // TODO : Find a way to share resources to all pages by references
 
     public Router(Stage stage) {
@@ -66,5 +64,11 @@ public class Router implements PageSwitcher {
         UserPage page = new UserPage(this);
         page.setPrefSize(1080, 608);
         return page;
+    }
+
+    public Node gotoSettingsPage(){
+        PageSettings pageSettings = new PageSettings(this, this.inputPath, this.stage);
+        pageSettings.setPrefSize(1080, 608);
+        return pageSettings;
     }
 }
