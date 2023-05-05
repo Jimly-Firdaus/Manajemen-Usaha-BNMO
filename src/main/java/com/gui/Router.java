@@ -3,7 +3,7 @@ package com.gui;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.stage.Stage;
-import lombok.Value;
+import lombok.Data;
 
 import java.util.List;
 
@@ -13,11 +13,12 @@ import com.gui.pages.*;
 import com.logic.feature.interfaces.IBill;
 import com.logic.constant.interfaces.IPayment;
 
-@Value
+@Data
 public class Router implements PageSwitcher {
     private Stage stage;
     private String inputPath = "";
-    
+    private List<IBill> systemBills;
+    private List<IPayment> systemPayments;
 
 
 
@@ -26,6 +27,7 @@ public class Router implements PageSwitcher {
 
     public Router(Stage stage) {
         this.stage = stage;
+
     }
 
     public Node gotoMainPage() {
