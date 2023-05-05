@@ -62,7 +62,7 @@ public class Router implements PageSwitcher {
     }
     
     public Node gotoUserPage(){
-        UserPage page = new UserPage(this);
+        UserPage page = new UserPage(this, this.stage);
         page.setPrefSize(1080, 608);
         return page;
     }
