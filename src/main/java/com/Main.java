@@ -44,7 +44,7 @@ public class Main extends Application {
         // Make Menu dropdown
         Menu halamanMenu = new Menu("Menu");
 
-        // Set Item in Menu
+        // Register page to Menu
         MenuItem halaman1 = new MenuItem("Dashboard");
         halaman1.setOnAction(event -> createNewTab("Dashboard"));
         MenuItem halaman2 = new MenuItem("Laporan");
@@ -57,7 +57,9 @@ public class Main extends Application {
         halaman5.setOnAction(event -> createNewTab("Deactivate Membership"));
         MenuItem halaman6 = new MenuItem("User Page");
         halaman6.setOnAction(event -> createNewTab("User Page"));
-        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6);
+        MenuItem halaman7 = new MenuItem("Settings");
+        halaman7.setOnAction(event -> createNewTab("Settings"));
+        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6, halaman7);
         menuBar.getMenus().add(halamanMenu);
         menuBar.setPadding(new Insets(10));
 
@@ -78,20 +80,32 @@ public class Main extends Application {
         Tab tab = new Tab(menuName);
         tab.setClosable(true);
 
-        if (menuName.equals("Dashboard")) {
-            tab.setContent(new MainPage(router));
-        } else if (menuName.equals("Registration")) {
-            tab.setContent(new RegistrationPage(router));
-        } else if (menuName.equals("Update Info")) {
-            tab.setContent(router.gotoUpdateInfoPage());
-        } else if (menuName.equals("Deactivate Membership")) {
-            tab.setContent(router.gotoMembershipDeactivationPage());
-        } else if (menuName.equals("Laporan")) {
-            tab.setContent(router.gotoPageLaporan(null, null));
-        } else if (menuName.equals("User Page")){
-            tab.setContent(router.gotoUserPage());
-        } else {
-            tab.setContent(new Label("Lanjutkan"));
+        switch (menuName) {
+            case "Dashboard":
+                tab.setContent(new MainPage(router));
+                break;
+            case "Registration":
+                tab.setContent(new RegistrationPage(router));
+                break;
+            case "Update Info":
+                tab.setContent(router.gotoUpdateInfoPage());
+                break;
+            case "Deactivate Membership":
+                tab.setContent(router.gotoMembershipDeactivationPage());
+                break;
+            case "Laporan":
+                // Todo get resources from router instead
+                tab.setContent(router.gotoPageLaporan(null, null));
+                break;
+            case "User Page":
+                tab.setContent(router.gotoUserPage());
+                break;
+            case "Settings":
+                tab.setContent(router.gotoSettingsPage());
+                break;
+            default:
+                tab.setContent(new Label("Lanjutkan"));
+                break;
         }
 
         // Add tab to tabpane
