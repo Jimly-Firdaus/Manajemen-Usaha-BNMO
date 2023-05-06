@@ -9,15 +9,22 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import com.gui.interfaces.PageSwitcher;
 import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import com.gui.Router;
 import com.gui.components.*;
 
 public class UpdateInfoPage extends VBox {
+    private Stage stage;
 
-    public UpdateInfoPage(PageSwitcher pageCaller) {
+    public UpdateInfoPage(
+            Router router,
+            Stage stage) {
+        this.stage = stage;
+
         // For Fonts
         Font titleFont = Font.font("Georgia", FontWeight.BOLD,16);
         Font textFont = Font.font("Times New Roman", 15);

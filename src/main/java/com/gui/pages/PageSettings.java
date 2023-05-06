@@ -64,7 +64,7 @@ public class PageSettings extends VBox {
         HBox databaseDialogBox = new HBox();
         databaseDialogBox.getChildren().addAll(reloadDatabase);
         BaseButton outDataStore = new BaseButton("Output Database");
-        outDataStore.setOnAction(event -> this.onOutputDatabase());
+        outDataStore.setOnAction(event -> this.onOutputDatabase(router));
         databaseStateBox.setSpacing(10);
         databaseStateBox.getChildren().addAll(databaseDialogBox, outDataStore);
 
@@ -178,23 +178,40 @@ public class PageSettings extends VBox {
         label.setText(this.databaseReloadText);
     }
 
-    public void onOutputDatabase() {
-
+    public void onOutputDatabase(Router router) {
+        Parseable parserOut = null;
+        String ext = "";
         switch (this.outputDatabaseType) {
             // TODO: change this to correlated reference list objects
             case "JSON":
-                Parseable jsonParser = new ParserJSON(this.pathLabel);
-                jsonParser.writeData(null);
+                parserOut = new ParserJSON(this.pathLabel);
+                ext = ".json";
                 break;
             case "XML":
-                Parseable xmlParser = new ParserXML(this.pathLabel);
-                xmlParser.writeData(null);
+                parserOut = new ParserXML(this.pathLabel);
+                ext = ".xml";
                 break;
             case "OBJ":
-                Parseable objParser = new ParserOBJ(this.pathLabel);
-                objParser.writeData(null);
+                parserOut = new ParserOBJ(this.pathLabel);
+                ext = ".obj";
                 break;
         }
+        
+        if (ext != "" && parserOut != null) {
+            parserOut.setFilename(this.pathLabel + "/systemBills_out" + ext);
+            parserOut.writeDatas(router.getSystemBills());
+            parserOut.setFilename(this.pathLabel + "/systemMembers_out" + ext);
+            parserOut.writeDatas(router.getSystemMembers());
+            parserOut.setFilename(this.pathLabel + "/systemPayments_out" + ext);
+            parserOut.writeDatas(router.getSystemPayments());
+            parserOut.setFilename(this.pathLabel + "/systemProducts_out" + ext);
+            parserOut.writeDatas(router.getSystemProducts());
+            parserOut.setFilename(this.pathLabel + "/systemVIPs_out" + ext);
+            parserOut.writeDatas(router.getSystemVIPs());
+            parserOut.setFilename(this.pathLabel + "/inventory_out" + ext);
+            parserOut.writeData(router.getInventory());
+        }
+
         System.out.println(this.outputDatabaseType);
     }
 

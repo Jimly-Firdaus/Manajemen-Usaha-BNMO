@@ -1,20 +1,31 @@
 package com.gui.pages;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import com.gui.interfaces.PageSwitcher;
+import javafx.stage.Stage;
+import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import java.util.List;
+
+import com.gui.interfaces.PageSwitcher;
+import com.gui.Router;
 import com.gui.components.*;
+import com.logic.feature.Member;
 
 public class RegistrationPage extends VBox {
+    private Stage stage;
 
-    public RegistrationPage(PageSwitcher pageCaller) {
+    public RegistrationPage(
+            Router router,
+            Stage stage) {
+        this.stage = stage;
+
         // For Fonts
         Font titleFont = Font.font("Georgia", FontWeight.BOLD,18);
         Font textFont = Font.font("Times New Roman", 15);
@@ -81,7 +92,16 @@ public class RegistrationPage extends VBox {
             String name = nameField.getText();
             String phone = phoneField.getText();
 
-            // TODO: Save the information to the database
+            List<Member> storeMember = router.getSystemMembers();
+
+            if (!name.equals("")) {
+                storeMember.add(new Member(storeMember.size() + 1, name, phone));
+                System.out.println("pass here");
+                List<Member> res = router.getSystemMembers();
+                for (Member mem : res) {
+                    System.out.println(mem.toString());
+                }
+            }
 
             // Clear the input field
             nameField.clear();

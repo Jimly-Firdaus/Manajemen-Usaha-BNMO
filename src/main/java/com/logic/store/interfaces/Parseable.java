@@ -10,4 +10,7 @@ public interface Parseable {
     public <T> T readData(Class<T> classType);
     public <T> void writeDatas(List<T> data);
     public <T> void writeData(T data);
+
+    // Setter
+    public void setFilename(String filename);
 }

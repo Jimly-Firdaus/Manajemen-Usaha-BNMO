@@ -10,12 +10,13 @@ import java.util.ArrayList;
 
 import com.logic.store.interfaces.Parseable;
 
+import lombok.AllArgsConstructor;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Setter
 public class ParserOBJ implements Parseable {
     String filename;
-
-    public ParserOBJ(String filename) {
-        this.filename = filename;
-    }
 
     public <T> void writeDatas(List<T> data) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(this.filename))) {
