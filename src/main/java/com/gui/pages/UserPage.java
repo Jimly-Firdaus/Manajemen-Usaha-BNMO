@@ -114,6 +114,27 @@ public class UserPage extends VBox {
         ListView<String> billListView = new ListView<>(billData);
 
         VBox.setVgrow(billListView, Priority.ALWAYS);
+
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deleteMenuItem = new MenuItem("Delete");
+        deleteMenuItem.setOnAction(event -> {
+            String item = billListView.getSelectionModel().getSelectedItem();
+            data.remove(item);
+        });
+        contextMenu.getItems().add(deleteMenuItem);
+
+        billListView.setCellFactory(lv -> {
+            ListCell<String> cell = new ListCell<>();
+            cell.textProperty().bind(cell.itemProperty());
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(contextMenu);
+                }
+            });
+            return cell ;
+        });
         
         VBox rightContainer = new VBox();
         rightContainer.getChildren().addAll(rightContainerHeader, billListView, saveBillLayout, chargeLayout);
