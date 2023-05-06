@@ -23,7 +23,7 @@ public class Router implements PageSwitcher {
     private UpdateInfoPage pageUpdateInfo;
     private MembershipDeactivationPage pageMembershipDeactivation;
     private PageSettings pageSettings;
-    private ShoppingPage pageShopping;
+    private InventoryManagement pageInventory;
     private UserPage pageUser;
 
     // System Data
@@ -43,7 +43,7 @@ public class Router implements PageSwitcher {
         this.pageMembershipDeactivation = new MembershipDeactivationPage(this);
         this.pageUser = new UserPage(this, this.stage);
         this.pageSettings = new PageSettings(this, this.inputPath, this.systemBills, this.stage);
-        this.pageShopping = new ShoppingPage(this);
+        this.pageInventory = new InventoryManagement(this, this.stage);
     }
 
     public Node gotoMainPage() {
@@ -83,8 +83,8 @@ public class Router implements PageSwitcher {
         return this.pageSettings;
     }
 
-    public Node gotoShoppingPage(){  
-        this.pageShopping.setPrefSize(1080, 608);
-        return this.pageShopping;
+    public Node gotoInventoryPage(){  
+        this.pageInventory.setPrefSize(1080, 608);
+        return this.pageInventory;
     }
 }
