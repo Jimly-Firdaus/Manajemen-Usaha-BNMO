@@ -97,7 +97,7 @@ public class Main extends Application {
                 break;
             case "Laporan":
                 // Todo get resources from router instead
-                tab.setContent(router.gotoPageLaporan(null, null));
+                tab.setContent(router.gotoPageLaporan());
                 break;
             case "User Page":
                 tab.setContent(router.gotoUserPage());
