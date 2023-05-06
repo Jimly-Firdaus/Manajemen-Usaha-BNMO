@@ -19,19 +19,18 @@ import com.logic.feature.Bill;
 import com.logic.constant.Payment;
 
 public class PageLaporan extends VBox {
-    List<Bill> listBills;
-    List<Payment> listPayments;
-    Stage stage;
+    private List<Bill> listBills;
+    private List<Payment> listPayments;
+    private Stage stage;
 
     public PageLaporan(PageSwitcher pageCaller, List<Bill> lsBills, List<Payment> lsPayments, Stage stage) {
         // keep this as reference for updates
         this.listBills = lsBills;
         this.listPayments = lsPayments;
         this.stage = stage;
-
         // Label label = new Label("Laporan");
         BaseButton button = new BaseButton("Go back to main");
-        button.setOnAction(event -> pageCaller.gotoMainPage());
+        // button.setOnAction(event -> this.checker());
 
         BaseCard card = new BaseCard("Pilih Jenis Laporan yang Ingin Dicetak", "");
 
