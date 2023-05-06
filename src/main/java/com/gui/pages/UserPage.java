@@ -1,9 +1,5 @@
 package com.gui.pages;
 
-import java.lang.reflect.AnnotatedWildcardType;
-
-import com.gui.components.BaseButton;
-import com.gui.interfaces.PageSwitcher;
 import javafx.scene.control.*;
 import javafx.collections.*;
 import javafx.collections.transformation.FilteredList;
@@ -21,6 +17,9 @@ import javafx.scene.layout.Region;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+
+import com.gui.components.BaseButton;
+import com.gui.interfaces.PageSwitcher;
 
 public class UserPage extends VBox {
 

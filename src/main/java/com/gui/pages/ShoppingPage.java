@@ -1,5 +1,5 @@
 package com.gui.pages;
-import com.gui.interfaces.PageSwitcher;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
@@ -13,7 +13,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.BorderPane;
+
 import com.gui.components.BaseButton;
+import com.gui.interfaces.PageSwitcher;
 
 public class ShoppingPage extends VBox {
     // Product List
@@ -70,11 +72,11 @@ public class ShoppingPage extends VBox {
         Button removeButton = new Button("Remove");
         removeButton.setStyle(
                 "-fx-background-color: red;" +
-                        "-fx-text-fill: #ffffff;" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-padding: 10px 20px;" +
-                        "-fx-border-radius: 5px;" +
-                        "-fx-background-radius: 5px;"
+                "-fx-text-fill: #ffffff;" +
+                "-fx-font-size: 12px;" +
+                "-fx-padding: 10px 20px;" +
+                "-fx-border-radius: 5px;" +
+                "-fx-background-radius: 5px;"
         );
         removeButton.setOnAction(event -> {
             String selectedItem = cartList.getSelectionModel().getSelectedItem();
