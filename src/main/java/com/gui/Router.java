@@ -77,9 +77,9 @@ public class Router implements PageSwitcher {
         this.pageSettings = new PageSettings(this, this.stage);
         this.mainPage = new MainPage(this);
         this.pageLaporan = new PageLaporan(this, this.stage);
-        this.pageRegister = new RegistrationPage(this);
-        this.pageUpdateInfo = new UpdateInfoPage(this);
-        this.pageMembershipDeactivation = new MembershipDeactivationPage(this);
+        this.pageRegister = new RegistrationPage(this, this.stage);
+        this.pageUpdateInfo = new UpdateInfoPage(this, this.stage);
+        this.pageMembershipDeactivation = new MembershipDeactivationPage(this, this.stage);
         this.pageUser = new UserPage(this, this.stage);
         this.pageInventory = new InventoryManagement(this, this.stage);
     }

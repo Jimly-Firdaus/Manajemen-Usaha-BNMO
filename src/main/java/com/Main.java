@@ -87,7 +87,7 @@ public class Main extends Application {
                 tab.setContent(new MainPage(router));
                 break;
             case "Registration":
-                tab.setContent(new RegistrationPage(router));
+                tab.setContent(router.gotoRegistrationPage());
                 break;
             case "Update Info":
                 tab.setContent(router.gotoUpdateInfoPage());
