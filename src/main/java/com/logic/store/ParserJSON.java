@@ -16,6 +16,7 @@ import com.logic.feature.ListOfProduct;
 import com.logic.store.interfaces.*;
 
 @AllArgsConstructor
+@Setter
 public class ParserJSON implements Parseable {
     String filename;
 
