@@ -10,6 +10,10 @@ import com.gui.interfaces.PageSwitcher;
 import com.gui.pages.*;
 
 import com.logic.feature.Bill;
+import com.logic.feature.Product;
+import com.logic.feature.Inventory;
+import com.logic.feature.Member;
+import com.logic.feature.VIP;
 import com.logic.constant.Payment;
 
 @Data
@@ -27,22 +31,26 @@ public class Router implements PageSwitcher {
     private UserPage pageUser;
 
     // System Data
-    private String inputPath = "";
     private List<Bill> systemBills;
     private List<Payment> systemPayments;
-
+    private List<Product> systemProducts;
+    private List<Member> systemMembers;
+    private List<VIP> systemVIPs;
+    private Inventory inventory;
 
     // TODO : Find a way to share resources to all pages by references
 
     public Router(Stage stage) {
         this.stage = stage;
+
+        // pages
+        this.pageSettings = new PageSettings(this, this.systemBills, this.stage);
         this.mainPage = new MainPage(this);
         this.pageLaporan = new PageLaporan(this, this.systemBills, this.systemPayments, this.stage);
         this.pageRegister = new RegistrationPage(this);
         this.pageUpdateInfo = new UpdateInfoPage(this);
         this.pageMembershipDeactivation = new MembershipDeactivationPage(this);
         this.pageUser = new UserPage(this, this.stage);
-        this.pageSettings = new PageSettings(this, this.inputPath, this.systemBills, this.stage);
         this.pageShopping = new ShoppingPage(this);
     }
 
