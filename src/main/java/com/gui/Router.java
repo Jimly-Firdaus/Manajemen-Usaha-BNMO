@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.gui.interfaces.PageSwitcher;
+import com.gui.interfaces.*;
 import com.gui.pages.*;
 
 import com.logic.feature.Bill;
@@ -26,6 +26,9 @@ import com.logic.constant.Payment;
 public class Router implements PageSwitcher {
     private Stage stage;
 
+    // Notification
+    private List<RouterListener> listeners = new ArrayList<>();
+    
     // Pages
     private MainPage mainPage;
     private PageLaporan pageLaporan;
@@ -49,26 +52,37 @@ public class Router implements PageSwitcher {
     public void restoreSystemBills(Collection<Bill> collection) {
         this.systemBills.clear();
         this.systemBills.addAll(collection);
+        notifyListeners();
     }
 
     public void restoreSystemPayments(Collection<Payment> collection) {
         this.systemPayments.clear();
         this.systemPayments.addAll(collection);
+        notifyListeners();
     }
 
     public void restoreSystemProducts(Collection<Product> collection) {
         this.systemProducts.clear();
         this.systemProducts.addAll(collection);
+        notifyListeners();
     }
 
     public void restoreSystemMembers(Collection<Member> collection) {
         this.systemMembers.clear();
         this.systemMembers.addAll(collection);
+        notifyListeners();
     }
 
     public void restoreSystemVIPs(Collection<VIP> collection) {
         this.systemVIPs.clear();
         this.systemVIPs.addAll(collection);
+        notifyListeners();
+    }
+
+    public void notifyListeners() {
+        for (RouterListener listener : listeners) {
+            listener.onResourceUpdate();
+        }
     }
 
     public Router(Stage stage) {
@@ -84,6 +98,8 @@ public class Router implements PageSwitcher {
         this.pageUser = new UserPage(this, this.stage);
         this.pageInventory = new InventoryManagement(this, this.stage);
         this.pagePaymentHistory = new PaymentHistoryPage(this, this.stage);
+        this.listeners.add(pagePaymentHistory);
+        this.listeners.add(pageInventory);
     }
 
     public Node gotoMainPage() {

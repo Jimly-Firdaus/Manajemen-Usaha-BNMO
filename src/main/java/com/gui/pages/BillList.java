@@ -1,15 +1,21 @@
 package com.gui.pages;
 
+import java.util.List;
+
 import com.gui.components.BaseButton;
 import com.gui.interfaces.PageSwitcher;
+import com.logic.feature.Bill;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -24,10 +30,16 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.Getter;
 
+@Getter
 public class BillList extends Stage {
+
+    private ObservableList<Bill> data = FXCollections.observableArrayList();
+
+    private Bill chooseBill = new Bill();
     
-    public BillList(){
+    public BillList(List<Bill> systemBills){
         // initModality(Modality.APPLICATION_MODAL);
         // // Set the stage style to UTILITY, which removes the default window decorations
         // initStyle(StageStyle.UTILITY);
@@ -39,7 +51,14 @@ public class BillList extends Stage {
         // Set the scene for the stage
         // Label label = new Label("Hello, World!");
         // label.setAlignment(Pos.CENTER);
-        ObservableList<String> data = FXCollections.observableArrayList("One", "Two", "Three", "Four", "Five");
+
+        this.data.addAll(systemBills);
+
+        ObservableList<String> stringData = FXCollections.observableArrayList();
+
+        FilteredList<String> filteredStringData = new FilteredList<>(stringData, s->true);
+
+        this.data.forEach(p -> filteredStringData.add(Integer.toString(p.getIdCustomer())));
         
         BaseButton cancelBtn = new BaseButton("Cancel");
         BaseButton newBillBtn = new BaseButton("New Bill");
@@ -62,7 +81,7 @@ public class BillList extends Stage {
         searchField.setPromptText("Search");
         
 
-        FilteredList<String> billList = new FilteredList<>(data, s -> true);
+        FilteredList<String> billList = new FilteredList<>(filteredStringData, s -> true);
         ListView<String> billListView = new ListView<>(billList);
 
         billListView.prefHeightProperty().bind(heightProperty());
@@ -73,6 +92,40 @@ public class BillList extends Stage {
                 billList.setPredicate(s -> true);
             } else {
                 billList.setPredicate(s -> s.contains(filter));
+            }
+        });
+
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deleteMenuItem = new MenuItem("Delete");
+        deleteMenuItem.setOnAction(event -> {
+            String item = billListView.getSelectionModel().getSelectedItem();
+
+            this.data.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
+            systemBills.removeIf(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
+            // Bill deletedBill = data.filtered(product -> product.getProductName().equals(item)).get(0);
+            // this.totalPrice -= deletedProduct.getBasePrice() * deletedProduct.getCount();
+            // cartData.removeIf(product -> product.getProductName().equals(item));
+        });
+        contextMenu.getItems().add(deleteMenuItem);
+
+        billListView.setCellFactory(lv -> {
+            ListCell<String> cell = new ListCell<>();
+            cell.textProperty().bind(cell.itemProperty());
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(contextMenu);
+                }
+            });
+            return cell ;
+        });
+
+        ListView<String> listView = new ListView<>(filteredStringData);
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                this.chooseBill = this.data.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(selectedItem)).get(0);
             }
         });
 

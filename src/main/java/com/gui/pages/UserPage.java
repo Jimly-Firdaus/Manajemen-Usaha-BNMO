@@ -16,32 +16,72 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.gui.Router;
 import com.gui.components.BaseButton;
 import com.gui.interfaces.PageSwitcher;
+import com.logic.feature.Bill;
+import com.logic.feature.Inventory;
+import com.logic.feature.Product;
 
 public class UserPage extends VBox {
 
-    public UserPage(PageSwitcher pageCaller, Stage stage) {
+    private ObservableList<Product> productData = FXCollections.observableArrayList();
+
+    private ObservableList<Product> cartData = FXCollections.observableArrayList();
+
+    private ObservableList<String> productStringData = FXCollections.observableArrayList();
+
+    private FilteredList<Product> productFilteredData = new FilteredList<>(productData, s -> true);
+
+
+    private Float totalPrice = 0.0f;
+
+    public UserPage(Router router, Stage stage) {
         TextField searchField = new TextField();
         searchField.setPromptText("Search");
 
-        ObservableList<String> data = FXCollections.observableArrayList("One", "Two", "Three", "Four", "Five");
-        FilteredList<String> filteredData = new FilteredList<>(data, s -> true);
+        ObservableList<Product> observableProductData = FXCollections.observableList(router.getInventory().getStorage());
+        observableProductData.addListener(new ListChangeListener<Product>() {
+            @Override
+            public void onChanged(Change<? extends Product> change) {
+                productData.setAll(observableProductData);
+                productStringData.clear();
+                productFilteredData.forEach(p -> productStringData.add(p.getProductName()));
+            }
+        });
+        productData.setAll(observableProductData);
+
+        BaseButton checkButton = new BaseButton("Im checking");
+        checkButton.setOnAction(e->{
+            System.out.println(router.getInventory());
+            System.out.println(this.productData);
+        });
+
+        FilteredList<Product> productFilteredData = new FilteredList<>(productData, s -> true);
+
+        ObservableList<String> productStringData = FXCollections.observableArrayList();
+        productFilteredData.forEach(p -> productStringData.add(p.getProductName()));
+
+        FilteredList<String>  productFilteredStringData = new FilteredList<>(productStringData, s->true);
 
         searchField.textProperty().addListener(obs -> {
             String filter = searchField.getText();
             if (filter == null || filter.length() == 0) {
-                filteredData.setPredicate(s -> true);
+                productFilteredStringData.setPredicate(s -> true);
             } else {
-                filteredData.setPredicate(s -> s.contains(filter));
+                productFilteredStringData.setPredicate(s -> s.contains(filter));
             }
         });
 
-        ListView<String> listView = new ListView<>(filteredData);
+        ListView<String> listView = new ListView<>(productFilteredStringData);
         listView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 String selectedItem = listView.getSelectionModel().getSelectedItem();
-                ProductClick clicked = new ProductClick(selectedItem);
+                ProductClick clicked = new ProductClick(selectedItem, router.getInventory(), cartData);
+                this.totalPrice += clicked.getPriceOnTotal();
                 clicked.show();
             }
         });
@@ -63,8 +103,13 @@ public class UserPage extends VBox {
         BaseButton saveBillBtn = new BaseButton("Bill");
         saveBillBtn.setOnAction(
             event -> {
-                BillList billListPage = new BillList();
+                BillList billListPage = new BillList(router.getSystemBills());
                 billListPage.show();
+                List<Product> productList = new ArrayList<>();
+                productList = billListPage.getChooseBill().getBasket().getProductList();
+                ObservableList<Product> tempCartData = FXCollections.observableArrayList();
+                tempCartData.addAll(productList);
+                this.cartData = tempCartData;
             }
         );
 
@@ -83,13 +128,14 @@ public class UserPage extends VBox {
                 "-fx-background-radius: 5px;";
         saveBillActionBtn.setStyle(saveBillBtnStyle);
 
+
         HBox saveBillLayout = new HBox(new Region(), saveBillActionBtn, new Region());
         saveBillLayout.setStyle(rightContainerStyle);
         saveBillLayout.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1, 1, 0, 1))));
         HBox.setHgrow(saveBillLayout.getChildren().get(0), Priority.ALWAYS);
         HBox.setHgrow(saveBillLayout.getChildren().get(2), Priority.ALWAYS);
 
-        Button chargeActionBtn = new Button("Charge {Price}");
+        Button chargeActionBtn = new Button("Charge " + this.totalPrice.toString());
         chargeActionBtn.setOnAction(
             e->{
                 Checkout checkoutPage = new Checkout();
@@ -110,7 +156,15 @@ public class UserPage extends VBox {
         HBox.setHgrow(chargeLayout.getChildren().get(0), Priority.ALWAYS);
         HBox.setHgrow(chargeLayout.getChildren().get(2), Priority.ALWAYS);
 
-        FilteredList<String> billData = new FilteredList<>(data, s -> true);
+        FilteredList<Product> cartFilteredData = new FilteredList<>(this.cartData, s -> true);
+
+        ObservableList<String> cartStringData = FXCollections.observableArrayList();
+
+        FilteredList<String>  cartFilteredStringData = new FilteredList<>(cartStringData, s->true);
+
+        cartFilteredData.forEach(p -> cartFilteredStringData.add(p.getProductName()));
+
+        FilteredList<String> billData = new FilteredList<>(cartFilteredStringData, s -> true);
         ListView<String> billListView = new ListView<>(billData);
 
         VBox.setVgrow(billListView, Priority.ALWAYS);
@@ -119,7 +173,9 @@ public class UserPage extends VBox {
         MenuItem deleteMenuItem = new MenuItem("Delete");
         deleteMenuItem.setOnAction(event -> {
             String item = billListView.getSelectionModel().getSelectedItem();
-            data.remove(item);
+            Product deletedProduct = cartData.filtered(product -> product.getProductName().equals(item)).get(0);
+            this.totalPrice -= deletedProduct.getBasePrice() * deletedProduct.getCount();
+            cartData.removeIf(product -> product.getProductName().equals(item));
         });
         contextMenu.getItems().add(deleteMenuItem);
 
@@ -143,7 +199,7 @@ public class UserPage extends VBox {
         rightContainer.prefHeightProperty().bind(stage.heightProperty());
 
         HBox content = new HBox();
-        content.getChildren().addAll(leftContainer, rightContainer);
+        content.getChildren().addAll(checkButton, leftContainer, rightContainer);
         content.prefHeightProperty().bind(stage.heightProperty());
 
         getChildren().addAll(content);

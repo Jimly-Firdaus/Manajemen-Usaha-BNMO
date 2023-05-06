@@ -1,4 +1,5 @@
 package com.gui.pages;
+
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -13,24 +14,25 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import com.logic.constant.Payment;
-import com.logic.feature.Product;
-import com.gui.Router;
-import com.gui.components.*;
 import java.util.*;
 
+import com.logic.constant.Payment;
+import com.gui.Router;
+import com.gui.components.*;
+import com.gui.interfaces.RouterListener;
 
-public class PaymentHistoryPage extends VBox {
+public class PaymentHistoryPage extends VBox implements RouterListener {
 
     private TableView<Payment> paymentTable;
     private ObservableList<Payment> payments = FXCollections.observableArrayList();
     private Stage stage;
+    private Router router;
 
     public PaymentHistoryPage(
             Router router,
             Stage stage) {
         this.stage = stage;
-        
+        this.router = router;
         BorderPane container = new BorderPane();
 
         // Create a label for the title of the page
@@ -62,18 +64,6 @@ public class PaymentHistoryPage extends VBox {
 
         paymentTable = new TableView<>();
 
-        // Add sample payment data to the table
-        List<Product> products1 = new ArrayList<>();
-        products1.add(new Product(1, "Product 1", 10, 10.0f, "Category 1"));
-        products1.add(new Product(1, "Product 2", 15, 15.0f, "Category 1"));
-        Payment payment1 = new Payment(1, products1, 25);
-        
-        List<Product> products2 = new ArrayList<>();
-        products2.add(new Product(2, "Product 3", 20, 20.0f, "Category 2"));
-        products2.add(new Product(3, "Product 4", 30, 25.0f, "Category 2"));
-        Payment payment2 = new Payment(2, products2, 75);
-
-        payments.addAll(payment1, payment2);
         paymentTable.getColumns().addAll(userIDColumn, itemsColumn, totalPriceColumn);
         paymentTable.setItems(payments);
 
@@ -91,5 +81,15 @@ public class PaymentHistoryPage extends VBox {
         // Append to VBox    
         getChildren().addAll(container);
         this.setAlignment(Pos.CENTER);
+    }
+
+    @Override
+    public void onResourceUpdate() {
+        this.payments.clear();
+        List<Payment> storedPayments = this.router.getSystemPayments();
+        for (Payment p : storedPayments) {
+            this.payments.add(p);
+        }
+        this.paymentTable.refresh();
     }
 }

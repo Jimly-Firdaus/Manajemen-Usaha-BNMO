@@ -1,7 +1,10 @@
 package com.gui.pages;
 
 import com.gui.components.BaseButton;
+import com.logic.feature.Inventory;
+import com.logic.feature.Product;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -18,12 +21,26 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import lombok.Getter;
 
+@Getter
 public class ProductClick extends Stage {
-    public ProductClick(String productName){
+    private float priceOnTotal = 0.0f;
+
+    public ProductClick(String productName, Inventory inventory, ObservableList<Product> cartData){
         BaseButton cancelBtn = new BaseButton("Cancel");
         BaseButton addBillBtn = new BaseButton("Add to Bill");
-        Label title = new Label(productName);
+
+        float basePrice = 0.0f;
+        Product currentProduct = inventory.searchInventoryProduct(productName);
+
+        if(currentProduct != null){
+            basePrice = currentProduct.getBasePrice();
+        }
+
+        String basePriceString = Float.toString(basePrice);
+
+        Label title = new Label(basePriceString);
         String titleStyle =  "-fx-background-color: transparent;\n" + 
                         "-fx-text-fill: black;\n" +
                         "-fx-padding: 10px 20px;\n" +
@@ -42,8 +59,20 @@ public class ProductClick extends Stage {
 
         TextField textNumber = new TextField();
         textNumber.setText("0");
-        textNumber.setTextFormatter(new TextFormatter<>(change ->
-                (change.getControlNewText().matches("\\d*")) ? change : null));
+        textNumber.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+            if (newText.isEmpty() || newText == null) {
+                textNumber.setText("1");
+                return null;
+            } else if (newText.matches("[1-9]\\d*")) {
+                return change;
+            } else {
+                return null;
+            }
+        }));
+
+        String numberProduct = textNumber.getText();
+        int value = Integer.parseInt(numberProduct);
 
         HBox productNumberLayout = new HBox(productNumberMethod, new Region(), textNumber);
         HBox.setHgrow(productNumberLayout.getChildren().get(1), Priority.ALWAYS);
@@ -57,5 +86,12 @@ public class ProductClick extends Stage {
         setScene(scene);
 
         cancelBtn.setOnAction(e->close());
+
+        addBillBtn.setOnAction(e -> {
+            this.priceOnTotal = currentProduct.getBasePrice() * value;
+            Product cartProduct = new Product(value, currentProduct.getProductName(), currentProduct.getBasePrice(), currentProduct.getBoughtPrice(), currentProduct.getCategory());
+            cartData.add(cartProduct);
+            close();
+        });
     }
 }
