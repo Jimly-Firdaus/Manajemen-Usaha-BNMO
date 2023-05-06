@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 public class Inventory implements Serializable {
     // Attributes   
     private List<Product> storage = new ArrayList<Product>();
