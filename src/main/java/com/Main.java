@@ -57,8 +57,8 @@ public class Main extends Application {
         halaman5.setOnAction(event -> createNewTab("Deactivate Membership"));
         MenuItem halaman6 = new MenuItem("User Page");
         halaman6.setOnAction(event -> createNewTab("User Page"));
-        MenuItem halaman7 = new MenuItem("Shopping");
-        halaman7.setOnAction(event -> createNewTab("Shopping"));
+        MenuItem halaman7 = new MenuItem("Inventory Management");
+        halaman7.setOnAction(event -> createNewTab("Inventory Management"));
         MenuItem halaman8 = new MenuItem("Settings");
         halaman8.setOnAction(event -> createNewTab("Settings"));
         halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6, halaman7, halaman8);
@@ -102,8 +102,8 @@ public class Main extends Application {
             case "User Page":
                 tab.setContent(router.gotoUserPage());
                 break;
-            case "Shopping":
-                tab.setContent(router.gotoShoppingPage());
+            case "Inventory Management":
+                tab.setContent(router.gotoInventoryPage());
                 break;
             case "Settings":
                 tab.setContent(router.gotoSettingsPage());
