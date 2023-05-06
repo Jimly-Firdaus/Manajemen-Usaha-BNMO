@@ -29,6 +29,9 @@ public class DataStoreTest {
             public <T> List<T> readDatas(Class<T> classType) {
                 return (List<T>) data;
             }
+
+            public void setFilename(String s) {
+            }
         };
 
         // DataStore instance with mockParser
