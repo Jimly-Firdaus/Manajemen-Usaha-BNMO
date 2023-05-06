@@ -6,13 +6,14 @@ import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
+import javafx.scene.control.TextField;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import java.util.List;
 import java.io.File;
 
 import com.gui.components.*;
-import com.gui.interfaces.PageSwitcher;
+import com.gui.Router;
 
 import com.logic.output.Printer;
 import com.logic.feature.Bill;
@@ -22,15 +23,14 @@ public class PageLaporan extends VBox {
     private List<Bill> listBills;
     private List<Payment> listPayments;
     private Stage stage;
+    private String userId;
 
-    public PageLaporan(PageSwitcher pageCaller, List<Bill> lsBills, List<Payment> lsPayments, Stage stage) {
+    public PageLaporan(Router router, Stage stage) {
         // keep this as reference for updates
-        this.listBills = lsBills;
-        this.listPayments = lsPayments;
         this.stage = stage;
-        // Label label = new Label("Laporan");
+        Label label = new Label("Laporan");
         BaseButton button = new BaseButton("Go back to main");
-        // button.setOnAction(event -> this.checker());
+        button.setOnAction(event -> this.checker(router));
 
         BaseCard card = new BaseCard("Pilih Jenis Laporan yang Ingin Dicetak", "");
 
@@ -52,9 +52,16 @@ public class PageLaporan extends VBox {
         BaseToggle togglerBox = new BaseToggle(opt1, opt2, printBtn, false);
         printBtn.setOnAction(event -> this.handlePrintEvent(togglerBox.getSelected()));
 
+        Label hint = new Label("Masukkan id (jika ingin mencetak fixed bill): ");
+        TextField userId = new TextField();
+        HBox userIdBox = new HBox();
+
+        userIdBox.getChildren().addAll(hint, userId);
+        userIdBox.setSpacing(10);
+
         card.getChildren().addAll(option, togglerBox);
         card.setAlignment(Pos.CENTER);
-        body.getChildren().addAll(card, printBtn);
+        body.getChildren().addAll(card, userIdBox, printBtn);
         body.setAlignment(Pos.CENTER);
         VBox.setMargin(printBtn, new Insets(50, 0, 0, 0));
         getChildren().addAll(header, body);
@@ -76,6 +83,16 @@ public class PageLaporan extends VBox {
                 printer.start();
             }
         }
+    }
+
+    public void checker(Router router) {
+        for (Payment payment : router.getSystemPayments()) {
+            System.out.println(payment.toString());
+        }
+        for (Bill bill : router.getSystemBills()) {
+            System.out.println(bill.toString());
+        }
+        System.out.println(router.getInventory().toString());
     }
 
 }
