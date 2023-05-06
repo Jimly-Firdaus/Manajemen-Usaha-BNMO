@@ -1,18 +1,28 @@
 package com.gui.pages;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
+
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import com.gui.interfaces.PageSwitcher;
-import javafx.geometry.Insets;
+
 import com.gui.Router;
 import com.gui.components.*;
+import com.logic.feature.*;
 
 public class MembershipDeactivationPage extends VBox {
+
+    private TableView<Member> userTable;
+    private ObservableList<Member> users = FXCollections.observableArrayList();
     private Stage stage;
 
     public MembershipDeactivationPage(
@@ -20,48 +30,76 @@ public class MembershipDeactivationPage extends VBox {
             Stage stage) {
         this.stage = stage;
         
-        // For Fonts
-        Font titleFont = Font.font("Georgia", FontWeight.BOLD,18);
-        Font textFont = Font.font("Times New Roman", 16);
+        BorderPane container = new BorderPane();
 
-        // Title Label
-        Label titleLabel = new Label("MEMBERSHIP DEACTIVATION");
-        titleLabel.setFont(titleFont);
+        // Create a label for the title of the page
+        Label titleLabel = new Label("Membership Deactivation");
+        titleLabel.setStyle(
+            "-fx-font-size: 20px;" +
+            "-fx-font-family: 'Georgia';" +
+            "-fx-padding: 10px;" +
+            "-fx-border-width: 1;" +
+            "-fx-border-color: gray;" +
+            "-fx-border-style: dashed;"
+        );
+        HBox titleLayout = new HBox(titleLabel);
+        titleLayout.setAlignment(Pos.CENTER);
+        titleLayout.setPadding(new Insets(20, 0, 0, 20));
+        container.setTop(titleLayout);
 
-        // HBox for Title Label
-        HBox titleHLayout = new HBox(titleLabel);
-        titleHLayout.setAlignment(Pos.CENTER);
+        // Create a VBox to hold the user table
+        VBox userBox = new VBox();
+        userBox.setPadding(new Insets(10, 0, 0, 20));
+        userBox.setSpacing(10);
 
-        // For the Question
-        Label questionLabel = new Label("Are you sure about your choice?");
-        questionLabel.setFont(textFont);
+        // Table to display user information
+        TableColumn<Member, Integer> userIDColumn = new TableColumn<>("User ID");
+        userIDColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId()).asObject());
 
-        HBox questionHLayout = new HBox(questionLabel);
-        questionHLayout.setAlignment(Pos.CENTER);
+        TableColumn<Member, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName().toString()));
 
-        // Deactivation Button
-        Button confirmButton = new Button("Confirm");
-        HBox confirmHLayout = new HBox(confirmButton);
-        confirmHLayout.setAlignment(Pos.CENTER);
-        confirmButton.setStyle(
-                "-fx-background-color: red;" +
-                        "-fx-text-fill: #ffffff;" +
-                        "-fx-font-family: 'Georgia';" +
-                        "-fx-font-size: 12px;" +
-                        "-fx-pref-width: 100px"
+        TableColumn<Member, String> phoneNumberColumn = new TableColumn<>("Phone Number");
+        phoneNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPhoneNumber().toString()));
+
+        userTable = new TableView<>();
+
+        // Sample
+        Member member1 = new Member(1, "abc", "123");
+        VIP member2 = new VIP(2, "cde", "456");
+
+        users.addAll(member1, member2);
+        userTable.getColumns().addAll(userIDColumn, nameColumn, phoneNumberColumn);
+        
+        userTable.setItems(users);
+        userTable.widthProperty().addListener((source, oldWidth, newWidth) -> {
+            userIDColumn.setPrefWidth(newWidth.doubleValue() / 6);
+            nameColumn.setPrefWidth(newWidth.doubleValue() / 2);
+            phoneNumberColumn.setPrefWidth(newWidth.doubleValue() / 3);
+        });
+
+        userBox.getChildren().add(userTable);
+        userBox.setPadding(new Insets(20, 20, 20, 20));
+
+        Button deactivateButton = new Button("Deactivate");
+        deactivateButton.setStyle(
+            "-fx-background-color: red;" + 
+            "-fx-text-fill: white;" +
+            "-fx-padding: 10px 20px;" +
+            "-fx-border-radius: 5px;" +
+            "-fx-background-radius: 5px;"
         );
 
         BaseButton backButton = new BaseButton("Back");
-        HBox backHLayout = new HBox(backButton);
+        HBox backHLayout = new HBox();
+        backHLayout.getChildren().addAll(deactivateButton, backButton);
         backHLayout.setAlignment(Pos.BOTTOM_RIGHT);
 
-        // Create a VBox as a container
-        VBox container = new VBox();
-        container.getChildren().addAll(titleHLayout, questionHLayout, confirmHLayout, backHLayout);
+        HBox.setMargin(backButton, new Insets(0, 0, 0, 880));
+        backHLayout.setPadding(new Insets(0, 20, 20, 20));
 
-        VBox.setMargin(titleHLayout, new Insets(200, 0, 50, 0));
-        VBox.setMargin(confirmHLayout, new Insets(15, 0, 75, 0));
-        VBox.setMargin(backHLayout, new Insets(120, 30, 0, 0));
+        container.setCenter(userBox);
+        container.setBottom(backHLayout);
 
         // Append to VBox    
         getChildren().addAll(container);
