@@ -1,10 +1,11 @@
 package com.logic.feature;
+import java.io.Serializable;
 import java.util.*;
 import lombok.*;
 
 @NoArgsConstructor
 @Getter
-public class ListOfProduct {
+public class ListOfProduct implements Serializable{
     /*Attribute */
     private Map<String, Product> productList = new HashMap<String, Product>();
 

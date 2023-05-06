@@ -1,12 +1,14 @@
 /* Member Class */
 package com.logic.feature;
 import com.logic.constant.Payment;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import lombok.*;
 
 @Getter
-
-public class Member extends Customer {
+@Setter
+public class Member extends Customer implements Serializable {
     /* Attributes */
     protected String name;
     protected String phoneNumber;
