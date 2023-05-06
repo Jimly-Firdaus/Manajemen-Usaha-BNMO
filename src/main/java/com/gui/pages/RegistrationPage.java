@@ -1,20 +1,27 @@
 package com.gui.pages;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import com.gui.interfaces.PageSwitcher;
+import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+import com.gui.Router;
 import com.gui.components.*;
 
 public class RegistrationPage extends VBox {
+    private Stage stage;
 
-    public RegistrationPage(PageSwitcher pageCaller) {
+    public RegistrationPage(
+            Router router,
+            Stage stage) {
+        this.stage = stage;
+
         // For Fonts
         Font titleFont = Font.font("Georgia", FontWeight.BOLD,18);
         Font textFont = Font.font("Times New Roman", 15);

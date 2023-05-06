@@ -6,13 +6,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import com.gui.interfaces.PageSwitcher;
 import javafx.geometry.Insets;
+import com.gui.Router;
 import com.gui.components.*;
 
 public class MembershipDeactivationPage extends VBox {
+    private Stage stage;
 
-    public MembershipDeactivationPage(PageSwitcher pageCaller) {
+    public MembershipDeactivationPage(
+            Router router,
+            Stage stage) {
+        this.stage = stage;
+        
         // For Fonts
         Font titleFont = Font.font("Georgia", FontWeight.BOLD,18);
         Font textFont = Font.font("Times New Roman", 16);
