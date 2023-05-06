@@ -36,7 +36,7 @@ public class Router implements PageSwitcher {
     private List<Product> systemProducts;
     private List<Member> systemMembers;
     private List<VIP> systemVIPs;
-    private Inventory inventory;
+    private Inventory inventory = new Inventory();
 
     // TODO : Find a way to share resources to all pages by references
 
@@ -44,7 +44,7 @@ public class Router implements PageSwitcher {
         this.stage = stage;
 
         // pages
-        this.pageSettings = new PageSettings(this, this.systemBills, this.stage);
+        this.pageSettings = new PageSettings(this, this.systemBills, this.systemPayments, this.systemProducts, this.systemMembers, this.systemVIPs, this.inventory, this.stage);
         this.mainPage = new MainPage(this);
         this.pageLaporan = new PageLaporan(this, this.systemBills, this.systemPayments, this.stage);
         this.pageRegister = new RegistrationPage(this);
