@@ -99,6 +99,7 @@ public class Router implements PageSwitcher {
         this.pageInventory = new InventoryManagement(this, this.stage);
         this.pagePaymentHistory = new PaymentHistoryPage(this, this.stage);
         this.listeners.add(pagePaymentHistory);
+        this.listeners.add(pageInventory);
     }
 
     public Node gotoMainPage() {
