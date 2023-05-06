@@ -5,7 +5,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Priority;
 import javafx.scene.control.TextField;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
@@ -103,7 +102,7 @@ public class PageLaporan extends VBox {
                 try {
                     int userId = Integer.parseInt(this.userId);
                     for (Bill bill : systemBills) {
-                        if (bill.getIdCustomer() == userId && bill.getFixBillStatus()) {
+                        if (bill.getIdCustomer() == userId && bill.isFixedBill()) {
                             chosenUserBill.add(bill);
                         }
                     }
