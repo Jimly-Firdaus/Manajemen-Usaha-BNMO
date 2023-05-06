@@ -1,5 +1,6 @@
 package com.gui.pages;
 
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.collections.*;
 import javafx.collections.transformation.FilteredList;
@@ -37,6 +38,13 @@ public class UserPage extends VBox {
         });
 
         ListView<String> listView = new ListView<>(filteredData);
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                String selectedItem = listView.getSelectionModel().getSelectedItem();
+                ProductClick clicked = new ProductClick(selectedItem);
+                clicked.show();
+            }
+        });
         // listView.setStyle("-fx-control-inner-background: #94b8d1; -fx-text-fill: black;");
         listView.prefHeightProperty().bind(stage.heightProperty());
 
@@ -82,6 +90,13 @@ public class UserPage extends VBox {
         HBox.setHgrow(saveBillLayout.getChildren().get(2), Priority.ALWAYS);
 
         Button chargeActionBtn = new Button("Charge {Price}");
+        chargeActionBtn.setOnAction(
+            e->{
+                Checkout checkoutPage = new Checkout();
+                checkoutPage.show();
+            }
+        );
+
         String chargeBtnStyle = "-fx-background-color: transparent;\n" +
                 "-fx-text-fill: black;\n" +
                 "-fx-padding: 10px 20px;\n" +
