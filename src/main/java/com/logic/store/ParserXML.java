@@ -7,7 +7,6 @@ import org.w3c.dom.Node;
 import lombok.AllArgsConstructor;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -20,7 +19,6 @@ import java.util.*;
 import com.logic.store.interfaces.Parseable;
 import com.logic.feature.ListOfProduct;
 import com.logic.feature.Product;
-import com.logic.constant.Payment;
 
 @AllArgsConstructor
 public class ParserXML implements Parseable {
@@ -296,7 +294,7 @@ public class ParserXML implements Parseable {
      */
     public <T> T readData(Class<T> type) {
         T data = null;
-
+    
         try {
             File file = new File(this.filename);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -304,27 +302,66 @@ public class ParserXML implements Parseable {
             // Parse XML
             Document doc = db.parse(file);
             doc.getDocumentElement().normalize();
-
-            NodeList nodeList = doc.getElementsByTagName(type.getSimpleName());
-            if (nodeList.getLength() > 0) {
-                Element element = (Element) nodeList.item(0);
-                data = type.getDeclaredConstructor().newInstance();
-                for (Field field : type.getDeclaredFields()) {
-                    field.setAccessible(true);
+    
+            // Get the first element with the tag name of the input type
+            Element element = (Element) doc.getElementsByTagName(type.getSimpleName()).item(0);
+            T item = type.getDeclaredConstructor().newInstance();
+            for (Field field : type.getDeclaredFields()) {
+                field.setAccessible(true);
+    
+                if (field.getType().isPrimitive() || field.getType() == String.class) {
+                    // Handle primitive types and String
                     String value = element.getElementsByTagName(field.getName()).item(0).getTextContent();
+    
+                    // Set the value of the field based on its type
                     if (field.getType() == float.class) {
-                        field.set(data, Float.parseFloat(value));
+                        field.set(item, Float.parseFloat(value));
                     } else if (field.getType() == int.class) {
-                        field.set(data, Integer.parseInt(value));
+                        field.set(item, Integer.parseInt(value));
                     } else if (field.getType() == double.class) {
-                        field.set(data, Double.parseDouble(value));
+                        field.set(item, Double.parseDouble(value));
                     } else if (field.getType() == boolean.class) {
-                        field.set(data, Boolean.parseBoolean(value));
+                        field.set(item, Boolean.parseBoolean(value));
                     } else {
-                        field.set(data, value);
+                        field.set(item, value);
                     }
+                } else if (field.getType() == ArrayList.class || field.getType() == List.class) {
+                    // Handle ArrayList and List types
+                    NodeList list = element.getElementsByTagName(field.getName()).item(0).getChildNodes();
+                    ParameterizedType listType = (ParameterizedType) field.getGenericType();
+                    Class<?> listClass = (Class<?>) listType.getActualTypeArguments()[0];
+                    List<Object> objects = new ArrayList<>();
+                    for (int j = 0; j < list.getLength(); j++) {
+                        Node node = list.item(j);
+                        if (node.getNodeType() == Node.ELEMENT_NODE) {
+                            Element elem = (Element) node;
+                            Object obj = listClass.getDeclaredConstructor().newInstance();
+                            for (Field f : listClass.getDeclaredFields()) {
+                                f.setAccessible(true);
+                                if (f.getType().isPrimitive() || f.getType() == String.class) {
+                                    // Handle primitive types and String
+                                    String value = elem.getElementsByTagName(f.getName()).item(0).getTextContent();
+                                    // Set the value of the field based on its type
+                                    if (f.getType() == float.class) {
+                                        f.set(obj, Float.parseFloat(value));
+                                    } else if (f.getType() == int.class) {
+                                        f.set(obj, Integer.parseInt(value));
+                                    } else if (f.getType() == double.class) {
+                                        f.set(obj, Double.parseDouble(value));
+                                    } else if (f.getType() == boolean.class) {
+                                        f.set(obj, Boolean.parseBoolean(value));
+                                    } else {
+                                        f.set(obj, value);
+                                    }
+                                }
+                            }
+                            objects.add(obj);
+                        }
+                    }
+                    field.set(item, objects);
                 }
             }
+            data = item;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -337,35 +374,60 @@ public class ParserXML implements Parseable {
      */
     public <T> void writeData(T data) {
         try {
-            // Create XML
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
+            // Create a new XML document
             Document doc = db.newDocument();
-
-            // Create root then append to document
-            Element rootElement = doc.createElement("data");
+    
+            // Create the root element
+            Element rootElement = doc.createElement(data.getClass().getSimpleName());
             doc.appendChild(rootElement);
-
-            Element element = doc.createElement(data.getClass().getSimpleName());
-            for (Field field : data.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                Object value = field.get(data);
-                Element fieldElement = doc.createElement(field.getName());
-                fieldElement.appendChild(doc.createTextNode(value.toString()));
-                element.appendChild(fieldElement);
-            }
-            rootElement.appendChild(element);
-
-            // Write XML to file
+    
+            // Write the object data to the XML document
+            writeObject(doc, rootElement, data);
+    
+            // Write the XML document to a file
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(this.filename));
             transformer.transform(source, result);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    
+    private void writeObject(Document doc, Element element, Object obj) {
+        for (Field field : obj.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(obj);
+                if (value != null) {
+                    if (field.getType().isPrimitive() || field.getType() == String.class) {
+                        // Handle primitive types and String
+                        Element fieldElement = doc.createElement(field.getName());
+                        fieldElement.appendChild(doc.createTextNode(value.toString()));
+                        element.appendChild(fieldElement);
+                    } else if (field.getType() == ArrayList.class || field.getType() == List.class) {
+                        // Handle ArrayList and List types
+                        Element fieldElement = doc.createElement(field.getName());
+                        List<?> list = (List<?>) value;
+                        for (Object item : list) {
+                            Element itemElement = doc.createElement(item.getClass().getSimpleName());
+                            writeObject(doc, itemElement, item);
+                            fieldElement.appendChild(itemElement);
+                        }
+                        element.appendChild(fieldElement);
+                    } else {
+                        // Handle custom classes
+                        Element fieldElement = doc.createElement(field.getName());
+                        writeObject(doc, fieldElement, value);
+                        element.appendChild(fieldElement);
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

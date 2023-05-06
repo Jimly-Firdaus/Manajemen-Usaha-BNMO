@@ -5,6 +5,7 @@ import lombok.*;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class ListOfProduct implements Serializable{
     /*Attribute */
     private List<Product> productList = new ArrayList<Product>(); 
