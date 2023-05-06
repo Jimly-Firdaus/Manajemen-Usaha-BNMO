@@ -15,22 +15,22 @@ import com.logic.store.interfaces.*;
 @AllArgsConstructor
 public class ParserJSON implements Parseable {
     String filename;
-    
+
     /**
      * @brief Writes a list of data to a file in JSON format
      * @param data The list of data
      */
-    public <T> void writeData(List<T> data) {
+    public <T> void writeDatas(List<T> data) {
         JSONArray jsonArray = new JSONArray();
-        
+
         // Convert to JSON
         for (T ele : data) {
             JSONObject json = new JSONObject(ele);
             jsonArray.put(json);
         }
-        
+
         try {
-            Files.write(Paths.get(filename), jsonArray.toString(4).getBytes());
+            Files.write(Paths.get(this.filename), jsonArray.toString(4).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,7 +41,7 @@ public class ParserJSON implements Parseable {
      * @param classType The class type of the data.
      * @return A list of data.
      */
-    public <T> List<T> readData(Class<T> classType) {
+    public <T> List<T> readDatas(Class<T> classType) {
         List<T> data = new ArrayList<>();
 
         try {
@@ -60,6 +60,46 @@ public class ParserJSON implements Parseable {
                     field.set(item, val);
                 }
                 data.add(item);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    /**
+     * @brief Writes a single data object to a file in JSON format
+     * @param data The data object
+     */
+    public <T> void writeData(T data) {
+        JSONObject json = new JSONObject(data);
+
+        try {
+            Files.write(Paths.get(this.filename), json.toString(4).getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @brief Reads data from a file in JSON format and returns it as an object.
+     * @param classType The class type of the data.
+     * @return A data object.
+     */
+    public <T> T readData(Class<T> classType) {
+        T data = null;
+
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(this.filename)));
+            JSONObject json = new JSONObject(content);
+            // Parse form JSON to Object type classType
+            Constructor<T> constructor = classType.getDeclaredConstructor();
+            data = constructor.newInstance();
+            // Restore to T
+            for (Field field : classType.getDeclaredFields()) {
+                field.setAccessible(true);
+                Object val = json.get(field.getName());
+                field.set(data, val);
             }
         } catch (Exception e) {
             e.printStackTrace();
