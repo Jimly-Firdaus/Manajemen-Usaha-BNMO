@@ -14,8 +14,8 @@ public class Bill implements IBill, Serializable {
     /*Attribute */
     private ListOfProduct basket;
     private int idCustomer;
-    private boolean isFixed;
-    private boolean isDone;
+    private boolean billFixed;
+    private boolean billDone;
 
     /*Method */
     public Product searchProduct(String productName){
@@ -35,7 +35,7 @@ public class Bill implements IBill, Serializable {
     }
 
     public void BillProductCount(){
-        this.basket.getProductCount();
+        this.basket.getTotalProduct();
     }
 
     @Override
@@ -52,12 +52,12 @@ public class Bill implements IBill, Serializable {
                     .append(", category : ").append(product.getCategory()).append("),\n");
             i++;
         }
-        if (this.isFixed) {
+        if (this.billFixed) {
             sb.append("=> Bill type : Fixed").append("\n");
         } else {
             sb.append("=> Bill type : Not Fixed").append("\n");
         }
-        if (this.isDone) {
+        if (this.billDone) {
             sb.append("=> Bill status : Paid").append("\n");
         } else {
             sb.append("=> Bill status : Unpaid").append("\n");
