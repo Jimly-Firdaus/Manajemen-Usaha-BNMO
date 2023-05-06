@@ -38,6 +38,14 @@ public class Bill implements IBill, Serializable {
         this.basket.getTotalProduct();
     }
 
+    public boolean getFixBillStatus(){
+        return this.billFixed;
+    }
+
+    public boolean getBillStatus(){
+        return this.billDone;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
