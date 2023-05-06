@@ -9,18 +9,14 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -42,9 +38,6 @@ public class InventoryManagement extends VBox implements RouterListener {
     private FilteredList<String> productList;
     private ListView<String> productListView;
                 
-    // Cart
-    // private ObservableList<String> cart = FXCollections.observableArrayList();
-
     public InventoryManagement(Router router, Stage stage) {
         this.router = router;
 
@@ -55,19 +48,22 @@ public class InventoryManagement extends VBox implements RouterListener {
 
         // For Product List
         VBox searchingContainer = new VBox();
-        // leftBox.setPadding(new Insets(15));
-        // leftBox.setAlignment(Pos.CENTER);
-
-        // For Cart
-        // VBox rightBox = new VBox(10);
-        // rightBox.setPadding(new Insets(15));
-        // rightBox.setAlignment(Pos.CENTER_LEFT);
 
         // Set up the text labels for product list and shopping cart
-        Text productListLabel = new Text("Products");
-        productListLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
-        Text shoppingCartLabel = new Text("Shopping Cart");
-        shoppingCartLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
+        Label productListLabel = new Label("Products");
+        productListLabel.setStyle(
+            "-fx-font-size: 20px;" +
+            "-fx-font-family: 'Georgia';" +
+            "-fx-padding: 10px;" +
+            "-fx-border-width: 1;" +
+            "-fx-border-color: gray;" +
+            "-fx-border-style: dashed;"
+        );
+
+        HBox productLabelLayout = new HBox(productListLabel);
+        productLabelLayout.setAlignment(Pos.TOP_LEFT);
+        productLabelLayout.setPadding(new Insets(10, 0, 0, 20));
+        productLabelLayout.setAlignment(Pos.CENTER);
 
         // Set up the list view for the products
         this.productList = new FilteredList<>(products, s -> true);
@@ -93,11 +89,6 @@ public class InventoryManagement extends VBox implements RouterListener {
             });
             return cell ;
         });
-        // productList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        // productList.setPrefWidth(775);
-
-        // Set up the list view for the cart
-        // ListView<String> cartList = new ListView<>(cart);
 
         // Add to Cart Button and Checkout Button
         BaseButton addInventoryButton = new BaseButton("Add to inventory");
@@ -112,58 +103,22 @@ public class InventoryManagement extends VBox implements RouterListener {
                 productList.setPredicate(s -> s.contains(filter));
             }
         });
-        // addInventoryButton.setOnAction(event -> {
-        //     String selectedProduct = productList.getSelectionModel().getSelectedItem();
-        //     if (selectedProduct != null) {
-        //         cart.add(selectedProduct);
-        //     }
-        // });
-
-        // Button removeButton = new Button("Remove");
-        // removeButton.setStyle(
-        //         "-fx-background-color: red;" +
-        //         "-fx-text-fill: #ffffff;" +
-        //         "-fx-font-size: 12px;" +
-        //         "-fx-padding: 10px 20px;" +
-        //         "-fx-border-radius: 5px;" +
-        //         "-fx-background-radius: 5px;"
-        // );
-        // removeButton.setOnAction(event -> {
-        //     String selectedItem = cartList.getSelectionModel().getSelectedItem();
-        //     if(selectedItem != null) {
-        //         cart.remove(selectedItem);
-        //     }
-        // });
-
-        // Button checkoutButton = new Button("Checkout");
-        // checkoutButton.setStyle(
-        //         "-fx-background-color: green;" +
-        //                 "-fx-text-fill: #ffffff;" +
-        //                 "-fx-font-size: 12px;" +
-        //                 "-fx-padding: 10px 20px;" +
-        //                 "-fx-border-radius: 5px;" +
-        //                 "-fx-background-radius: 5px;"
-        // );
-        // checkoutButton.setOnAction(event -> {
-        //     // TODO: Logic
-        // });
 
         // Add the components
-        searchingContainer.getChildren().addAll(productListLabel, new Region(), searchField, productListView, new Region());
+        searchingContainer.getChildren().addAll(productLabelLayout, new Region(), searchField, productListView, new Region());
+        VBox.setMargin(searchField,  new Insets(20, 0, 0, 0));
         VBox.setVgrow(searchingContainer.getChildren().get(1), Priority.ALWAYS);
         VBox.setVgrow(searchingContainer.getChildren().get(4), Priority.ALWAYS);
 
-        // HBox upperContainer = new HBox(new Region(), searchingContainer, new Region());
-        // HBox.setHgrow(upperContainer.getChildren().get(0), Priority.ALWAYS);
-        // HBox.setHgrow(upperContainer.getChildren().get(2), Priority.ALWAYS);
-        // HBox.setMargin(removeButton, new Insets(0, 0, 0, 335));
         bottomBox.getChildren().addAll(new Region(), addInventoryButton, new Region());
         HBox.setHgrow(bottomBox.getChildren().get(0), Priority.ALWAYS);
         HBox.setHgrow(bottomBox.getChildren().get(2), Priority.ALWAYS);
-        // rightBox.getChildren().addAll(shoppingCartLabel, cartList);
+        searchingContainer.setPadding(new Insets(20, 20, 0, 20));
 
         container.getChildren().addAll(searchingContainer, bottomBox);
+        VBox.setMargin(bottomBox, new Insets(20, 0, 20, 0));
         container.prefHeightProperty().bind(stage.heightProperty());
+
 
         addInventoryButton.setOnAction(
             e -> {
@@ -171,8 +126,6 @@ public class InventoryManagement extends VBox implements RouterListener {
                 addProductPage.show();
             }
         );
-        // VBox.setVgrow(container.getChildren().get(1), Priority.ALWAYS);
-        // container.setRight(rightBox);
 
         // Append to VBox    
         getChildren().addAll(container);
