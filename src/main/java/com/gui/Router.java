@@ -33,6 +33,7 @@ public class Router implements PageSwitcher {
     private MainPage mainPage;
     private PageLaporan pageLaporan;
     private RegistrationPage pageRegister;
+    private UserInfosPage pageUserInfos;
     private UpdateInfoPage pageUpdateInfo;
     private MembershipDeactivationPage pageMembershipDeactivation;
     private PageSettings pageSettings;
@@ -93,6 +94,7 @@ public class Router implements PageSwitcher {
         this.mainPage = new MainPage(this);
         this.pageLaporan = new PageLaporan(this, this.stage);
         this.pageRegister = new RegistrationPage(this, this.stage);
+        this.pageUserInfos = new UserInfosPage(this, this.stage);
         this.pageUpdateInfo = new UpdateInfoPage(this, this.stage);
         this.pageMembershipDeactivation = new MembershipDeactivationPage(this, this.stage);
         this.pageUser = new UserPage(this, this.stage);
@@ -117,6 +119,11 @@ public class Router implements PageSwitcher {
     public Node gotoRegistrationPage() {
         this.pageRegister.setPrefSize(1080, 608);
         return this.pageRegister;
+    }
+
+    public Node gotoUserInfosPage() {
+        this.pageUserInfos.setPrefSize(1080, 608);
+        return this.pageUserInfos;
     }
 
     public Node gotoUpdateInfoPage() {

@@ -92,7 +92,7 @@ public class Main extends Application {
                 tab.setContent(router.gotoRegistrationPage());
                 break;
             case "Update Info":
-                tab.setContent(router.gotoUpdateInfoPage());
+                tab.setContent(router.gotoUserInfosPage());
                 break;
             case "Deactivate Membership":
                 tab.setContent(router.gotoMembershipDeactivationPage());
