@@ -66,6 +66,11 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
 
         paymentTable.getColumns().addAll(userIDColumn, itemsColumn, totalPriceColumn);
         paymentTable.setItems(payments);
+        paymentTable.widthProperty().addListener((source, oldWidth, newWidth) -> {
+            userIDColumn.setPrefWidth(newWidth.doubleValue() / 3);
+            itemsColumn.setPrefWidth(newWidth.doubleValue() / 3);
+            totalPriceColumn.setPrefWidth(newWidth.doubleValue() / 3);
+        });
 
         paymentBox.getChildren().add(paymentTable);
         paymentBox.setPadding(new Insets(20, 20, 20, 20));
