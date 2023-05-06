@@ -6,8 +6,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import lombok.*;
 
+@NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Member extends Customer implements Serializable {
     /* Attributes */
     protected String name;

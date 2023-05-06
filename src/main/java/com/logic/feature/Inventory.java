@@ -8,8 +8,8 @@ import lombok.*;
 @Setter
 @Getter
 public class Inventory implements Serializable {
-    // Attributes
-    private Map<String, Product> storage = new HashMap<String, Product>();
+    // Attributes   
+    private List<Product> storage = new ArrayList<Product>();
 
     // Method
     public int getInventoryCount() {
@@ -17,13 +17,12 @@ public class Inventory implements Serializable {
     }
 
     public Product searchInventoryProduct(String productName) {
-        if (!this.storage.containsKey(productName)) {
-            // Product Not Found
-            return null;
-        } else {
-            // Product Found
-            return this.storage.get(productName);
+        for (Product product : storage) {
+            if (product.getProductName().equals(productName)) {
+                return product;
+            }
         }
+        return null;
     }
 
     public void addInventoryProduct(Product newProduct) {
@@ -35,34 +34,36 @@ public class Inventory implements Serializable {
         } else {
             // productFound == null || productFound.isEquals(newProduct)
             // Product not in storage, add a new product
-            this.storage.put(newProduct.getProductName(), newProduct);
+            this.storage.add(newProduct);
         }
     }
 
     public void removeInventoryProduct(String productName) {
-        if (this.storage.containsKey(productName)) {
+        Product productFound = this.searchInventoryProduct(productName);
+        if (productFound != null) {
             // Product Found, remove product
-            this.storage.remove(productName);
+            this.storage.remove(productFound);
         } // Product not found, do nothing
     }
 
     public void updateInventoryProduct(String oldProductName, Product newProduct) {
-        if (this.storage.containsKey(oldProductName)) {
+        Product oldProduct = this.searchInventoryProduct(oldProductName);
+        if (oldProduct != null) {
             // Product Found, update product
-            this.removeInventoryProduct(oldProductName);
-            this.storage.put(newProduct.getProductName(), newProduct);
+            int index = this.storage.indexOf(oldProduct);
+            this.storage.set(index, newProduct);
         } // Product Not Found, do nothing
     }
 
     public void printInventory() {
-        if (getInventoryCount() == 0) {
+        if (this.getInventoryCount() == 0) {
             System.out.println("Empty Inventory");
         } else {
             System.out.println("Product in inventory:");
             int i = 1;
-            for (Map.Entry<String, Product> entry : this.storage.entrySet()) {
+            for (Product product : this.storage) {
                 System.out.print(i + ". ");
-                entry.getValue().printProduct();
+                product.printProduct();
                 i++;
             }
         }

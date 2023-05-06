@@ -2,9 +2,10 @@
 package com.logic.feature;
 import lombok.*;
 
+@NoArgsConstructor
 @Getter
 @Setter
-
+@ToString
 public class VIP extends Member {
     /* Attributes */
     protected float discountRate;

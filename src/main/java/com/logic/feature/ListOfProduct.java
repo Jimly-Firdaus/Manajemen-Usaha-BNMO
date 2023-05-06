@@ -10,7 +10,7 @@ public class ListOfProduct implements Serializable{
     private List<Product> productList = new ArrayList<Product>(); 
 
     /*Method */
-    public int getProductCount(){
+    public int getTotalProduct(){
         return this.productList.size();
     }
 
@@ -37,7 +37,7 @@ public class ListOfProduct implements Serializable{
     }
 
     public void printAllProduct(){
-        if(getProductCount() == 0){
+        if(this.getTotalProduct() == 0){
             System.out.println("No product");
         }else{
             for (Product product : productList) {

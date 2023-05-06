@@ -5,7 +5,7 @@ import com.logic.feature.interfaces.Payable;
 import lombok.*;
 
 @Getter
-
+@NoArgsConstructor
 public class Customer implements Payable {
     /* Attributes */
     protected int id;
