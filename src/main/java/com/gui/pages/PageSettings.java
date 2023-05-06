@@ -15,6 +15,7 @@ import com.gui.components.*;
 import com.logic.store.interfaces.Parseable;
 import com.logic.store.ParserJSON;
 import com.logic.store.ParserXML;
+import com.logic.store.ParserOBJ;
 import com.logic.feature.Bill;
 
 public class PageSettings extends VBox {
@@ -84,6 +85,10 @@ public class PageSettings extends VBox {
             case "xml":
                 Parseable xmlParser = new ParserXML(this.pathLabel);
                 newData = xmlParser.readData(classType);
+                break;
+            case "obj":
+                Parseable objParser = new ParserOBJ(this.pathLabel);
+                newData = objParser.readData(classType);
                 break;
         }
 
