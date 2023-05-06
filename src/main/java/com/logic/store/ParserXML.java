@@ -28,11 +28,11 @@ public class ParserXML implements Parseable {
      * @param type The class type of the data to be read.
      * @return A list of data read from the file.
      */
-    public <T> List<T> readData(Class<T> type) {
+    public <T> List<T> readDatas(Class<T> type) {
         List<T> data = new ArrayList<>();
 
         try {
-            File file = new File(filename);
+            File file = new File(this.filename);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             // Parse XML
@@ -48,7 +48,7 @@ public class ParserXML implements Parseable {
                 for (Field field : type.getDeclaredFields()) {
                     field.setAccessible(true);
                     String value = element.getElementsByTagName(field.getName()).item(0).getTextContent();
-                    
+
                     // Set the value of the field based on its type
                     if (field.getType() == float.class) {
                         field.set(item, Float.parseFloat(value));
@@ -67,7 +67,6 @@ public class ParserXML implements Parseable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return data;
     }
 
@@ -75,7 +74,7 @@ public class ParserXML implements Parseable {
      * @brief Writes a list of data to an XML file.
      * @param data The list of data to be written.
      */
-    public <T> void writeData(List<T> data) {
+    public <T> void writeDatas(List<T> data) {
         try {
             // Create XML
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -97,14 +96,94 @@ public class ParserXML implements Parseable {
                 }
                 rootElement.appendChild(element);
             }
-            
+
             // Write XML to file
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(filename));
+            StreamResult result = new StreamResult(new File(this.filename));
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @brief Reads data from an XML file and returns it as an object.
+     * @param type The class type of the data to be read.
+     * @return A data object read from the file.
+     */
+    public <T> T readData(Class<T> type) {
+        T data = null;
+
+        try {
+            File file = new File(this.filename);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            // Parse XML
+            Document doc = db.parse(file);
+            doc.getDocumentElement().normalize();
+
+            NodeList nodeList = doc.getElementsByTagName(type.getSimpleName());
+            if (nodeList.getLength() > 0) {
+                Element element = (Element) nodeList.item(0);
+                data = type.getDeclaredConstructor().newInstance();
+                for (Field field : type.getDeclaredFields()) {
+                    field.setAccessible(true);
+                    String value = element.getElementsByTagName(field.getName()).item(0).getTextContent();
+                    if (field.getType() == float.class) {
+                        field.set(data, Float.parseFloat(value));
+                    } else if (field.getType() == int.class) {
+                        field.set(data, Integer.parseInt(value));
+                    } else if (field.getType() == double.class) {
+                        field.set(data, Double.parseDouble(value));
+                    } else if (field.getType() == boolean.class) {
+                        field.set(data, Boolean.parseBoolean(value));
+                    } else {
+                        field.set(data, value);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    /**
+     * @brief Writes a single data object to an XML file.
+     * @param data The data object to be written.
+     */
+    public <T> void writeData(T data) {
+        try {
+            // Create XML
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.newDocument();
+
+            // Create root then append to document
+            Element rootElement = doc.createElement("data");
+            doc.appendChild(rootElement);
+
+            Element element = doc.createElement(data.getClass().getSimpleName());
+            for (Field field : data.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                Object value = field.get(data);
+                Element fieldElement = doc.createElement(field.getName());
+                fieldElement.appendChild(doc.createTextNode(value.toString()));
+                element.appendChild(fieldElement);
+            }
+            rootElement.appendChild(element);
+
+            // Write XML to file
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(this.filename));
             transformer.transform(source, result);
         } catch (Exception e) {
             e.printStackTrace();
