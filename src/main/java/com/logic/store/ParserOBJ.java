@@ -17,7 +17,7 @@ public class ParserOBJ implements Parseable {
         this.filename = filename;
     }
 
-    public <T> void writeData(List<T> data) {
+    public <T> void writeDatas(List<T> data) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(this.filename))) {
             out.writeObject(data);
         } catch (IOException e) {
@@ -25,11 +25,30 @@ public class ParserOBJ implements Parseable {
         }
     }
 
-    public <T> List<T> readData(Class<T> classType) {
+    public <T> List<T> readDatas(Class<T> classType) {
         List<T> data = new ArrayList<>();
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(this.filename))) {
             data = (List<T>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    public <T> void writeData(T data) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(this.filename))) {
+            out.writeObject(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public <T> T readData(Class<T> classType) {
+        T data = null;
+    
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(this.filename))) {
+            data = (T) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

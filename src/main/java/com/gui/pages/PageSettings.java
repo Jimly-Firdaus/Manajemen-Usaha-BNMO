@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import java.io.File;
 import java.util.List;
+import lombok.Getter;
 
 import com.gui.interfaces.PageSwitcher;
 import com.gui.components.*;
@@ -21,6 +22,7 @@ import com.logic.store.ParserXML;
 import com.logic.store.ParserOBJ;
 import com.logic.feature.Bill;
 
+@Getter
 public class PageSettings extends VBox {
     private Stage stage;
     private String pathLabel = "";
@@ -29,7 +31,7 @@ public class PageSettings extends VBox {
 
     // Need reference resource to fill in from Parser (Bills, and other)
     // TODO: add more objects that are needs to be retrieved from data store
-    public PageSettings(PageSwitcher pageCaller, String inputPath, List<Bill> storedBills, Stage stage) {
+    public PageSettings(PageSwitcher pageCaller, List<Bill> storedBills, Stage stage) {
         this.stage = stage;
 
         // input file path dialog
@@ -48,7 +50,7 @@ public class PageSettings extends VBox {
         BaseButton reloadDatabase = new BaseButton("Refresh Database");
         Label reloadDatabaseStatus = new Label("");
         reloadDatabase.setOnAction(event -> onReloadDatabase(reloadDatabaseStatus, storedBills, Bill.class));
-        openFile.setOnAction(event -> this.chooseOutputPath(inputPath, inputPathLabel, reloadDatabaseStatus));
+        openFile.setOnAction(event -> this.chooseOutputPath(inputPathLabel, reloadDatabaseStatus));
         HBox databaseDialogBox = new HBox();
         databaseDialogBox.getChildren().addAll(reloadDatabase);
         BaseButton outDataStore = new BaseButton("Output Database");
@@ -80,7 +82,7 @@ public class PageSettings extends VBox {
         this.getChildren().addAll(fileDialogCard);
     }
 
-    public void chooseOutputPath(String outputPath, Label label, Label databaseStatusText) {
+    public void chooseOutputPath(Label label, Label databaseStatusText) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Input File");
         fileChooser.getExtensionFilters().addAll(
@@ -107,15 +109,15 @@ public class PageSettings extends VBox {
         switch (extension) {
             case "json":
                 Parseable jsonParser = new ParserJSON(this.pathLabel);
-                newData = jsonParser.readData(classType);
+                newData = jsonParser.readDatas(classType);
                 break;
             case "xml":
                 Parseable xmlParser = new ParserXML(this.pathLabel);
-                newData = xmlParser.readData(classType);
+                newData = xmlParser.readDatas(classType);
                 break;
             case "obj":
                 Parseable objParser = new ParserOBJ(this.pathLabel);
-                newData = objParser.readData(classType);
+                newData = objParser.readDatas(classType);
                 break;
         }
 

@@ -5,6 +5,8 @@ import java.util.*;
 import lombok.*;
 
 @NoArgsConstructor
+@Setter
+@Getter
 public class Inventory implements Serializable {
     // Attributes
     private Map<String, Product> storage = new HashMap<String, Product>();
