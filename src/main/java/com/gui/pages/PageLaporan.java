@@ -15,15 +15,15 @@ import com.gui.components.*;
 import com.gui.interfaces.PageSwitcher;
 
 import com.logic.output.Printer;
-import com.logic.feature.interfaces.IBill;
-import com.logic.constant.interfaces.IPayment;
+import com.logic.feature.Bill;
+import com.logic.constant.Payment;
 
 public class PageLaporan extends VBox {
-    List<IBill> listBills;
-    List<IPayment> listPayments;
+    List<Bill> listBills;
+    List<Payment> listPayments;
     Stage stage;
 
-    public PageLaporan(PageSwitcher pageCaller, List<IBill> lsBills, List<IPayment> lsPayments, Stage stage) {
+    public PageLaporan(PageSwitcher pageCaller, List<Bill> lsBills, List<Payment> lsPayments, Stage stage) {
         // keep this as reference for updates
         this.listBills = lsBills;
         this.listPayments = lsPayments;
