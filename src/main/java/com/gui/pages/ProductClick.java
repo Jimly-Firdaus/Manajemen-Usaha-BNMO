@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -37,21 +38,18 @@ public class ProductClick extends Stage {
         HBox.setHgrow(headerLayout.getChildren().get(1), Priority.ALWAYS);
         HBox.setHgrow(headerLayout.getChildren().get(3), Priority.ALWAYS);
 
-        Label cashMethod = new Label("Cash : ");
+        Label productNumberMethod = new Label("Product Number : ");
 
         TextField textNumber = new TextField();
         textNumber.setText("0");
-        textNumber.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
-                textNumber.setText(oldValue);
-            }
-        });
+        textNumber.setTextFormatter(new TextFormatter<>(change ->
+                (change.getControlNewText().matches("\\d*")) ? change : null));
 
-        HBox cashLayout = new HBox(cashMethod, new Region(), textNumber);
-        HBox.setHgrow(cashLayout.getChildren().get(1), Priority.ALWAYS);
-        cashLayout.setStyle("-fx-padding: 10px 30px;");
+        HBox productNumberLayout = new HBox(productNumberMethod, new Region(), textNumber);
+        HBox.setHgrow(productNumberLayout.getChildren().get(1), Priority.ALWAYS);
+        productNumberLayout.setStyle("-fx-padding: 10px 30px;");
 
-        VBox root = new VBox(headerLayout, cashLayout);
+        VBox root = new VBox(headerLayout, productNumberLayout);
         root.setAlignment(Pos.CENTER);
         
         // Set the scene of the popup window
