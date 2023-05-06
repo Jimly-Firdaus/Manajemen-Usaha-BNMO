@@ -21,11 +21,15 @@ import javafx.stage.Stage;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import java.util.List;
+import java.util.ArrayList;
 
+import com.gui.Router;
 import com.gui.components.BaseButton;
-import com.gui.interfaces.PageSwitcher;
+import com.gui.interfaces.*;
+import com.logic.feature.Product;
 
-public class InventoryManagement extends VBox {
+public class InventoryManagement extends VBox implements RouterListener {
     // Product List
     private ObservableList<String> products =
             FXCollections.observableArrayList(
@@ -33,10 +37,17 @@ public class InventoryManagement extends VBox {
                     "Product 2",
                     "Product 3");
 
+    Router router;
+
+    private FilteredList<String> productList;
+    private ListView<String> productListView;
+                
     // Cart
     // private ObservableList<String> cart = FXCollections.observableArrayList();
 
-    public InventoryManagement(PageSwitcher pageCaller, Stage stage) {
+    public InventoryManagement(Router router, Stage stage) {
+        this.router = router;
+
         VBox container = new VBox();
 
         // For Buttons
@@ -59,8 +70,8 @@ public class InventoryManagement extends VBox {
         shoppingCartLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 16));
 
         // Set up the list view for the products
-        FilteredList<String> productList = new FilteredList<>(products, s -> true);
-        ListView<String> productListView = new ListView<>(productList);
+        this.productList = new FilteredList<>(products, s -> true);
+        this.productListView = new ListView<>(productList);
 
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteMenuItem = new MenuItem("Delete");
@@ -166,5 +177,30 @@ public class InventoryManagement extends VBox {
         // Append to VBox    
         getChildren().addAll(container);
         this.setAlignment(Pos.CENTER);
+    }
+
+    public void refreshProducts() {
+        List<Product> storedProducts = this.router.getSystemProducts();
+        
+        // Get the latest products data from the router
+        List<String> latestProducts = new ArrayList<>();
+        for (Product p : storedProducts) {
+            latestProducts.add(p.getProductName());
+        }
+
+        // Update the products list
+        products.clear();
+        products.addAll(latestProducts);
+
+        // Refresh the filtered list to show the latest data
+        productList.setPredicate(s -> true);
+
+        // Update the list view to show the latest data
+        productListView.refresh();
+    }
+
+    @Override
+    public void onResourceUpdate() {
+        this.refreshProducts();
     }
 }
