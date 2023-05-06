@@ -1,5 +1,7 @@
 package com.logic.feature;
 
+import java.io.Serializable;
+
 import lombok.*;
 
 @Data
@@ -7,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Product {
+public class Product implements Serializable {
     private int count;
     @NonNull
     private String productName;

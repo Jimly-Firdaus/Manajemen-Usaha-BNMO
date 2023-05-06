@@ -1,10 +1,11 @@
 package com.logic.feature;
 
+import java.io.Serializable;
 import java.util.*;
 import lombok.*;
 
 @NoArgsConstructor
-public class Inventory {
+public class Inventory implements Serializable {
     // Attributes
     private Map<String, Product> storage = new HashMap<String, Product>();
 

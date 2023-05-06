@@ -2,6 +2,8 @@ package com.logic.constant;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 import com.logic.constant.interfaces.IPayment;
 import com.logic.feature.ListOfProduct;
 import com.logic.feature.Product;
@@ -11,7 +13,7 @@ import com.logic.feature.Product;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Payment implements IPayment {
+public class Payment implements IPayment, Serializable {
     /*Attribute */
     private int userID;
     private ListOfProduct boughtItems;

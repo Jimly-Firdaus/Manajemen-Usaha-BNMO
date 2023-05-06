@@ -2,13 +2,15 @@ package com.logic.feature;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 import com.logic.feature.interfaces.IBill;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-public class Bill implements IBill {
+public class Bill implements IBill, Serializable {
     /*Attribute */
     private ListOfProduct basket;
     private int idCustomer;
