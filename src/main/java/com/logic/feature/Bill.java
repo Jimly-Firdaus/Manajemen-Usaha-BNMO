@@ -44,7 +44,7 @@ public class Bill implements IBill, Serializable {
         sb.append("Customer ID : ").append(idCustomer).append("\n");
         sb.append("=> Basket = \n");
         int i = 1;
-        for (Product product : basket.getProductList().values()) {
+        for (Product product : basket.getProductList()) {
             sb.append("    ").append(i).append(". ").append(product.getProductName())
                     .append(" (count : ").append(product.getCount())
                     .append(", basePrice : ").append(product.getBasePrice())

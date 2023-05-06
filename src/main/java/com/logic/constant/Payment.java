@@ -25,7 +25,7 @@ public class Payment implements IPayment, Serializable {
         sb.append("User ID : ").append(userID).append("\n");
         sb.append("=> boughtItems = \n");
         int i = 1;
-        for (Product product : boughtItems.getProductList().values()) {
+        for (Product product : boughtItems.getProductList()) {
             sb.append("    ").append(i).append(". ").append(product.getProductName())
                     .append(" (count : ").append(product.getCount())
                     .append(", basePrice : ").append(product.getBasePrice())
