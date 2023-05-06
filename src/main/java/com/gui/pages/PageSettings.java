@@ -71,13 +71,10 @@ public class PageSettings extends VBox {
         fileDialogCard.getChildren().addAll(fileDialogBox, databaseOutputBox, databaseStateBox);
         fileDialogCard.setAlignment(Pos.CENTER_LEFT);
 
-        // Database output type files
-
-
         // TODO : 2
         // Delete or unplug plugin
 
-        // TODO : 3
+
         // Other config should be done in here
 
         this.getChildren().addAll(fileDialogCard);
@@ -132,6 +129,22 @@ public class PageSettings extends VBox {
     }
 
     public void onOutputDatabase() {
+        
+        switch (this.outputDatabaseType) {
+            // TODO: change this to correlated reference list objects
+            case "JSON":
+                Parseable jsonParser = new ParserJSON(this.pathLabel);
+                jsonParser.writeData(null);
+                break;
+            case "XML":
+                Parseable xmlParser = new ParserXML(this.pathLabel);
+                xmlParser.writeData(null);
+                break;
+            case "OBJ":
+                Parseable objParser = new ParserOBJ(this.pathLabel);
+                objParser.writeData(null);
+                break;
+        }
         System.out.println(this.outputDatabaseType);
     }
 
