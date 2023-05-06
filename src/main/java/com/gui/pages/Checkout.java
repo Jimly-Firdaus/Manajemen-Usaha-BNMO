@@ -35,6 +35,7 @@ public class Checkout extends Stage {
         String headerLayoutStyle = "-fx-background-color: #679abe; -fx-padding: 10px 30px; \n";
         headerLayout.setStyle(headerLayoutStyle);
         headerLayout.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        headerLayout.prefHeightProperty().bind(heightProperty());
         HBox.setHgrow(headerLayout.getChildren().get(1), Priority.ALWAYS);
         HBox.setHgrow(headerLayout.getChildren().get(3), Priority.ALWAYS);
 
@@ -49,6 +50,7 @@ public class Checkout extends Stage {
         });
 
         HBox cashLayout = new HBox(cashMethod, new Region(), textNumber);
+        cashLayout.prefHeightProperty().bind(heightProperty());
         HBox.setHgrow(cashLayout.getChildren().get(1), Priority.ALWAYS);
         cashLayout.setStyle("-fx-padding: 10px 30px;");
 
