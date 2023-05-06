@@ -7,6 +7,9 @@ import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.geometry.Insets;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 import java.io.File;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class PageSettings extends VBox {
     private Stage stage;
     private String pathLabel = "";
     private String databaseReloadText = "";
+    private String outputDatabaseType = "";
 
     // Need reference resource to fill in from Parser (Bills, and other)
     // TODO: add more objects that are needs to be retrieved from data store
@@ -29,7 +33,7 @@ public class PageSettings extends VBox {
         this.stage = stage;
 
         // input file path dialog
-        BaseCard fileDialogCard = new BaseCard("Input File Option", "");
+        BaseCard fileDialogCard = new BaseCard("Database Config: ", "");
         HBox fileDialogBox = new HBox();
         fileDialogBox.setSpacing(10);
         Label inputPathLabel = new Label("Data Store Path: " + pathLabel);
@@ -37,13 +41,39 @@ public class PageSettings extends VBox {
         fileDialogBox.getChildren().addAll(openFile, inputPathLabel);
         fileDialogBox.setAlignment(Pos.CENTER_LEFT);
         HBox.setMargin(fileDialogBox, new Insets(0, 0, 0, 20));
-        fileDialogCard.getChildren().addAll(fileDialogBox);
-        fileDialogCard.setAlignment(Pos.CENTER_LEFT);
+        fileDialogCard.setSpacing(10);
 
+        // Database state dialog
+        VBox databaseStateBox = new VBox();
         BaseButton reloadDatabase = new BaseButton("Refresh Database");
         Label reloadDatabaseStatus = new Label("");
         reloadDatabase.setOnAction(event -> onReloadDatabase(reloadDatabaseStatus, storedBills, Bill.class));
         openFile.setOnAction(event -> this.chooseOutputPath(inputPath, inputPathLabel, reloadDatabaseStatus));
+        HBox databaseDialogBox = new HBox();
+        databaseDialogBox.getChildren().addAll(reloadDatabase);
+        BaseButton outDataStore = new BaseButton("Output Database");
+        outDataStore.setOnAction(event -> this.onOutputDatabase());
+        databaseStateBox.setSpacing(10);
+        databaseStateBox.getChildren().addAll(databaseDialogBox, outDataStore);
+
+
+        // Database output type dialog
+        HBox databaseOutputBox = new HBox();
+        ObservableList<String> options = FXCollections.observableArrayList("JSON", "XML", "OBJ");
+        final ComboBox<String> comboBox = new ComboBox<>(options);
+        comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            this.outputDatabaseType = (String) newVal;
+        });
+        Label comboBoxLabel = new Label("Output Data Store type: ");
+        databaseOutputBox.getChildren().addAll(comboBoxLabel, comboBox);
+        databaseOutputBox.setAlignment(Pos.CENTER_LEFT);
+
+        fileDialogCard.getChildren().addAll(fileDialogBox, databaseOutputBox, databaseStateBox);
+        fileDialogCard.setAlignment(Pos.CENTER_LEFT);
+
+        // Database output type files
+
+
         // TODO : 2
         // Delete or unplug plugin
 
@@ -99,6 +129,10 @@ public class PageSettings extends VBox {
 
         this.databaseReloadText = "";
         label.setText(this.databaseReloadText);
+    }
+
+    public void onOutputDatabase() {
+        System.out.println(this.outputDatabaseType);
     }
 
 }
