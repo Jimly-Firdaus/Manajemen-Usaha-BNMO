@@ -5,6 +5,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -21,6 +23,7 @@ import com.logic.feature.ListOfProduct;
 import com.logic.feature.Product;
 
 @AllArgsConstructor
+@Setter
 public class ParserXML implements Parseable {
     private String filename;
 
