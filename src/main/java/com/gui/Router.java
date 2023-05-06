@@ -3,7 +3,11 @@ package com.gui;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.gui.interfaces.PageSwitcher;
@@ -17,6 +21,8 @@ import com.logic.feature.VIP;
 import com.logic.constant.Payment;
 
 @Data
+@Setter
+@Getter
 public class Router implements PageSwitcher {
     private Stage stage;
 
@@ -31,22 +37,46 @@ public class Router implements PageSwitcher {
     private UserPage pageUser;
 
     // System Data
-    private List<Bill> systemBills;
-    private List<Payment> systemPayments;
-    private List<Product> systemProducts;
-    private List<Member> systemMembers;
-    private List<VIP> systemVIPs;
+    private List<Bill> systemBills = new ArrayList<>();
+    private List<Payment> systemPayments = new ArrayList<>();
+    private List<Product> systemProducts = new ArrayList<>();
+    private List<Member> systemMembers = new ArrayList<>();
+    private List<VIP> systemVIPs = new ArrayList<>();
     private Inventory inventory = new Inventory();
 
     // TODO : Find a way to share resources to all pages by references
+    public void restoreSystemBills(Collection<Bill> collection) {
+        this.systemBills.clear();
+        this.systemBills.addAll(collection);
+    }
+
+    public void restoreSystemPayments(Collection<Payment> collection) {
+        this.systemPayments.clear();
+        this.systemPayments.addAll(collection);
+    }
+
+    public void restoreSystemProducts(Collection<Product> collection) {
+        this.systemProducts.clear();
+        this.systemProducts.addAll(collection);
+    }
+
+    public void restoreSystemMembers(Collection<Member> collection) {
+        this.systemMembers.clear();
+        this.systemMembers.addAll(collection);
+    }
+
+    public void restoreSystemVIPs(Collection<VIP> collection) {
+        this.systemVIPs.clear();
+        this.systemVIPs.addAll(collection);
+    }
 
     public Router(Stage stage) {
         this.stage = stage;
 
         // pages
-        this.pageSettings = new PageSettings(this, this.systemBills, this.systemPayments, this.systemProducts, this.systemMembers, this.systemVIPs, this.inventory, this.stage);
+        this.pageSettings = new PageSettings(this, this.stage);
         this.mainPage = new MainPage(this);
-        this.pageLaporan = new PageLaporan(this, this.systemBills, this.systemPayments, this.stage);
+        this.pageLaporan = new PageLaporan(this, this.stage);
         this.pageRegister = new RegistrationPage(this);
         this.pageUpdateInfo = new UpdateInfoPage(this);
         this.pageMembershipDeactivation = new MembershipDeactivationPage(this);
