@@ -31,11 +31,11 @@ import com.gui.interfaces.RouterListener;
 public class PaymentPage extends VBox implements RouterListener {
 
     private TableView<Bill> billTable;
-    private List<Integer> userIds;
+    private List<String> userIds;
     private ObservableList<Bill> bills = FXCollections.observableArrayList();
     private Stage stage;
     private Router router;
-    private ComboBox<Integer> userIDComboBox = new ComboBox<>();
+    private ComboBox<String> userIDComboBox = new ComboBox<>();
 
     public PaymentPage(
             Router router,
@@ -73,7 +73,7 @@ public class PaymentPage extends VBox implements RouterListener {
         for (Bill b : billList) {
             int userId = b.getIdCustomer();
             if (!userIds.contains(userId) && b.isBillFixed() && !b.isBillDone()) {
-                userIds.add(userId);
+                userIds.add(Integer.toString(userId));
             }
         }
 
@@ -112,19 +112,22 @@ public class PaymentPage extends VBox implements RouterListener {
         });
 
         userIDComboBox.setOnAction(event -> {
-            Integer selectedUserId = userIDComboBox.getSelectionModel().getSelectedItem();
+            String selectedUserId = userIDComboBox.getSelectionModel().getSelectedItem();
+            // Clear the bills list
+            bills.clear();
             if (selectedUserId != null) {
-                // Clear the bills list
-                bills.clear();
                 // Add only the bills corresponding to the selected user ID
                 for (Bill b : billList) {
-                    if (b.getIdCustomer() == selectedUserId && b.isBillFixed() && !b.isBillDone()) {
-                        bills.add(b);
-                    }
+                    try {
+                        Integer userId = Integer.parseInt(selectedUserId); 
+                        if (b.getIdCustomer() == userId && b.isBillFixed() && !b.isBillDone()) {
+                            bills.add(b);
+                        }
+                    } catch (NumberFormatException e) {}
                 }
-                // Refresh the billTable to update the view
-                billTable.refresh();
-            }
+            } 
+            // Refresh the billTable to update the view
+            billTable.refresh();
         });
 
         HBox userIdBox = new HBox();
@@ -190,11 +193,12 @@ public class PaymentPage extends VBox implements RouterListener {
         this.bills.clear();
         List<Bill> storedbills = this.router.getSystemBills();
         for (Bill p : storedbills) {
-            if (p.isBillFixed() && !p.isBillDone())
-            this.userIds.add(p.getIdCustomer());
-            this.bills.add(p);
+            if (p.isBillFixed() && !p.isBillDone()) {
+                this.userIds.add(Integer.toString(p.getIdCustomer()));
+                this.bills.add(p);
+            }
         }
-        ObservableList<Integer> newItems = FXCollections.observableArrayList(this.userIds);
+        ObservableList<String> newItems = FXCollections.observableArrayList(this.userIds);
         this.userIDComboBox.setItems(newItems);
         this.billTable.refresh();
     }
