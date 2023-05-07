@@ -128,6 +128,7 @@ public class Router implements PageSwitcher {
     
     public Node gotoUserPage(){
         this.pageUser = new UserPage(this, this.stage);
+        this.listeners.add(pageUser);
         this.pageUser.setPrefSize(1080, 608);
         return this.pageUser;
     }
