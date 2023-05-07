@@ -98,7 +98,6 @@ public class Router implements PageSwitcher {
         this.pageLaporan = new PageLaporan(this, this.stage);
         this.pageRegister = new RegistrationPage(this, this.stage);
         this.pageUserInfos = new UserInfosPage(this, this.stage);
-        this.pageUpdateInfo = new UpdateInfoPage(this, this.stage);
         this.pageMembershipDeactivation = new MembershipDeactivationPage(this, this.stage);
         this.pageUser = new UserPage(this, this.stage);
         this.pageInventory = new InventoryManagement(this, this.stage);
@@ -108,6 +107,7 @@ public class Router implements PageSwitcher {
         this.listeners.add(pageInventory);
         this.listeners.add(pageUserInfos);
         this.listeners.add(pageMembershipDeactivation);
+        this.listeners.add(pagePayment);
     }
 
     public Node gotoMainPage() {
