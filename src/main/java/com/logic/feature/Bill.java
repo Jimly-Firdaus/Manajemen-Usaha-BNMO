@@ -10,6 +10,7 @@ import com.logic.feature.interfaces.IBill;
 @AllArgsConstructor
 @Setter
 @Getter
+@EqualsAndHashCode
 public class Bill implements IBill, Serializable {
     /*Attribute */
     private ListOfProduct basket;
