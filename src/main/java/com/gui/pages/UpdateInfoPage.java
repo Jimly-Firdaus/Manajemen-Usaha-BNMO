@@ -84,7 +84,7 @@ public class UpdateInfoPage extends Stage {
                         "-fx-pref-width: 250px"
         );
 
-        BaseButton saveButton = new BaseButton("Back");
+        BaseButton saveButton = new BaseButton("Save");
         saveButton.setOnAction(
             // TODO: Save the data changes
             event -> close()
