@@ -8,7 +8,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -19,7 +18,6 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import java.util.List;
-import java.util.ArrayList;
 
 import com.gui.Router;
 import com.gui.components.BaseButton;
@@ -189,26 +187,6 @@ public class InventoryManagement extends VBox implements RouterListener {
         getChildren().addAll(container);
         this.setAlignment(Pos.CENTER);
     }
-
-    // public void refreshProducts() {
-    //     List<Product> storedProducts = this.router.getSystemProducts();
-        
-    //     // Get the latest products data from the router
-    //     List<String> latestProducts = new ArrayList<>();
-    //     for (Product p : storedProducts) {
-    //         latestProducts.add(p.getProductName());
-    //     }
-
-    //     // Update the products list
-    //     products.clear();
-    //     products.addAll(latestProducts);
-
-    //     // Refresh the filtered list to show the latest data
-    //     productList.setPredicate(s -> true);
-
-    //     // Update the list view to show the latest data
-    //     productListView.refresh();
-    // }
 
     @Override
     public void onResourceUpdate() {

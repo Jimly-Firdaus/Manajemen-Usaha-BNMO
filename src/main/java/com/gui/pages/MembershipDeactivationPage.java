@@ -21,7 +21,6 @@ import java.util.List;
 
 import com.gui.Router;
 import com.gui.interfaces.RouterListener;
-import com.gui.components.*;
 import com.logic.feature.*;
 
 public class MembershipDeactivationPage extends VBox implements RouterListener {
@@ -70,12 +69,6 @@ public class MembershipDeactivationPage extends VBox implements RouterListener {
         phoneNumberColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPhoneNumber().toString()));
 
         userTable = new TableView<>();
-
-        // Sample
-        // Member member1 = new Member(1, "abc", "123");
-        // VIP member2 = new VIP(2, "cde", "456");
-
-        // users.addAll(member1, member2);
         userTable.getColumns().addAll(userIDColumn, nameColumn, phoneNumberColumn);
         
         userTable.setItems(users);

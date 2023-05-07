@@ -42,26 +42,6 @@ public class MainPage extends VBox {
         HBox titleHLayout2 = new HBox(titleLabel2);
         titleHLayout2.setAlignment(Pos.CENTER);
 
-        // Set Logo
-        /*
-         * Image logo = null;
-         * try {
-         * File file = new File("../src/main/java/com/gui/components/logo.png");
-         * InputStream inputStream = new FileInputStream(file);
-         * logo = new Image(inputStream);
-         * } catch (FileNotFoundException e) {
-         * e.printStackTrace();
-         * }
-         * 
-         * ImageView logoView = new ImageView(logo);
-         * logoView.setFitHeight(100);
-         * logoView.setFitWidth(200);
-         * 
-         * // Create a new HBox to hold the title and logo
-         * HBox logoLayout = new HBox(logoView);
-         * logoLayout.setAlignment(Pos.CENTER);
-         */
-
         Image gifImage = null;
         try {
             File file = new File("../src/main/java/com/gui/components/holaLogo.gif");
@@ -181,9 +161,6 @@ public class MainPage extends VBox {
 
         // Set margins
         VBox.setMargin(titleHLayout1, new Insets(0, 0, 0, 0));
-        // VBox.setMargin(logoPane, new Insets(95, 30, 0, 0));
-        // VBox.setMargin(jamHLayout, new Insets(20, 0, 0, 0));
-        // VBox.setMargin(autLabelsBox, new Insets(20, 0, 0, 0));
 
         // Append to VBox
         getChildren().addAll(container);

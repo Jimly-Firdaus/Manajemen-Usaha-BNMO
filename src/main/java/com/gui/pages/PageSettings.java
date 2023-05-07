@@ -2,7 +2,6 @@ package com.gui.pages;
 
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.DirectoryChooser;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
@@ -12,7 +11,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
@@ -24,7 +22,6 @@ import com.logic.store.ParserXML;
 import com.logic.store.ParserOBJ;
 import com.logic.feature.Bill;
 import com.logic.feature.Product;
-import com.logic.feature.Inventory;
 import com.logic.feature.Member;
 import com.logic.feature.VIP;
 import com.logic.constant.Payment;
@@ -38,7 +35,6 @@ public class PageSettings extends VBox {
     private File databaseDirectory;
 
     // Need reference resource to fill in from Parser (Bills, and other)
-    // TODO: add more objects that are needs to be retrieved from data store
     public PageSettings(
             Router router,
             Stage stage) {
@@ -82,11 +78,6 @@ public class PageSettings extends VBox {
         fileDialogCard.getChildren().addAll(fileDialogBox, databaseOutputBox, databaseStateBox);
         fileDialogCard.setAlignment(Pos.CENTER_LEFT);
 
-        // TODO : 2
-        // Delete or unplug plugin
-
-        // Other config should be done in here
-
         this.getChildren().addAll(fileDialogCard);
     }
 
@@ -128,53 +119,10 @@ public class PageSettings extends VBox {
                         } else if (fileName.startsWith("systemVIPs")) {
                             router.restoreSystemVIPs(this.processParsing(VIP.class, fileExtension, file.getAbsolutePath()));
                         } 
-                        // else if (fileName.startsWith("inventory")) {
-                        //     Inventory parsedInventory = null;
-                        //     switch (fileExtension) {
-                        //         case "json":
-                        //             Parseable jsonParser = new ParserJSON(file.getAbsolutePath());
-                        //             parsedInventory = (Inventory) jsonParser.readData(Inventory.class);
-                        //             break;
-                        //         case "xml":
-                        //             Parseable xmlParser = new ParserXML(file.getAbsolutePath());
-                        //             parsedInventory = (Inventory) xmlParser.readData(Inventory.class);
-                        //             break;
-                        //         case "obj":
-                        //             Parseable objParser = new ParserOBJ(file.getAbsolutePath());
-                        //             parsedInventory = (Inventory) objParser.readData(Inventory.class);
-                        //             break;
-                        //     }
-                        //     router.getInventory().getStorage().clear();
-                        //     router.getInventory().getStorage().addAll(parsedInventory.getStorage());
-                        // }
                     }
                     router.notifyListeners();
                 }
             }
-
-        // System.out.println("------------------Payments------------------");
-        // for (Payment payment : router.getSystemPayments()) {
-        //     System.out.println(payment.toString());
-        // }
-        // System.out.println("------------------Bills------------------");
-        // for (Bill bill : router.getSystemBills()) {
-        //     System.out.println(bill.toString());
-        // }
-        // System.out.println("------------------Members------------------");
-        // for (Member bill : router.getSystemMembers()) {
-        //     System.out.println(bill.toString());
-        // }
-        // System.out.println("------------------Products------------------");
-        // for (Product bill : router.getSystemProducts()) {
-        //     System.out.println(bill.toString());
-        // }
-        // System.out.println("------------------VIPs------------------");
-        // for (VIP bill : router.getSystemVIPs()) {
-        //     System.out.println(bill.toString());
-        //     System.out.println(bill.getPaymentHistory().toString());
-        // }
-        // System.out.println("------------------Inventory------------------");
-        // System.out.println(router.getInventory());
 
         this.databaseReloadText = "";
         label.setText(this.databaseReloadText);

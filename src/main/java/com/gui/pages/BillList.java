@@ -1,11 +1,7 @@
 package com.gui.pages;
 
-import java.util.List;
-
 import com.gui.components.BaseButton;
-import com.gui.interfaces.PageSwitcher;
 import com.logic.feature.Bill;
-import com.logic.feature.ListOfProduct;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,9 +24,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import lombok.Getter;
 
 @Getter
@@ -45,18 +39,6 @@ public class BillList extends Stage {
     private boolean newBill;
     
     public BillList(ObservableList<Bill> systemBills){
-        // initModality(Modality.APPLICATION_MODAL);
-        // // Set the stage style to UTILITY, which removes the default window decorations
-        // initStyle(StageStyle.UTILITY);
-        
-        // Create the layout for the pop-up window
-        // VBox layout = new VBox();
-        // Scene scene = new Scene(layout);
-        
-        // Set the scene for the stage
-        // Label label = new Label("Hello, World!");
-        // label.setAlignment(Pos.CENTER);
-
         this.cancelBtn = false;
         this.newBill = false;
         this.notFixedBillData = systemBills.filtered(b -> !(b.isBillFixed()));
@@ -109,9 +91,6 @@ public class BillList extends Stage {
 
             this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
             systemBills.removeIf(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
-            // Bill deletedBill = data.filtered(product -> product.getProductName().equals(item)).get(0);
-            // this.totalPrice -= deletedProduct.getBasePrice() * deletedProduct.getCount();
-            // cartData.removeIf(product -> product.getProductName().equals(item));
         });
         contextMenu.getItems().add(deleteMenuItem);
 
@@ -128,7 +107,6 @@ public class BillList extends Stage {
             return cell ;
         });
 
-        // ListView<String> listView = new ListView<>(filteredStringData);
         billListView.setOnMouseClicked(event -> {
             System.out.println("hello");
             if (event.getClickCount() == 2) {
@@ -152,16 +130,11 @@ public class BillList extends Stage {
 
         newBillBtn.setOnAction(
             e -> {
-                // ListOfProduct basket = new ListOfProduct();
-                // this.chooseBill = new Bill(basket, -1, false, false);\
                 this.chooseBill = new Bill();
                 this.newBill = true;
                 close();
             }
         );
-        // Set the size of the pop-up window
-        // setWidth(400);
-        // setHeight(300);
     }
 
 }

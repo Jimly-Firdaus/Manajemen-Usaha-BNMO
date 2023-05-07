@@ -31,9 +31,6 @@ public class PageLaporan extends VBox {
     public PageLaporan(Router router, Stage stage) {
         // keep this as reference for updates
         this.stage = stage;
-        // Label label = new Label("Laporan");
-        // BaseButton button = new BaseButton("Go back to main");
-        // button.setOnAction(event -> this.checker(router));
 
         BaseCard card = new BaseCard("Pilih Jenis Laporan yang Ingin Dicetak", "");
 
@@ -127,7 +124,6 @@ public class PageLaporan extends VBox {
         for (Bill bill : router.getSystemBills()) {
             System.out.println(bill.toString());
         }
-        // System.out.println(router.getInventory().toString());
     }
 
 }
