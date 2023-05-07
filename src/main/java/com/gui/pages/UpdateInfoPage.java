@@ -91,10 +91,10 @@ public class UpdateInfoPage extends Stage {
                         "-fx-font-size: 12px;" +
                         "-fx-pref-width: 250px");
 
-        BaseButton saveButton = new BaseButton("Save");
-        saveButton.setOnAction(
+        BaseButton backButton = new BaseButton("Back");
+        backButton.setOnAction(
                 event -> close());
-        HBox saveHLayout = new HBox(saveButton);
+        HBox saveHLayout = new HBox(backButton);
         saveHLayout.setAlignment(Pos.BOTTOM_RIGHT);
 
         // Create a VBox as a container
