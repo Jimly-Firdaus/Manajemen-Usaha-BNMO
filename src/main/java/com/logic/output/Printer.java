@@ -27,8 +27,8 @@ public class Printer <T> extends Thread {
             for (T line : data) {
                 document.add(new Paragraph(line.toString()));
                 document.add(new Chunk(ls));
-                // Sleep for 0.1 second
-                Thread.sleep(100);
+                // Sleep for 10 second
+                Thread.sleep(10000);
             }
             document.close();
         } catch (Exception e) {
