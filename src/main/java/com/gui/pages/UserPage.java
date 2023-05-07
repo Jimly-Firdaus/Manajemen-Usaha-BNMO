@@ -154,30 +154,31 @@ public class UserPage extends VBox implements RouterListener{
         BaseButton saveBillBtn = new BaseButton("Bill");
         saveBillBtn.setOnAction(
             event -> {
-                ObservableList<Bill> temp = FXCollections.observableArrayList(this.billDArray);
-                BillList billListPage = new BillList(temp);
+                // ObservableList<Product> selectedBillProduct = FXCollections.observableArrayList();
+                ObservableList<Bill> tempBillList = FXCollections.observableArrayList(this.billDArray);
+                BillList billListPage = new BillList(tempBillList);
                 billListPage.showAndWait();
-                List<Product> productList = new ArrayList<>();
                 if(!billListPage.isCancelBtn()){
-                    productList = billListPage.getChooseBill().getBasket().getProductList();
-                    if (billListPage.isNew()) {
+                    if(billListPage.isNewBill()){
+                        List<Product> productList = new ArrayList<>();
                         this.currentCustomerStatus = "None";
                         this.currentCustomerID = 0;
-                    } else {
+                        this.cartData.setAll(productList);
+                    }else{
+                        List<Product> productList = new ArrayList<>();
+                        productList.addAll(billListPage.getChooseBill().getBasket().getProductList());
+                        // this.cartData.clear();
+                        this.cartData.setAll(productList);
                         this.currentCustomerID = billListPage.getChooseBill().getIdCustomer();
-                        this.setStatus(this.currentCustomerID);
-                    }
-                    this.cartData.clear();
-                    this.cartData.addAll(productList);
-                    this.totalPrice.set(0.0f);
-                    for(Product p : this.cartData){
-                        this.totalPrice.set(this.totalPrice.get() + (p.getBasePrice() * p.getCount()));
-                    }
-                    if (!billListPage.isNew()) {
+                        this.totalPrice.set(0.0f);
+                        for(Product p : this.cartData){
+                            this.totalPrice.set(this.totalPrice.get() + (p.getBasePrice() * p.getCount()));
+                        }
+                        this.setStatus(currentCustomerID);
                         this.billDArray.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
                         List<Bill> routerBills = router.getSystemBills();
                         routerBills.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
-                        router.notifyListeners();
+
                     }
                 }
             }
@@ -210,7 +211,11 @@ public class UserPage extends VBox implements RouterListener{
         saveBillActionBtn.setOnAction(
             e->{
                 if(!this.productData.isEmpty() && !(this.currentCustomerStatus.equals("None"))){
-                    ListOfProduct cartList = new ListOfProduct(this.cartData);
+                    List<Product> tempCartList = new ArrayList<>();
+                    for(Product p : this.cartData){
+                        tempCartList.add(p);
+                    }
+                    ListOfProduct cartList = new ListOfProduct(tempCartList);
                     Bill currentBill = new Bill(cartList, this.currentCustomerID, false, false);
                     this.billDArray.add(currentBill);
                     List<Bill> billList = this.router.getSystemBills();

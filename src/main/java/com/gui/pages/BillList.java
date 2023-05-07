@@ -43,22 +43,13 @@ public class BillList extends Stage {
     private boolean isNew;
 
     private boolean cancelBtn;
+
+    private boolean newBill;
     
     public BillList(ObservableList<Bill> systemBills){
-        // initModality(Modality.APPLICATION_MODAL);
-        // // Set the stage style to UTILITY, which removes the default window decorations
-        // initStyle(StageStyle.UTILITY);
-        
-        // Create the layout for the pop-up window
-        // VBox layout = new VBox();
-        // Scene scene = new Scene(layout);
-        
-        // Set the scene for the stage
-        // Label label = new Label("Hello, World!");
-        // label.setAlignment(Pos.CENTER);
         this.chooseBill = new Bill();
         this.cancelBtn = false;
-        this.isNew = false;
+        this.newBill = false;
         this.notFixedBillData = systemBills.filtered(b -> !(b.isBillFixed()));
 
         ObservableList<String> stringData = FXCollections.observableArrayList();
@@ -102,39 +93,8 @@ public class BillList extends Stage {
             }
         });
 
-        // ContextMenu contextMenu = new ContextMenu();
-        // MenuItem deleteMenuItem = new MenuItem("Delete");
-        // deleteMenuItem.setOnAction(event -> {
-        //     String item = billListView.getSelectionModel().getSelectedItem();
-
-        //     this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
-        //     systemBills.removeIf(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
-        //     // Bill deletedBill = data.filtered(product -> product.getProductName().equals(item)).get(0);
-        //     // this.totalPrice -= deletedProduct.getBasePrice() * deletedProduct.getCount();
-        //     // cartData.removeIf(product -> product.getProductName().equals(item));
-        // });
-        // contextMenu.getItems().add(deleteMenuItem);
-
-        // billListView.setCellFactory(lv -> {
-        //     ListCell<String> cell = new ListCell<>();
-        //     cell.textProperty().bind(cell.itemProperty());
-        //     cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-        //         if (isNowEmpty) {
-        //             cell.setContextMenu(null);
-        //         } else {
-        //             cell.setContextMenu(contextMenu);
-        //         }
-        //     });
-        //     return cell ;
-        // });
-
-        // ListView<String> listView = new ListView<>(filteredStringData);
         billListView.setOnMouseClicked(event -> {
-            System.out.println("hello");
             if (event.getClickCount() == 2) {
-                System.out.println("--------->>>>>>>>>>>");
-                System.out.println(this.notFixedBillData.toString());
-                System.out.println("--------->>>>>>>>>>>");
                 String selectedItem = billListView.getSelectionModel().getSelectedItem();
                 this.chooseBill = this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(selectedItem)).get(0);
                 close();
@@ -155,15 +115,11 @@ public class BillList extends Stage {
 
         newBillBtn.setOnAction(
             e -> {
-                this.isNew = true;
-                ListOfProduct basket = new ListOfProduct();
-                this.chooseBill = new Bill(basket, -1, false, false);
+                this.chooseBill = new Bill();
+                this.newBill = true;
                 close();
             }
         );
-        // Set the size of the pop-up window
-        // setWidth(400);
-        // setHeight(300);
     }
 
 }
