@@ -18,12 +18,19 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import lombok.Getter;
 
-public class Checkout extends Stage {
-    public Checkout(){
+@Getter
+public class AddingProductNumber extends Stage {
+
+    private int addNumber;
+
+    public AddingProductNumber(){
+
+        this.addNumber = 0;
         BaseButton cancelBtn = new BaseButton("Cancel");
-        BaseButton chargeBtn = new BaseButton("Charge");
-        Label title = new Label("{Harga}");
+        BaseButton chargeBtn = new BaseButton("Add");
+        Label title = new Label("Add Product Number");
         String titleStyle =  "-fx-background-color: transparent;\n" + 
                         "-fx-text-fill: black;\n" +
                         "-fx-padding: 10px 20px;\n" +
@@ -44,7 +51,7 @@ public class Checkout extends Stage {
         TextField textNumber = new TextField();
         textNumber.setPromptText("Rp 0");
         textNumber.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+            if (!newValue.matches("\\d*")) {
                 textNumber.setText(oldValue);
             }
         });
@@ -54,6 +61,17 @@ public class Checkout extends Stage {
         HBox.setHgrow(cashLayout.getChildren().get(1), Priority.ALWAYS);
         cashLayout.setStyle("-fx-padding: 10px 30px;");
 
+        cancelBtn.setOnAction(e->close());
+
+        chargeBtn.setOnAction(
+            e->{
+                String numberText = textNumber.getText();
+                if(numberText != null){
+                    this.addNumber = Integer.parseInt(numberText);
+                    close();
+                }
+            }
+        );
         VBox root = new VBox(headerLayout, cashLayout);
 
         root.setAlignment(Pos.CENTER);
@@ -61,7 +79,5 @@ public class Checkout extends Stage {
         // Set the scene of the popup window
         Scene scene = new Scene(root, 508, 108);
         setScene(scene);
-
-        cancelBtn.setOnAction(e->close());
     }
 }   

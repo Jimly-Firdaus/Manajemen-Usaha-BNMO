@@ -5,6 +5,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
@@ -27,16 +28,9 @@ import com.logic.feature.Product;
 
 public class InventoryManagement extends VBox implements RouterListener {
     // Product List
-    private ObservableList<String> products =
-            FXCollections.observableArrayList(
-                    "Product 1",
-                    "Product 2",
-                    "Product 3");
+    private ObservableList<Product> products = FXCollections.observableArrayList();
 
-    Router router;
-
-    private FilteredList<String> productList;
-    private ListView<String> productListView;
+    private Router router;
                 
     public InventoryManagement(Router router, Stage stage) {
         this.router = router;
@@ -65,17 +59,74 @@ public class InventoryManagement extends VBox implements RouterListener {
         productLabelLayout.setPadding(new Insets(10, 0, 0, 20));
         productLabelLayout.setAlignment(Pos.CENTER);
 
+        FilteredList<Product> productList = new FilteredList<>(products, s->true);
+        
         // Set up the list view for the products
-        this.productList = new FilteredList<>(products, s -> true);
-        this.productListView = new ListView<>(productList);
+        ObservableList<String> productListString = FXCollections.observableArrayList();
+
+        productList.forEach(p->productListString.add(p.getProductName()));
+
+        FilteredList<String> productFilterListString = new FilteredList<>(productListString, s->true);
+
+        ListView<String> productListView = new ListView<>(productFilterListString);
+
+        products.addListener(new ListChangeListener<Product>() {
+            @Override
+            public void onChanged(Change<? extends Product> c) {
+                productList.setPredicate(p -> true);
+                // update the productStringData list
+                productListString.clear();
+                productList.forEach(p -> productListString.add(p.getProductName()));
+                // refresh the productFilteredStringData list
+                productFilterListString.setPredicate(s -> true);
+                // refresh the listView
+                productListView.refresh();
+            }
+        });
 
         ContextMenu contextMenu = new ContextMenu();
+
+        // Create menu items
         MenuItem deleteMenuItem = new MenuItem("Delete");
+        MenuItem addMenuItem = new MenuItem("Add");
+        MenuItem descMenuItem = new MenuItem("Desc");
+
+        // Set onAction events for menu items
         deleteMenuItem.setOnAction(event -> {
             String item = productListView.getSelectionModel().getSelectedItem();
-            products.remove(item);
+            this.products.removeIf(p-> p.getProductName().equals(item));
+            List<Product> systemProducts = this.router.getSystemProducts();
+            systemProducts.removeIf(p-> p.getProductName().equals(item));
+            this.router.notifyListeners();
         });
-        contextMenu.getItems().add(deleteMenuItem);
+
+        addMenuItem.setOnAction(event -> {
+            String item = productListView.getSelectionModel().getSelectedItem();
+            AddingProductNumber addProductPage = new AddingProductNumber();
+            addProductPage.showAndWait();
+            products.stream()
+                    .filter(p -> p.getProductName() == item)
+                    .findFirst()
+                    .ifPresent(p -> p.setCount(addProductPage.getAddNumber() + p.getCount()));
+            List<Product> routerProducts = router.getSystemProducts();
+            routerProducts.stream()
+                .filter(p -> p.getProductName() == item)
+                .findFirst()
+                .ifPresent(p -> p.setCount(addProductPage.getAddNumber() + p.getCount()));
+            this.router.notifyListeners();
+        });
+
+        descMenuItem.setOnAction(
+            event -> {
+                String item = productListView.getSelectionModel().getSelectedItem();
+                Product chosen = this.products.filtered(p -> p.getProductName().equals(item)).get(0);
+                ProductDesc desc = new ProductDesc(chosen);
+                desc.showAndWait();
+            }
+        );
+
+        // Add menu items to context menu
+        contextMenu.getItems().addAll(deleteMenuItem, addMenuItem, descMenuItem);
 
         productListView.setCellFactory(lv -> {
             ListCell<String> cell = new ListCell<>();
@@ -98,9 +149,9 @@ public class InventoryManagement extends VBox implements RouterListener {
         searchField.textProperty().addListener(obs -> {
             String filter = searchField.getText();
             if (filter == null || filter.length() == 0) {
-                productList.setPredicate(s -> true);
+                productFilterListString.setPredicate(s -> true);
             } else {
-                productList.setPredicate(s -> s.contains(filter));
+                productFilterListString.setPredicate(s -> s.contains(filter));
             }
         });
 
@@ -122,8 +173,15 @@ public class InventoryManagement extends VBox implements RouterListener {
 
         addInventoryButton.setOnAction(
             e -> {
+                System.out.println(this.products);
                 AddProductInventory addProductPage = new AddProductInventory();
-                addProductPage.show();
+                addProductPage.showAndWait();
+                if(!addProductPage.isCancelBtn()){
+                    this.products.add(addProductPage.getProduct());
+                    List<Product> systemProductList = this.router.getSystemProducts();
+                    systemProductList.add(addProductPage.getProduct());
+                    this.router.notifyListeners();
+                }
             }
         );
 
@@ -132,28 +190,32 @@ public class InventoryManagement extends VBox implements RouterListener {
         this.setAlignment(Pos.CENTER);
     }
 
-    public void refreshProducts() {
-        List<Product> storedProducts = this.router.getSystemProducts();
+    // public void refreshProducts() {
+    //     List<Product> storedProducts = this.router.getSystemProducts();
         
-        // Get the latest products data from the router
-        List<String> latestProducts = new ArrayList<>();
-        for (Product p : storedProducts) {
-            latestProducts.add(p.getProductName());
-        }
+    //     // Get the latest products data from the router
+    //     List<String> latestProducts = new ArrayList<>();
+    //     for (Product p : storedProducts) {
+    //         latestProducts.add(p.getProductName());
+    //     }
 
-        // Update the products list
-        products.clear();
-        products.addAll(latestProducts);
+    //     // Update the products list
+    //     products.clear();
+    //     products.addAll(latestProducts);
 
-        // Refresh the filtered list to show the latest data
-        productList.setPredicate(s -> true);
+    //     // Refresh the filtered list to show the latest data
+    //     productList.setPredicate(s -> true);
 
-        // Update the list view to show the latest data
-        productListView.refresh();
-    }
+    //     // Update the list view to show the latest data
+    //     productListView.refresh();
+    // }
 
     @Override
     public void onResourceUpdate() {
-        this.refreshProducts();
+        this.products.clear();
+        List<Product> productList = this.router.getSystemProducts();
+        for(Product p : productList){
+            this.products.add(p);
+        }
     }
 }
