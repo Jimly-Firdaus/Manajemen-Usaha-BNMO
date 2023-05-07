@@ -41,6 +41,8 @@ public class BillList extends Stage {
     private Bill chooseBill = new Bill();
 
     private boolean cancelBtn;
+
+    private boolean newBill;
     
     public BillList(ObservableList<Bill> systemBills){
         // initModality(Modality.APPLICATION_MODAL);
@@ -56,6 +58,7 @@ public class BillList extends Stage {
         // label.setAlignment(Pos.CENTER);
 
         this.cancelBtn = false;
+        this.newBill = false;
         this.notFixedBillData = systemBills.filtered(b -> !(b.isBillFixed()));
 
         ObservableList<String> stringData = FXCollections.observableArrayList();
@@ -149,8 +152,10 @@ public class BillList extends Stage {
 
         newBillBtn.setOnAction(
             e -> {
-                ListOfProduct basket = new ListOfProduct();
-                this.chooseBill = new Bill(basket, -1, false, false);
+                // ListOfProduct basket = new ListOfProduct();
+                // this.chooseBill = new Bill(basket, -1, false, false);\
+                this.chooseBill = new Bill();
+                this.newBill = true;
                 close();
             }
         );
