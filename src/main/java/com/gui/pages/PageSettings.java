@@ -128,25 +128,25 @@ public class PageSettings extends VBox {
                         } else if (fileName.startsWith("systemVIPs")) {
                             router.restoreSystemVIPs(this.processParsing(VIP.class, fileExtension, file.getAbsolutePath()));
                         } 
-                        else if (fileName.startsWith("inventory")) {
-                            Inventory parsedInventory = null;
-                            switch (fileExtension) {
-                                case "json":
-                                    Parseable jsonParser = new ParserJSON(file.getAbsolutePath());
-                                    parsedInventory = (Inventory) jsonParser.readData(Inventory.class);
-                                    break;
-                                case "xml":
-                                    Parseable xmlParser = new ParserXML(file.getAbsolutePath());
-                                    parsedInventory = (Inventory) xmlParser.readData(Inventory.class);
-                                    break;
-                                case "obj":
-                                    Parseable objParser = new ParserOBJ(file.getAbsolutePath());
-                                    parsedInventory = (Inventory) objParser.readData(Inventory.class);
-                                    break;
-                            }
-                            router.getInventory().getStorage().clear();
-                            router.getInventory().getStorage().addAll(parsedInventory.getStorage());
-                        }
+                        // else if (fileName.startsWith("inventory")) {
+                        //     Inventory parsedInventory = null;
+                        //     switch (fileExtension) {
+                        //         case "json":
+                        //             Parseable jsonParser = new ParserJSON(file.getAbsolutePath());
+                        //             parsedInventory = (Inventory) jsonParser.readData(Inventory.class);
+                        //             break;
+                        //         case "xml":
+                        //             Parseable xmlParser = new ParserXML(file.getAbsolutePath());
+                        //             parsedInventory = (Inventory) xmlParser.readData(Inventory.class);
+                        //             break;
+                        //         case "obj":
+                        //             Parseable objParser = new ParserOBJ(file.getAbsolutePath());
+                        //             parsedInventory = (Inventory) objParser.readData(Inventory.class);
+                        //             break;
+                        //     }
+                        //     router.getInventory().getStorage().clear();
+                        //     router.getInventory().getStorage().addAll(parsedInventory.getStorage());
+                        // }
                     }
                     router.notifyListeners();
                 }
@@ -209,8 +209,8 @@ public class PageSettings extends VBox {
             parserOut.writeDatas(router.getSystemProducts());
             parserOut.setFilename(this.pathLabel + "/systemVIPs_out" + ext);
             parserOut.writeDatas(router.getSystemVIPs());
-            parserOut.setFilename(this.pathLabel + "/inventory_out" + ext);
-            parserOut.writeData(router.getInventory());
+            // parserOut.setFilename(this.pathLabel + "/inventory_out" + ext);
+            // parserOut.writeData(router.getInventory());
         }
 
         System.out.println(this.outputDatabaseType);

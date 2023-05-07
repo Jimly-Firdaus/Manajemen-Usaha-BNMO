@@ -95,12 +95,10 @@ public class UserInfosPage extends VBox implements RouterListener {
             }
         );
 
-        BaseButton backButton = new BaseButton("Back");
         HBox backHLayout = new HBox();
-        backHLayout.getChildren().addAll(updateButton, backButton);
-        backHLayout.setAlignment(Pos.BOTTOM_RIGHT);
+        backHLayout.getChildren().addAll(updateButton);
+        backHLayout.setAlignment(Pos.CENTER);
 
-        HBox.setMargin(backButton, new Insets(0, 0, 0, 880));
         backHLayout.setPadding(new Insets(0, 20, 20, 20));
 
         container.setCenter(userBox);

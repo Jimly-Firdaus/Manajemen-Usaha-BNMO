@@ -82,7 +82,6 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
                 // Clear the payments list
                 payments.clear();
                 // Add only the payments corresponding to the selected user ID
-                // TODO: change to router.getSystemPayments()
                 for (Payment p : paymentList) {
                     if (p.getUserID() == selectedUserId) {
                         payments.add(p);
@@ -125,14 +124,7 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
         paymentBox.getChildren().add(paymentTable);
         paymentBox.setPadding(new Insets(20, 20, 20, 20));
 
-        BaseButton backButton = new BaseButton("Back");
-        
-        HBox backHLayout = new HBox(backButton);
-        backHLayout.setAlignment(Pos.BOTTOM_RIGHT);
-        backHLayout.setPadding(new Insets(0, 20, 20, 20));
-
         container.setCenter(paymentBox);
-        container.setBottom(backHLayout);
 
         // Append to VBox    
         getChildren().addAll(container);
@@ -145,9 +137,12 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
         this.payments.clear();
         List<Payment> storedPayments = this.router.getSystemPayments();
         for (Payment p : storedPayments) {
-            this.userIds.add(p.getUserID());
+            if (!this.userIds.contains(p.getUserID())) { // Remove duplicate id
+                this.userIds.add(p.getUserID());
+            }
             this.payments.add(p);
         }
+        Collections.sort(this.userIds);
         ObservableList<Integer> newItems = FXCollections.observableArrayList(this.userIds);
         this.userIDComboBox.setItems(newItems);
         this.paymentTable.refresh();

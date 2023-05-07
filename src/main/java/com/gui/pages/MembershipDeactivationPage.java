@@ -126,12 +126,10 @@ public class MembershipDeactivationPage extends VBox implements RouterListener {
             }
         });
 
-        BaseButton backButton = new BaseButton("Back");
         HBox backHLayout = new HBox();
-        backHLayout.getChildren().addAll(deactivateButton, backButton);
-        backHLayout.setAlignment(Pos.BOTTOM_RIGHT);
+        backHLayout.getChildren().addAll(deactivateButton);
+        backHLayout.setAlignment(Pos.CENTER);
 
-        HBox.setMargin(backButton, new Insets(0, 0, 0, 880));
         backHLayout.setPadding(new Insets(0, 20, 20, 20));
 
         container.setCenter(userBox);

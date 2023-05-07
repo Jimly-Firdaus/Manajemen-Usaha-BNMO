@@ -23,7 +23,10 @@ import java.util.*;
 
 import com.logic.constant.Payment;
 import com.logic.feature.Bill;
+import com.logic.feature.Customer;
+import com.logic.feature.Member;
 import com.logic.feature.Product;
+import com.logic.feature.VIP;
 import com.gui.Router;
 import com.gui.components.*;
 import com.gui.interfaces.RouterListener;
@@ -52,10 +55,9 @@ public class PaymentPage extends VBox implements RouterListener {
         // Create a label for the title of the page
         Label titleLabel = new Label("Total Payment");
         titleLabel.setStyle(
-            "-fx-font-size: 20px;" +
-            "-fx-font-family: 'Georgia';" +
-            "-fx-padding: 5px;"
-        );
+                "-fx-font-size: 20px;" +
+                        "-fx-font-family: 'Georgia';" +
+                        "-fx-padding: 5px;");
         HBox titleLayout = new HBox(titleLabel);
         titleLayout.setAlignment(Pos.CENTER);
         titleLayout.setPadding(new Insets(20, 0, 0, 20));
@@ -102,7 +104,8 @@ public class PaymentPage extends VBox implements RouterListener {
             }
 
             userIDComboBox.setItems(FXCollections.observableArrayList(userIds));
-            userIDComboBox.getItems().removeIf(item -> !item.toString().toLowerCase().startsWith(newValue.toLowerCase()));
+            userIDComboBox.getItems()
+                    .removeIf(item -> !item.toString().toLowerCase().startsWith(newValue.toLowerCase()));
 
             if (userIDComboBox.getItems().isEmpty()) {
                 userIDComboBox.hide();
@@ -119,13 +122,14 @@ public class PaymentPage extends VBox implements RouterListener {
                 // Add only the bills corresponding to the selected user ID
                 for (Bill b : billList) {
                     try {
-                        Integer userId = Integer.parseInt(selectedUserId); 
+                        Integer userId = Integer.parseInt(selectedUserId);
                         if (b.getIdCustomer() == userId && b.isBillFixed() && !b.isBillDone()) {
                             bills.add(b);
                         }
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException e) {
+                    }
                 }
-            } 
+            }
             // Refresh the billTable to update the view
             billTable.refresh();
         });
@@ -141,11 +145,13 @@ public class PaymentPage extends VBox implements RouterListener {
 
         // Table to display payment information
         TableColumn<Bill, String> itemsColumn = new TableColumn<>("Items");
-        itemsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBasket().toString()));
-        
+        itemsColumn
+                .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBasket().toString()));
+
         // TableColumn<Bill, Float> totalPriceColumn = new TableColumn<>("Total Price");
-        // totalPriceColumn.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getTotalPrice()).asObject());
-        
+        // totalPriceColumn.setCellValueFactory(cellData -> new
+        // SimpleFloatProperty(cellData.getValue().getTotalPrice()).asObject());
+
         billTable = new TableView<>();
         billTable.setItems(FXCollections.observableArrayList(billList)); // TODO: replace sample
         billTable.getColumns().addAll(itemsColumn);
@@ -155,26 +161,95 @@ public class PaymentPage extends VBox implements RouterListener {
             // totalPriceColumn.setPrefWidth(newWidth.doubleValue() / 2);
         });
 
-        billTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);  
+        billTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         paymentBox.getChildren().add(billTable);
         paymentBox.setPadding(new Insets(20, 20, 20, 20));
 
         Button payButton = new Button("Confirm");
         payButton.setStyle(
-            "-fx-background-color: green;" + 
-            "-fx-text-fill: white;" +
-            "-fx-padding: 10px 20px;" +
-            "-fx-border-radius: 5px;" +
-            "-fx-background-radius: 5px;"
-        );
+                "-fx-background-color: green;" +
+                        "-fx-text-fill: white;" +
+                        "-fx-padding: 10px 20px;" +
+                        "-fx-border-radius: 5px;" +
+                        "-fx-background-radius: 5px;");
         payButton.setOnAction(
-            event -> {
-                Bill selectedBill = billTable.getSelectionModel().getSelectedItem();
-                selectedBill.setBillDone(true);
-            }
-        );
-        
+                event -> {
+                    Bill selectedBill = billTable.getSelectionModel().getSelectedItem();
+                    List<Bill> storeBills = router.getSystemBills();
+                    Iterator<Bill> billIterator = storeBills.iterator();
+                    while (billIterator.hasNext()) {
+                        Bill b = billIterator.next();
+                        if (selectedBill.equals(b)) {
+                            b.setBillDone(true);
+                            break;
+                        }
+                    }
+                    List<Product> storeProducts = router.getSystemProducts();
+                    List<Product> boughtItems = selectedBill.getBasket().getProductList();
+                    float totalPrice = 0;
+                    for (Product boughtItem : boughtItems) {
+                        for (Product storeProduct : storeProducts) {
+                            if (storeProduct.getProductName().equals(boughtItem.getProductName())) {
+                                int newQuantity = storeProduct.getCount() - boughtItem.getCount();
+                                storeProduct.setCount(newQuantity);
+                                break;
+                            }
+                        }
+                        totalPrice += boughtItem.getBasePrice();
+                    }
+                    Payment newPayment = new Payment(selectedBill.getIdCustomer(), boughtItems, totalPrice);
+                    // Update user list
+                    List<Customer> cList = router.getSystemCustomers();
+                    List<Member> mList = router.getSystemMembers();
+                    List<VIP> vList = router.getSystemVIPs();
+                    List<Payment> storePayments = router.getSystemPayments();
+                    int initialSize = storePayments.size();
+
+                    Iterator<Customer> cIterator = cList.iterator();
+                    while (cIterator.hasNext()) {
+                        Customer c = cIterator.next();
+                        if (selectedBill.getIdCustomer() == c.getId()) {
+                            c.setMadeFirstPurchase(true);
+                            storePayments.add(newPayment);
+                            break;
+                        }
+                    }
+
+                    if (storePayments.size() == initialSize) {
+                        // Not a customer
+                        Iterator<Member> mIterator = mList.iterator();
+                        while (mIterator.hasNext()) {
+                            Member m = mIterator.next();
+                            if (selectedBill.getIdCustomer() == m.getId()) {
+                                float point = totalPrice / 100;
+                                m.getPaymentHistory().add(newPayment);
+                                float mPoint = m.getPoint();
+                                m.setPoint(mPoint + point);
+                                storePayments.add(newPayment);
+                                break;
+                            }
+                        }
+                        if (storePayments.size() == initialSize) {
+                            // Not a Member
+                            Iterator<VIP> vIterator = vList.iterator();
+                            while (vIterator.hasNext()) {
+                                VIP v = vIterator.next();
+                                if (selectedBill.getIdCustomer() == v.getId()) {
+                                    float point = totalPrice / 100;
+                                    newPayment.setTotalPrice(totalPrice - (totalPrice / 10));
+                                    v.getPaymentHistory().add(newPayment);
+                                    float mPoint = v.getPoint();
+                                    v.setPoint(mPoint + point);
+                                    storePayments.add(newPayment);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    router.notifyListeners();
+                });
+
         HBox backHLayout = new HBox(payButton);
         backHLayout.setAlignment(Pos.BOTTOM_CENTER);
         backHLayout.setPadding(new Insets(0, 20, 20, 20));
@@ -182,7 +257,7 @@ public class PaymentPage extends VBox implements RouterListener {
         container.setCenter(paymentBox);
         container.setBottom(backHLayout);
 
-        // Append to VBox    
+        // Append to VBox
         getChildren().addAll(container);
         this.setAlignment(Pos.CENTER);
     }

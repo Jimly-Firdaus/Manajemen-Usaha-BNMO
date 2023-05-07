@@ -50,7 +50,7 @@ public class Router implements PageSwitcher {
     private List<Member> systemMembers = new ArrayList<>();
     private List<VIP> systemVIPs = new ArrayList<>();
     private List<Customer> systemCustomers = new ArrayList<>();
-    private Inventory inventory = new Inventory();
+    // private Inventory inventory = new Inventory();
 
     // TODO : Find a way to share resources to all pages by references
     public void restoreSystemBills(Collection<Bill> collection) {

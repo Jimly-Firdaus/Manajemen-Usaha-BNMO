@@ -127,7 +127,7 @@ public class PageLaporan extends VBox {
         for (Bill bill : router.getSystemBills()) {
             System.out.println(bill.toString());
         }
-        System.out.println(router.getInventory().toString());
+        // System.out.println(router.getInventory().toString());
     }
 
 }
