@@ -31,7 +31,7 @@ public class UpdateInfoPage extends Stage {
         Font textFont = Font.font("Times New Roman", 15);
 
         // Title Label
-        Label titleLabel = new Label("UPDATE YOUR INFORMATION");
+        Label titleLabel = new Label("UPDATE USER INFORMATION");
         titleLabel.setFont(titleFont);
 
         // HBox for Title Label
