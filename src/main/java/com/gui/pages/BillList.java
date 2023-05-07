@@ -5,6 +5,7 @@ import java.util.List;
 import com.gui.components.BaseButton;
 import com.gui.interfaces.PageSwitcher;
 import com.logic.feature.Bill;
+import com.logic.feature.ListOfProduct;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,11 +36,13 @@ import lombok.Getter;
 @Getter
 public class BillList extends Stage {
 
-    private ObservableList<Bill> data = FXCollections.observableArrayList();
+    private ObservableList<Bill> notFixedBillData = FXCollections.observableArrayList();
 
     private Bill chooseBill = new Bill();
+
+    private boolean cancelBtn;
     
-    public BillList(List<Bill> systemBills){
+    public BillList(ObservableList<Bill> systemBills){
         // initModality(Modality.APPLICATION_MODAL);
         // // Set the stage style to UTILITY, which removes the default window decorations
         // initStyle(StageStyle.UTILITY);
@@ -52,13 +55,14 @@ public class BillList extends Stage {
         // Label label = new Label("Hello, World!");
         // label.setAlignment(Pos.CENTER);
 
-        this.data.addAll(systemBills);
+        this.cancelBtn = false;
+        this.notFixedBillData = systemBills.filtered(b -> !(b.isBillFixed()));
 
         ObservableList<String> stringData = FXCollections.observableArrayList();
 
-        FilteredList<String> filteredStringData = new FilteredList<>(stringData, s->true);
+        this.notFixedBillData.forEach(p -> stringData.add(Integer.toString(p.getIdCustomer())));
 
-        this.data.forEach(p -> filteredStringData.add(Integer.toString(p.getIdCustomer())));
+        FilteredList<String> filteredStringData = new FilteredList<>(stringData, s->true);
         
         BaseButton cancelBtn = new BaseButton("Cancel");
         BaseButton newBillBtn = new BaseButton("New Bill");
@@ -100,7 +104,7 @@ public class BillList extends Stage {
         deleteMenuItem.setOnAction(event -> {
             String item = billListView.getSelectionModel().getSelectedItem();
 
-            this.data.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
+            this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
             systemBills.removeIf(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
             // Bill deletedBill = data.filtered(product -> product.getProductName().equals(item)).get(0);
             // this.totalPrice -= deletedProduct.getBasePrice() * deletedProduct.getCount();
@@ -121,11 +125,13 @@ public class BillList extends Stage {
             return cell ;
         });
 
-        ListView<String> listView = new ListView<>(filteredStringData);
-        listView.setOnMouseClicked(event -> {
+        // ListView<String> listView = new ListView<>(filteredStringData);
+        billListView.setOnMouseClicked(event -> {
+            System.out.println("hello");
             if (event.getClickCount() == 2) {
-                String selectedItem = listView.getSelectionModel().getSelectedItem();
-                this.chooseBill = this.data.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(selectedItem)).get(0);
+                String selectedItem = billListView.getSelectionModel().getSelectedItem();
+                this.chooseBill = this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(selectedItem)).get(0);
+                close();
             }
         });
 
@@ -136,7 +142,18 @@ public class BillList extends Stage {
         Scene scene = new Scene(root, 880, 408);
         setScene(scene);
 
-        cancelBtn.setOnAction(e->close());
+        cancelBtn.setOnAction(e->{
+            this.cancelBtn = true;
+            close();
+        });
+
+        newBillBtn.setOnAction(
+            e -> {
+                ListOfProduct basket = new ListOfProduct();
+                this.chooseBill = new Bill(basket, -1, false, false);
+                close();
+            }
+        );
         // Set the size of the pop-up window
         // setWidth(400);
         // setHeight(300);
