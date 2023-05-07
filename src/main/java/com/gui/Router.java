@@ -14,6 +14,7 @@ import com.gui.interfaces.*;
 import com.gui.pages.*;
 
 import com.logic.feature.Bill;
+import com.logic.feature.Customer;
 import com.logic.feature.Product;
 import com.logic.feature.Inventory;
 import com.logic.feature.Member;
@@ -47,6 +48,7 @@ public class Router implements PageSwitcher {
     private List<Product> systemProducts = new ArrayList<>();
     private List<Member> systemMembers = new ArrayList<>();
     private List<VIP> systemVIPs = new ArrayList<>();
+    private List<Customer> systemCustomers = new ArrayList<>();
     private Inventory inventory = new Inventory();
 
     // TODO : Find a way to share resources to all pages by references
