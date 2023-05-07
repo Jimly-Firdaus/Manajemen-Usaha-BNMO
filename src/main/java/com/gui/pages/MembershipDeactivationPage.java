@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.SelectionMode;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -14,6 +15,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Iterator;
 import java.util.List;
 
 import com.gui.Router;
@@ -82,6 +85,7 @@ public class MembershipDeactivationPage extends VBox implements RouterListener {
             phoneNumberColumn.setPrefWidth(newWidth.doubleValue() / 3);
         });
 
+        userTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         userBox.getChildren().add(userTable);
         userBox.setPadding(new Insets(20, 20, 20, 20));
 
@@ -93,6 +97,34 @@ public class MembershipDeactivationPage extends VBox implements RouterListener {
             "-fx-border-radius: 5px;" +
             "-fx-background-radius: 5px;"
         );
+
+        deactivateButton.setOnAction(event -> {
+            Member user = userTable.getSelectionModel().getSelectedItem();
+            List<Member> storeMember = router.getSystemMembers();
+            List<VIP> storeVIP = router.getSystemVIPs();
+            boolean isMember = false;
+            Iterator<Member> memberIterator = storeMember.iterator();
+            while (memberIterator.hasNext()) {
+                Member c = memberIterator.next();
+                if (c.getId() == user.getId()) {
+                    c.setDeactivate(true);
+                    isMember = true;
+                    router.notifyListeners();
+                    break;
+                }
+            }
+            if (!isMember) {
+                Iterator<VIP> vipIterator = storeVIP.iterator();
+                while (vipIterator.hasNext()) {
+                    VIP c = vipIterator.next();
+                    if (c.getId() == user.getId()) {
+                        c.setDeactivate(true);
+                        router.notifyListeners();
+                        break;
+                    }
+                }
+            }
+        });
 
         BaseButton backButton = new BaseButton("Back");
         HBox backHLayout = new HBox();

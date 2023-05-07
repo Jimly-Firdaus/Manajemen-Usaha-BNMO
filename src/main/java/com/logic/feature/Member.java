@@ -16,6 +16,7 @@ public class Member extends Customer implements Serializable {
     protected String phoneNumber;
     protected float point;
     protected ArrayList<Payment> paymentHistory;
+    protected boolean isDeactivate = false;
 
     /* Constructor */
     public Member(int id, String name, String phoneNumber) {
