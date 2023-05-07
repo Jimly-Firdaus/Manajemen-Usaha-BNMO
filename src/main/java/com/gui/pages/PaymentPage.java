@@ -76,6 +76,7 @@ public class PaymentPage extends VBox implements RouterListener {
                 userIds.add(userId);
             }
         }
+
         Collections.sort(userIds);
         userIDComboBox.setEditable(true);
         userIDComboBox.setItems(FXCollections.observableArrayList(userIds));
@@ -189,6 +190,7 @@ public class PaymentPage extends VBox implements RouterListener {
         this.bills.clear();
         List<Bill> storedbills = this.router.getSystemBills();
         for (Bill p : storedbills) {
+            if (p.isBillFixed() && !p.isBillDone())
             this.userIds.add(p.getIdCustomer());
             this.bills.add(p);
         }
