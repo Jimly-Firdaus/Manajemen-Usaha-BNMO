@@ -21,20 +21,37 @@ import javafx.scene.layout.Region;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 import com.gui.Router;
 import com.gui.components.BaseButton;
 import com.gui.interfaces.PageSwitcher;
 import com.gui.interfaces.RouterListener;
 import com.logic.feature.Bill;
+import com.logic.feature.Customer;
 import com.logic.feature.Inventory;
+import com.logic.feature.ListOfProduct;
+import com.logic.feature.Member;
 import com.logic.feature.Product;
+import com.logic.feature.VIP;
 
 public class UserPage extends VBox implements RouterListener{
 
     private ObservableList<Product> productData = FXCollections.observableArrayList();
 
     private ObservableList<Product> cartData = FXCollections.observableArrayList();
+
+    private ObservableList<Bill> billDArray = FXCollections.observableArrayList();
+
+    private ObservableList<VIP> VIPbuyer = FXCollections.observableArrayList();
+
+    private ObservableList<Member> memberBuyer = FXCollections.observableArrayList();
+
+    private ObservableList<Customer> customerBuyer = FXCollections.observableArrayList();
+
+    private String currentCustomerStatus;
+
+    private int currentCustomerID;
 
     // private ObservableList<String> productStringData = FXCollections.observableArrayList();
 
@@ -48,6 +65,10 @@ public class UserPage extends VBox implements RouterListener{
     public UserPage(Router router, Stage stage) {
 
         this.totalPrice.set(0.0f);
+
+        this.currentCustomerStatus = "None";
+
+        this.currentCustomerID = 0;
 
         this.router = router;
 
@@ -71,9 +92,9 @@ public class UserPage extends VBox implements RouterListener{
             System.out.println(cartData);
             System.out.println(this.totalPrice.get());
         });
-
+        
         // product filtered list
-        FilteredList<Product> productFilteredData = new FilteredList<>(productData, s -> true);
+        FilteredList<Product> productFilteredData = new FilteredList<>(productData, s -> s.getCount() > 0);
         
         // product name string observable list 
         ObservableList<String> productStringData = FXCollections.observableArrayList();
@@ -112,7 +133,7 @@ public class UserPage extends VBox implements RouterListener{
             @Override
             public void onChanged(Change<? extends Product> c) {
                 // update the productFilteredData list
-                productFilteredData.setPredicate(p -> true);
+                productFilteredData.setPredicate(p -> p.getCount() > 0);
                 // update the productStringData list
                 productStringData.clear();
                 productFilteredData.forEach(p -> productStringData.add(p.getProductName()));
@@ -139,17 +160,36 @@ public class UserPage extends VBox implements RouterListener{
                 "-fx-background-radius: 5px;";
         addCustomerBtn.setStyle(style);
 
+        addCustomerBtn.setOnAction(
+            e -> {
+                addCustomer addCustomerPage = new addCustomer(VIPbuyer, memberBuyer, customerBuyer);
+                addCustomerPage.showAndWait();
+                this.currentCustomerStatus = addCustomerPage.getCurrentCustomerStatus();
+                this.currentCustomerID = addCustomerPage.getCurrentCustomerID();
+            }
+        );
+
         // save bill button history
         BaseButton saveBillBtn = new BaseButton("Bill");
         saveBillBtn.setOnAction(
             event -> {
-                BillList billListPage = new BillList(router.getSystemBills());
-                billListPage.show();
+                BillList billListPage = new BillList(this.billDArray);
+                billListPage.showAndWait();
                 List<Product> productList = new ArrayList<>();
-                productList = billListPage.getChooseBill().getBasket().getProductList();
-                ObservableList<Product> tempCartData = FXCollections.observableArrayList();
-                tempCartData.addAll(productList);
-                this.cartData = tempCartData;
+                if(!billListPage.isCancelBtn()){
+                    productList = billListPage.getChooseBill().getBasket().getProductList();
+                    this.cartData.setAll(productList);
+                    this.currentCustomerID = billListPage.getChooseBill().getIdCustomer();
+                    this.totalPrice.set(0.0f);
+                    for(Product p : this.cartData){
+                        this.totalPrice.set(this.totalPrice.get() + (p.getBasePrice() * p.getCount()));
+                    }
+                    this.setStatus(currentCustomerID);
+                    System.out.println(this.currentCustomerStatus);
+                    this.billDArray.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
+                    List<Bill> routerBills = router.getSystemBills();
+                    routerBills.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
+                }
             }
         );
 
@@ -177,15 +217,28 @@ public class UserPage extends VBox implements RouterListener{
         HBox.setHgrow(saveBillLayout.getChildren().get(0), Priority.ALWAYS);
         HBox.setHgrow(saveBillLayout.getChildren().get(2), Priority.ALWAYS);
 
+        saveBillActionBtn.setOnAction(
+            e->{
+                if(!this.productData.isEmpty() && !(this.currentCustomerStatus.equals("None"))){
+                    ListOfProduct cartList = new ListOfProduct(this.cartData);
+                    Bill currentBill = new Bill(cartList, this.currentCustomerID, false, false);
+                    this.billDArray.add(currentBill);
+                    List<Bill> billList = this.router.getSystemBills();
+                    billList.add(currentBill);
+                    this.router.notifyListeners();
+                    saveBillLayout.getChildren().removeIf(node -> node instanceof Label && ((Label) node).getText().equals("Invalid Bill"));
+                }else{
+                    Label errorLabel = new Label("Invalid Bill");
+                    saveBillLayout.getChildren().removeIf(node -> node instanceof Label && ((Label) node).getText().equals("Invalid Bill"));
+                    saveBillLayout.getChildren().add(errorLabel); // add 
+                }
+            }
+        );
+
         // charge action button 
         Button chargeActionBtn = new Button("Charge " + totalPrice.get());
         totalPrice.addListener((obs, oldValue, newValue) -> {
             chargeActionBtn.setText("Charge " + newValue.toString());
-        });
-
-        chargeActionBtn.setOnAction(e -> {
-            Checkout checkoutPage = new Checkout();
-            checkoutPage.show();
         });
 
         String chargeBtnStyle = "-fx-background-color: transparent;\n" +
@@ -201,6 +254,26 @@ public class UserPage extends VBox implements RouterListener{
         chargeLayout.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         HBox.setHgrow(chargeLayout.getChildren().get(0), Priority.ALWAYS);
         HBox.setHgrow(chargeLayout.getChildren().get(2), Priority.ALWAYS);
+
+        chargeActionBtn.setOnAction(e -> {
+            if(!this.productData.isEmpty() && !(this.currentCustomerStatus.equals("None"))){
+                billDArray.stream()
+                    .filter(bill -> bill.getIdCustomer() == this.currentCustomerID)
+                    .findFirst()
+                    .ifPresent(bill -> bill.setBillFixed(true));
+                List<Bill> routerBills = router.getSystemBills();
+                routerBills.stream()
+                    .filter(bill -> bill.getIdCustomer() == this.currentCustomerID)
+                    .findFirst()
+                    .ifPresent(bill -> bill.setBillFixed(true));
+                this.router.notifyListeners();
+                chargeLayout.getChildren().removeIf(node -> node instanceof Label && ((Label) node).getText().equals("Invalid Bill"));
+            } else {
+                Label errorLabel = new Label("Invalid Bill");
+                chargeLayout.getChildren().removeIf(node -> node instanceof Label && ((Label) node).getText().equals("Invalid Bill"));
+                    chargeLayout.getChildren().add(errorLabel); // add 
+            }
+        });
 
         // cart filtered list
         FilteredList<Product> cartFilteredData = new FilteredList<>(this.cartData, s -> true);
@@ -219,7 +292,7 @@ public class UserPage extends VBox implements RouterListener{
 
         ListView<String> billListView = new ListView<>(billData);
 
-        cartData.addListener(new ListChangeListener<Product>() {
+        this.cartData.addListener(new ListChangeListener<Product>() {
             @Override
             public void onChanged(Change<? extends Product> c) {
                 // update the productFilteredData list
@@ -230,7 +303,7 @@ public class UserPage extends VBox implements RouterListener{
                 // refresh the productFilteredStringData list
                 billData.setPredicate(s -> true);
                 // refresh the listView
-                listView.refresh();
+                billListView.refresh();
             }
         });
 
@@ -283,11 +356,22 @@ public class UserPage extends VBox implements RouterListener{
     @Override
     public void onResourceUpdate() {
         this.productData.clear();
-        List<Product> storedProducts = this.router.getSystemProducts();
-        for (Product p : storedProducts) {
-            this.productData.add(p);
-        }
+        this.copyData(this.router.getSystemProducts(), this.productData);
         this.localStorage = this.productData;
+        this.billDArray.clear();
+        this.copyData(this.router.getSystemBills(), this.billDArray);
+        this.VIPbuyer.clear();
+        this.copyData(this.router.getSystemVIPs(), this.VIPbuyer);
+        this.memberBuyer.clear();
+        this.copyData(this.router.getSystemMembers(), this.memberBuyer);
+        this.customerBuyer.clear();
+        this.copyData(this.router.getSystemCustomers(), this.customerBuyer);
+    }
+
+    public <T> void copyData(List<T> routerData, ObservableList<T> list){
+        for (T data : routerData){
+            list.add(data);
+        }
     }
 
     public boolean updateStorageDeleted(ObservableList<Product> products, int value, Product product){
@@ -306,5 +390,16 @@ public class UserPage extends VBox implements RouterListener{
         return true;
     }
 
+    public void setStatus(int id){
+        if(!(VIPbuyer.filtered(b -> b.getId() == id).isEmpty())){
+            this.currentCustomerStatus = "VIP";
+        }else if(!(memberBuyer.filtered(b -> b.getId() == id).isEmpty())){
+            this.currentCustomerStatus = "Member";
+        }else if(!(customerBuyer.filtered(b -> b.getId() == id).isEmpty())){
+            this.currentCustomerStatus = "Customer";
+        }else{
+            this.currentCustomerStatus = "None";
+        }
+    }
 
 }
