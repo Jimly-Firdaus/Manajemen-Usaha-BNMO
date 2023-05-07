@@ -15,6 +15,4 @@ public class VIP extends Member {
         super(id, name, phoneNumber);
         this.discountRate = 10;
     }
-    
-    /* Other Methods */
 }
