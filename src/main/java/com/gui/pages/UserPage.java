@@ -66,7 +66,7 @@ public class UserPage extends VBox implements RouterListener{
 
         BaseButton checkButton = new BaseButton("Im checking");
         checkButton.setOnAction(e->{
-            System.out.println(router.getInventory());
+            // System.out.println(router.getInventory());
             System.out.println(this.productData);
             System.out.println(cartData);
             System.out.println(this.totalPrice.get());
