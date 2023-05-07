@@ -55,7 +55,7 @@ or
 Manajemen_Usaha_BNMO
 │
 ├───.github/workflows
-│    └── continoud-integration.yml
+│    └── continous-integration.yml
 │
 ├───src
 │    ├── main/java/com
