@@ -4,7 +4,6 @@ import com.logic.feature.interfaces.Payable;
 
 import lombok.*;
 
-@Getter
 @NoArgsConstructor
 public class Customer implements Payable {
     /* Attributes */
@@ -15,6 +14,14 @@ public class Customer implements Payable {
     public Customer(int id) {
         this.id = id;
         this.madeFirstPurchase = false;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public boolean getFirstPurchaseStatus() {
+        return this.madeFirstPurchase;
     }
 
     /* Setter */

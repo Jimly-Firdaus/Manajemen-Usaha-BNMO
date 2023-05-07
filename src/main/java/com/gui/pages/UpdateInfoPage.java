@@ -1,4 +1,5 @@
 package com.gui.pages;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
@@ -15,6 +16,12 @@ import com.gui.interfaces.PageSwitcher;
 import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.Iterator;
+import java.util.List;
+
+import com.logic.feature.Member;
+import com.logic.feature.VIP;
 import com.gui.Router;
 import com.gui.components.*;
 
@@ -23,15 +30,16 @@ public class UpdateInfoPage extends Stage {
 
     public UpdateInfoPage(
             Router router,
+            Integer userId,
             Stage stage) {
         this.stage = stage;
 
         // For Fonts
-        Font titleFont = Font.font("Georgia", FontWeight.BOLD,16);
+        Font titleFont = Font.font("Georgia", FontWeight.BOLD, 16);
         Font textFont = Font.font("Times New Roman", 15);
 
         // Title Label
-        Label titleLabel = new Label("UPDATE YOUR INFORMATION");
+        Label titleLabel = new Label("UPDATE USER INFORMATION");
         titleLabel.setFont(titleFont);
 
         // HBox for Title Label
@@ -81,14 +89,11 @@ public class UpdateInfoPage extends Stage {
                         "-fx-text-fill: #ffffff;" +
                         "-fx-font-family: 'Georgia';" +
                         "-fx-font-size: 12px;" +
-                        "-fx-pref-width: 250px"
-        );
+                        "-fx-pref-width: 250px");
 
         BaseButton saveButton = new BaseButton("Save");
         saveButton.setOnAction(
-            // TODO: Save the data changes
-            event -> close()
-        );
+                event -> close());
         HBox saveHLayout = new HBox(saveButton);
         saveHLayout.setAlignment(Pos.BOTTOM_RIGHT);
 
@@ -104,14 +109,51 @@ public class UpdateInfoPage extends Stage {
         submitButton.setOnAction(event -> {
             String name = nameField.getText();
             String phone = phoneField.getText();
+            String level = (String) membershipField.getValue();
 
+            List<Member> storeMember = router.getSystemMembers();
+            List<VIP> storeVIP = router.getSystemVIPs();
             // TODO: Save the information to the database
+            if (!name.equals("") && !phone.equals("") && !level.equals(null)) {
+                boolean isMember = false;
+                Iterator<Member> memberIterator = storeMember.iterator();
+                while (memberIterator.hasNext()) {
+                    Member c = memberIterator.next();
+                    if (c.getId() == userId) {
+                        c.setName(name);
+                        c.setPhoneNumber(phone);
+                        if (level.equals("VIP")) {
+                            storeVIP.add(c.upgradeToVIP(name, phone));
+                            memberIterator.remove();
+                        }
+                        isMember = true;
+                        router.notifyListeners();
+                        break;
+                    }
+                }
+                if (!isMember) {
+                    Iterator<VIP> vipIterator = storeVIP.iterator();
+                    while (vipIterator.hasNext()) {
+                        VIP c = vipIterator.next();
+                        if (c.getId() == userId) {
+                            c.setName(name);
+                            c.setPhoneNumber(phone);
+                            if (level.equals("Member")) {
+                                storeMember.add(new Member(userId, name, phone));
+                                vipIterator.remove();
+                            }
+                            router.notifyListeners();
+                            break;
+                        }
+                    }
+                }
+            }
 
             // Clear the input field
             nameField.clear();
             phoneField.clear();
         });
- 
+
         // Set the scene of the popup window
         Scene scene = new Scene(container, 608, 405);
         setScene(scene);

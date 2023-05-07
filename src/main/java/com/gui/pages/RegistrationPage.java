@@ -11,6 +11,8 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
+
+import java.util.Iterator;
 import java.util.List;
 
 import com.gui.interfaces.PageSwitcher;
@@ -18,6 +20,7 @@ import com.gui.Router;
 import com.gui.components.*;
 import com.logic.feature.Customer;
 import com.logic.feature.Member;
+import com.logic.feature.VIP;
 
 public class RegistrationPage extends VBox {
     private Stage stage;
@@ -99,24 +102,49 @@ public class RegistrationPage extends VBox {
         submitButton.setOnAction(event -> {
             String name = nameField.getText();
             String phone = phoneField.getText();
+            String id = idField.getText();
 
             List<Member> storeMember = router.getSystemMembers();
             List<Customer> storeCustomer = router.getSystemCustomers();
+            List<VIP> storeVIP = router.getSystemVIPs();
             if (!name.equals("")) {
                 // Perform checking to system customer here, if exits then check if eligible to upgrade
+                try {
+                    int userId = Integer.parseInt(id);
+                    boolean isCustomer = false;
+                    Iterator<Customer> customerIterator = storeCustomer.iterator();
+                    while (customerIterator.hasNext()) {
+                        Customer c = customerIterator.next();
+                        if (c.getId() == userId && c.getFirstPurchaseStatus()) {
+                            storeMember.add(c.upgradeToMember(name, phone));
+                            customerIterator.remove(); // Remove customer from storeCustomer list
+                            isCustomer = true;
+                            router.notifyListeners();
+                            break;
+                        }
+                    }
+                    if (!isCustomer) {
+                        Iterator<Member> memberIterator = storeMember.iterator();
+                        while (memberIterator.hasNext()) {
+                            Member m = memberIterator.next();
+                            if (m.getId() == userId) {
+                                storeVIP.add(m.upgradeToVIP(name, phone));
+                                memberIterator.remove(); // Remove member from storeMember list
+                                router.notifyListeners();
+                                break;
+                            }
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    // Can display error label via here
 
-                // if eligible
-                storeMember.add(new Member(storeMember.size() + 1, name, phone));
-                System.out.println("pass here");
-                List<Member> res = router.getSystemMembers();
-                for (Member mem : res) {
-                    System.out.println(mem.toString());
                 }
             }
 
             // Clear the input field
             nameField.clear();
             phoneField.clear();
+            idField.clear();
         });
 
         // Append to VBox    
