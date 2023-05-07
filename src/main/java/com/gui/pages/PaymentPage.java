@@ -1,7 +1,5 @@
 package com.gui.pages;
 
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +26,6 @@ import com.logic.feature.Member;
 import com.logic.feature.Product;
 import com.logic.feature.VIP;
 import com.gui.Router;
-import com.gui.components.*;
 import com.gui.interfaces.RouterListener;
 
 public class PaymentPage extends VBox implements RouterListener {
@@ -148,17 +145,12 @@ public class PaymentPage extends VBox implements RouterListener {
         itemsColumn
                 .setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBasket().toString()));
 
-        // TableColumn<Bill, Float> totalPriceColumn = new TableColumn<>("Total Price");
-        // totalPriceColumn.setCellValueFactory(cellData -> new
-        // SimpleFloatProperty(cellData.getValue().getTotalPrice()).asObject());
-
         billTable = new TableView<>();
-        billTable.setItems(FXCollections.observableArrayList(billList)); // TODO: replace sample
+        billTable.setItems(FXCollections.observableArrayList(billList));
         billTable.getColumns().addAll(itemsColumn);
         billTable.setItems(bills);
         billTable.widthProperty().addListener((source, oldWidth, newWidth) -> {
             itemsColumn.setPrefWidth(newWidth.doubleValue());
-            // totalPriceColumn.setPrefWidth(newWidth.doubleValue() / 2);
         });
 
         billTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -176,73 +168,79 @@ public class PaymentPage extends VBox implements RouterListener {
         payButton.setOnAction(
                 event -> {
                     Bill selectedBill = billTable.getSelectionModel().getSelectedItem();
-                    List<Bill> storeBills = router.getSystemBills();
-                    Iterator<Bill> billIterator = storeBills.iterator();
-                    while (billIterator.hasNext()) {
-                        Bill b = billIterator.next();
-                        if (selectedBill.equals(b)) {
-                            b.setBillDone(true);
-                            break;
-                        }
-                    }
-                    List<Product> storeProducts = router.getSystemProducts();
-                    List<Product> boughtItems = selectedBill.getBasket().getProductList();
-                    float totalPrice = 0;
-                    for (Product boughtItem : boughtItems) {
-                        for (Product storeProduct : storeProducts) {
-                            if (storeProduct.getProductName().equals(boughtItem.getProductName())) {
-                                int newQuantity = storeProduct.getCount() - boughtItem.getCount();
-                                storeProduct.setCount(newQuantity);
+                    if (selectedBill == null) {
+                        List<Customer> storeCustomers = router.getSystemCustomers();
+                        int id = router.getSystemCustomers().size() + router.getSystemMembers().size() + router.getSystemVIPs().size();
+                        storeCustomers.add(new Customer(id));
+                    } else {
+                        List<Bill> storeBills = router.getSystemBills();
+                        Iterator<Bill> billIterator = storeBills.iterator();
+                        while (billIterator.hasNext()) {
+                            Bill b = billIterator.next();
+                            if (selectedBill.equals(b)) {
+                                b.setBillDone(true);
                                 break;
                             }
                         }
-                        totalPrice += boughtItem.getBasePrice();
-                    }
-                    Payment newPayment = new Payment(selectedBill.getIdCustomer(), boughtItems, totalPrice);
-                    // Update user list
-                    List<Customer> cList = router.getSystemCustomers();
-                    List<Member> mList = router.getSystemMembers();
-                    List<VIP> vList = router.getSystemVIPs();
-                    List<Payment> storePayments = router.getSystemPayments();
-                    int initialSize = storePayments.size();
-
-                    Iterator<Customer> cIterator = cList.iterator();
-                    while (cIterator.hasNext()) {
-                        Customer c = cIterator.next();
-                        if (selectedBill.getIdCustomer() == c.getId()) {
-                            c.setMadeFirstPurchase(true);
-                            storePayments.add(newPayment);
-                            break;
+                        List<Product> storeProducts = router.getSystemProducts();
+                        List<Product> boughtItems = selectedBill.getBasket().getProductList();
+                        float totalPrice = 0;
+                        for (Product boughtItem : boughtItems) {
+                            for (Product storeProduct : storeProducts) {
+                                if (storeProduct.getProductName().equals(boughtItem.getProductName())) {
+                                    int newQuantity = storeProduct.getCount() - boughtItem.getCount();
+                                    storeProduct.setCount(newQuantity);
+                                    break;
+                                }
+                            }
+                            totalPrice += boughtItem.getBasePrice();
                         }
-                    }
-
-                    if (storePayments.size() == initialSize) {
-                        // Not a customer
-                        Iterator<Member> mIterator = mList.iterator();
-                        while (mIterator.hasNext()) {
-                            Member m = mIterator.next();
-                            if (selectedBill.getIdCustomer() == m.getId()) {
-                                float point = totalPrice / 100;
-                                m.getPaymentHistory().add(newPayment);
-                                float mPoint = m.getPoint();
-                                m.setPoint(mPoint + point);
+                        Payment newPayment = new Payment(selectedBill.getIdCustomer(), boughtItems, totalPrice);
+                        // Update user list
+                        List<Customer> cList = router.getSystemCustomers();
+                        List<Member> mList = router.getSystemMembers();
+                        List<VIP> vList = router.getSystemVIPs();
+                        List<Payment> storePayments = router.getSystemPayments();
+                        int initialSize = storePayments.size();
+    
+                        Iterator<Customer> cIterator = cList.iterator();
+                        while (cIterator.hasNext()) {
+                            Customer c = cIterator.next();
+                            if (selectedBill.getIdCustomer() == c.getId()) {
+                                c.setMadeFirstPurchase(true);
                                 storePayments.add(newPayment);
                                 break;
                             }
                         }
+    
                         if (storePayments.size() == initialSize) {
-                            // Not a Member
-                            Iterator<VIP> vIterator = vList.iterator();
-                            while (vIterator.hasNext()) {
-                                VIP v = vIterator.next();
-                                if (selectedBill.getIdCustomer() == v.getId()) {
-                                    float point = totalPrice / 100;
-                                    newPayment.setTotalPrice(totalPrice - (totalPrice / 10));
-                                    v.getPaymentHistory().add(newPayment);
-                                    float mPoint = v.getPoint();
-                                    v.setPoint(mPoint + point);
+                            // Not a customer
+                            Iterator<Member> mIterator = mList.iterator();
+                            while (mIterator.hasNext()) {
+                                Member m = mIterator.next();
+                                if (selectedBill.getIdCustomer() == m.getId()) {
+                                    float point = Math.round(totalPrice / 100.0f);
+                                    m.getPaymentHistory().add(newPayment);
+                                    float mPoint = m.getPoint();
+                                    m.setPoint(mPoint + point);
                                     storePayments.add(newPayment);
                                     break;
+                                }
+                            }
+                            if (storePayments.size() == initialSize) {
+                                // Not a Member
+                                Iterator<VIP> vIterator = vList.iterator();
+                                while (vIterator.hasNext()) {
+                                    VIP v = vIterator.next();
+                                    if (selectedBill.getIdCustomer() == v.getId()) {
+                                        float point = Math.round(totalPrice / 100.0f);
+                                        newPayment.setTotalPrice(totalPrice - (totalPrice / 10));
+                                        v.getPaymentHistory().add(newPayment);
+                                        float mPoint = v.getPoint();
+                                        v.setPoint(mPoint + point);
+                                        storePayments.add(newPayment);
+                                        break;
+                                    }
                                 }
                             }
                         }

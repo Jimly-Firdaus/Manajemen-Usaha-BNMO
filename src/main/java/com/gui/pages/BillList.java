@@ -38,7 +38,9 @@ public class BillList extends Stage {
 
     private ObservableList<Bill> notFixedBillData = FXCollections.observableArrayList();
 
-    private Bill chooseBill = new Bill();
+    private Bill chooseBill;
+
+    private boolean isNew;
 
     private boolean cancelBtn;
     
@@ -54,8 +56,9 @@ public class BillList extends Stage {
         // Set the scene for the stage
         // Label label = new Label("Hello, World!");
         // label.setAlignment(Pos.CENTER);
-
+        this.chooseBill = new Bill();
         this.cancelBtn = false;
+        this.isNew = false;
         this.notFixedBillData = systemBills.filtered(b -> !(b.isBillFixed()));
 
         ObservableList<String> stringData = FXCollections.observableArrayList();
@@ -99,36 +102,39 @@ public class BillList extends Stage {
             }
         });
 
-        ContextMenu contextMenu = new ContextMenu();
-        MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(event -> {
-            String item = billListView.getSelectionModel().getSelectedItem();
+        // ContextMenu contextMenu = new ContextMenu();
+        // MenuItem deleteMenuItem = new MenuItem("Delete");
+        // deleteMenuItem.setOnAction(event -> {
+        //     String item = billListView.getSelectionModel().getSelectedItem();
 
-            this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
-            systemBills.removeIf(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
-            // Bill deletedBill = data.filtered(product -> product.getProductName().equals(item)).get(0);
-            // this.totalPrice -= deletedProduct.getBasePrice() * deletedProduct.getCount();
-            // cartData.removeIf(product -> product.getProductName().equals(item));
-        });
-        contextMenu.getItems().add(deleteMenuItem);
+        //     this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
+        //     systemBills.removeIf(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
+        //     // Bill deletedBill = data.filtered(product -> product.getProductName().equals(item)).get(0);
+        //     // this.totalPrice -= deletedProduct.getBasePrice() * deletedProduct.getCount();
+        //     // cartData.removeIf(product -> product.getProductName().equals(item));
+        // });
+        // contextMenu.getItems().add(deleteMenuItem);
 
-        billListView.setCellFactory(lv -> {
-            ListCell<String> cell = new ListCell<>();
-            cell.textProperty().bind(cell.itemProperty());
-            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                if (isNowEmpty) {
-                    cell.setContextMenu(null);
-                } else {
-                    cell.setContextMenu(contextMenu);
-                }
-            });
-            return cell ;
-        });
+        // billListView.setCellFactory(lv -> {
+        //     ListCell<String> cell = new ListCell<>();
+        //     cell.textProperty().bind(cell.itemProperty());
+        //     cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+        //         if (isNowEmpty) {
+        //             cell.setContextMenu(null);
+        //         } else {
+        //             cell.setContextMenu(contextMenu);
+        //         }
+        //     });
+        //     return cell ;
+        // });
 
         // ListView<String> listView = new ListView<>(filteredStringData);
         billListView.setOnMouseClicked(event -> {
             System.out.println("hello");
             if (event.getClickCount() == 2) {
+                System.out.println("--------->>>>>>>>>>>");
+                System.out.println(this.notFixedBillData.toString());
+                System.out.println("--------->>>>>>>>>>>");
                 String selectedItem = billListView.getSelectionModel().getSelectedItem();
                 this.chooseBill = this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(selectedItem)).get(0);
                 close();
@@ -149,6 +155,7 @@ public class BillList extends Stage {
 
         newBillBtn.setOnAction(
             e -> {
+                this.isNew = true;
                 ListOfProduct basket = new ListOfProduct();
                 this.chooseBill = new Bill(basket, -1, false, false);
                 close();

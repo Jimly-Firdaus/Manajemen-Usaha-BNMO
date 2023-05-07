@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import com.logic.store.interfaces.Parseable;
 
 import lombok.AllArgsConstructor;
+import lombok.Cleanup;
 import lombok.Setter;
 
 @AllArgsConstructor
@@ -21,6 +22,7 @@ public class ParserOBJ implements Parseable {
     public <T> void writeDatas(List<T> data) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(this.filename))) {
             out.writeObject(data);
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,6 +33,7 @@ public class ParserOBJ implements Parseable {
 
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(this.filename))) {
             data = (List<T>) in.readObject();
+            in.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

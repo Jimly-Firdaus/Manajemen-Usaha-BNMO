@@ -74,24 +74,7 @@ public class UserPage extends VBox implements RouterListener{
 
         // search bar
         TextField searchField = new TextField();
-        searchField.setPromptText("Search");
-
-        // productData.addListener(new ListChangeListener<Product>() {
-        //     @Override
-        //     public void onChanged(Change<? extends Product> c){
-
-        //     }
-        // });
-
-        // this.productData.setAll(router.getSystemProducts());        
-
-        BaseButton checkButton = new BaseButton("Im checking");
-        checkButton.setOnAction(e->{
-            // System.out.println(router.getInventory());
-            System.out.println(this.productData);
-            System.out.println(cartData);
-            System.out.println(this.totalPrice.get());
-        });
+        searchField.setPromptText("Search");      
         
         // product filtered list
         FilteredList<Product> productFilteredData = new FilteredList<>(productData, s -> s.getCount() > 0);
@@ -122,8 +105,6 @@ public class UserPage extends VBox implements RouterListener{
                 String selectedItem = listView.getSelectionModel().getSelectedItem();
                 ProductClick clicked = new ProductClick(selectedItem, this.localStorage, cartData);
                 clicked.showAndWait();
-                System.out.println(cartData);
-                System.out.println(clicked.getPriceOnTotal());
                 this.totalPrice.set(this.totalPrice.get() + clicked.getPriceOnTotal());
             }
         });
@@ -173,22 +154,31 @@ public class UserPage extends VBox implements RouterListener{
         BaseButton saveBillBtn = new BaseButton("Bill");
         saveBillBtn.setOnAction(
             event -> {
-                BillList billListPage = new BillList(this.billDArray);
+                ObservableList<Bill> temp = FXCollections.observableArrayList(this.billDArray);
+                BillList billListPage = new BillList(temp);
                 billListPage.showAndWait();
                 List<Product> productList = new ArrayList<>();
                 if(!billListPage.isCancelBtn()){
                     productList = billListPage.getChooseBill().getBasket().getProductList();
-                    this.cartData.setAll(productList);
-                    this.currentCustomerID = billListPage.getChooseBill().getIdCustomer();
+                    if (billListPage.isNew()) {
+                        this.currentCustomerStatus = "None";
+                        this.currentCustomerID = 0;
+                    } else {
+                        this.currentCustomerID = billListPage.getChooseBill().getIdCustomer();
+                        this.setStatus(this.currentCustomerID);
+                    }
+                    this.cartData.clear();
+                    this.cartData.addAll(productList);
                     this.totalPrice.set(0.0f);
                     for(Product p : this.cartData){
                         this.totalPrice.set(this.totalPrice.get() + (p.getBasePrice() * p.getCount()));
                     }
-                    this.setStatus(currentCustomerID);
-                    System.out.println(this.currentCustomerStatus);
-                    this.billDArray.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
-                    List<Bill> routerBills = router.getSystemBills();
-                    routerBills.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
+                    if (!billListPage.isNew()) {
+                        this.billDArray.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
+                        List<Bill> routerBills = router.getSystemBills();
+                        routerBills.removeIf(bill -> bill.getIdCustomer() == this.currentCustomerID);
+                        router.notifyListeners();
+                    }
                 }
             }
         );
@@ -258,9 +248,9 @@ public class UserPage extends VBox implements RouterListener{
         chargeActionBtn.setOnAction(e -> {
             if(!this.productData.isEmpty() && !(this.currentCustomerStatus.equals("None"))){
                 billDArray.stream()
-                    .filter(bill -> bill.getIdCustomer() == this.currentCustomerID)
-                    .findFirst()
-                    .ifPresent(bill -> bill.setBillFixed(true));
+                .filter(bill -> bill.getIdCustomer() == this.currentCustomerID && !bill.isBillFixed())
+                .findFirst()
+                .ifPresent(bill -> bill.setBillFixed(true));
                 List<Bill> routerBills = router.getSystemBills();
                 routerBills.stream()
                     .filter(bill -> bill.getIdCustomer() == this.currentCustomerID)
@@ -282,7 +272,6 @@ public class UserPage extends VBox implements RouterListener{
         ObservableList<String> cartStringData = FXCollections.observableArrayList();
 
         // cart filtered string data 
-        // FilteredList<String>  cartFilteredStringData = new FilteredList<>(cartStringData, s->true);
 
         // copy cart data product to string filtered data
         cartFilteredData.forEach(p -> cartStringData.add(p.getProductName()));
@@ -338,19 +327,14 @@ public class UserPage extends VBox implements RouterListener{
         // right container
         VBox rightContainer = new VBox();
         rightContainer.getChildren().addAll(rightContainerHeader, billListView, saveBillLayout, chargeLayout);
-        // VBox.setVgrow(rightContainer.getChildren().get(1), Priority.ALWAYS);
         rightContainer.prefWidthProperty().bind(stage.widthProperty().divide(2));
         rightContainer.prefHeightProperty().bind(stage.heightProperty());
 
         HBox content = new HBox();
-        content.getChildren().addAll(checkButton, leftContainer, rightContainer);
+        content.getChildren().addAll(leftContainer, rightContainer);
         content.prefHeightProperty().bind(stage.heightProperty());
 
         getChildren().addAll(content);
-        // setPadding(new Insets(10));
-        // setSpacing(10);
-        // prefHeightProperty().bind(stage.heightProperty());
-        // this.setAlignment(Pos.CENTER);
     }
 
     @Override
