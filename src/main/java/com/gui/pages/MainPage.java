@@ -82,7 +82,7 @@ public class MainPage extends VBox {
         logoGIFPane.getChildren().add(logoGIFView);
 
         // Load the GIF image on a separate thread
-        Thread thread = new Thread(() -> {
+        Thread loadGifThread = new Thread(() -> {
             Image preloadedGifImage = null;
             try {
                 File file = new File("../src/main/java/com/gui/components/holaLogo.gif");
@@ -93,8 +93,8 @@ public class MainPage extends VBox {
             }
             logoGIFView.setImage(preloadedGifImage);
         });
-        thread.setDaemon(true);
-        thread.start();
+        loadGifThread.setDaemon(true);
+        loadGifThread.start();
 
         // Set NIM and Nama
         Label autLabel = new Label(" Author:");
@@ -126,7 +126,7 @@ public class MainPage extends VBox {
         waktu.setText(getCurrentTime());
 
         // Create a task for updating the time label
-        Task<Void> task = new Task<Void>() {
+        Task<Void> updateTimeTask = new Task<Void>() {
             @Override
             protected Void call() {
                 while (true) {
@@ -148,7 +148,7 @@ public class MainPage extends VBox {
         };
 
         // Start the task in a new thread
-        new Thread(task).start();
+        new Thread(updateTimeTask).start();
 
         // Membuat objek GridPane untuk tanggal dan waktu
         GridPane jamLayout = new GridPane();

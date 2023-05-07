@@ -109,70 +109,72 @@ public class PageSettings extends VBox {
             Label label,
             Router router
         ) {
-        File[] files = this.databaseDirectory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                String fileName = file.getName();
-                String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-                // Check if file name and extension match
-                if (fileName.startsWith("systemProducts")) {
-                    router.restoreSystemProducts(this.processParsing(Product.class, fileExtension, file.getAbsolutePath()));
-
-                } else if (fileName.startsWith("systemPayments")) {
-                    router.restoreSystemPayments(this.processParsing(Payment.class, fileExtension, file.getAbsolutePath()));
-                } else if (fileName.startsWith("systemBills")) {
-                    router.restoreSystemBills(this.processParsing(Bill.class, fileExtension, file.getAbsolutePath()));
-                } else if (fileName.startsWith("systemMembers")) {
-                    router.restoreSystemMembers(this.processParsing(Member.class, fileExtension, file.getAbsolutePath()));
-                } else if (fileName.startsWith("systemVIPs")) {
-                    router.restoreSystemVIPs(this.processParsing(VIP.class, fileExtension, file.getAbsolutePath()));
-                } 
-                else if (fileName.startsWith("inventory")) {
-                    Inventory parsedInventory = null;
-                    switch (fileExtension) {
-                        case "json":
-                            Parseable jsonParser = new ParserJSON(file.getAbsolutePath());
-                            parsedInventory = (Inventory) jsonParser.readData(Inventory.class);
-                            break;
-                        case "xml":
-                            Parseable xmlParser = new ParserXML(file.getAbsolutePath());
-                            parsedInventory = (Inventory) xmlParser.readData(Inventory.class);
-                            break;
-                        case "obj":
-                            Parseable objParser = new ParserOBJ(file.getAbsolutePath());
-                            parsedInventory = (Inventory) objParser.readData(Inventory.class);
-                            break;
-
+            if (this.databaseDirectory != null) {
+                File[] files = this.databaseDirectory.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        String fileName = file.getName();
+                        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        
+                        // Check if file name and extension match
+                        if (fileName.startsWith("systemProducts")) {
+                            router.restoreSystemProducts(this.processParsing(Product.class, fileExtension, file.getAbsolutePath()));
+                        } else if (fileName.startsWith("systemPayments")) {
+                            router.restoreSystemPayments(this.processParsing(Payment.class, fileExtension, file.getAbsolutePath()));
+                        } else if (fileName.startsWith("systemBills")) {
+                            router.restoreSystemBills(this.processParsing(Bill.class, fileExtension, file.getAbsolutePath()));
+                        } else if (fileName.startsWith("systemMembers")) {
+                            router.restoreSystemMembers(this.processParsing(Member.class, fileExtension, file.getAbsolutePath()));
+                        } else if (fileName.startsWith("systemVIPs")) {
+                            router.restoreSystemVIPs(this.processParsing(VIP.class, fileExtension, file.getAbsolutePath()));
+                        } 
+                        else if (fileName.startsWith("inventory")) {
+                            Inventory parsedInventory = null;
+                            switch (fileExtension) {
+                                case "json":
+                                    Parseable jsonParser = new ParserJSON(file.getAbsolutePath());
+                                    parsedInventory = (Inventory) jsonParser.readData(Inventory.class);
+                                    break;
+                                case "xml":
+                                    Parseable xmlParser = new ParserXML(file.getAbsolutePath());
+                                    parsedInventory = (Inventory) xmlParser.readData(Inventory.class);
+                                    break;
+                                case "obj":
+                                    Parseable objParser = new ParserOBJ(file.getAbsolutePath());
+                                    parsedInventory = (Inventory) objParser.readData(Inventory.class);
+                                    break;
+                            }
+                            router.getInventory().getStorage().clear();
+                            router.getInventory().getStorage().addAll(parsedInventory.getStorage());
+                        }
                     }
-                    router.getInventory().getStorage().clear();
-                    router.getInventory().getStorage().addAll(parsedInventory.getStorage());
+                    router.notifyListeners();
                 }
             }
-        }
 
-        System.out.println("------------------Payments------------------");
-        for (Payment payment : router.getSystemPayments()) {
-            System.out.println(payment.toString());
-        }
-        System.out.println("------------------Bills------------------");
-        for (Bill bill : router.getSystemBills()) {
-            System.out.println(bill.toString());
-        }
-        System.out.println("------------------Members------------------");
-        for (Member bill : router.getSystemMembers()) {
-            System.out.println(bill.toString());
-        }
-        System.out.println("------------------Products------------------");
-        for (Product bill : router.getSystemProducts()) {
-            System.out.println(bill.toString());
-        }
-        System.out.println("------------------VIPs------------------");
-        for (VIP bill : router.getSystemVIPs()) {
-            System.out.println(bill.toString());
-        }
-        System.out.println("------------------Inventory------------------");
-        System.out.println(router.getInventory());
+        // System.out.println("------------------Payments------------------");
+        // for (Payment payment : router.getSystemPayments()) {
+        //     System.out.println(payment.toString());
+        // }
+        // System.out.println("------------------Bills------------------");
+        // for (Bill bill : router.getSystemBills()) {
+        //     System.out.println(bill.toString());
+        // }
+        // System.out.println("------------------Members------------------");
+        // for (Member bill : router.getSystemMembers()) {
+        //     System.out.println(bill.toString());
+        // }
+        // System.out.println("------------------Products------------------");
+        // for (Product bill : router.getSystemProducts()) {
+        //     System.out.println(bill.toString());
+        // }
+        // System.out.println("------------------VIPs------------------");
+        // for (VIP bill : router.getSystemVIPs()) {
+        //     System.out.println(bill.toString());
+        //     System.out.println(bill.getPaymentHistory().toString());
+        // }
+        // System.out.println("------------------Inventory------------------");
+        // System.out.println(router.getInventory());
 
         this.databaseReloadText = "";
         label.setText(this.databaseReloadText);
@@ -182,7 +184,6 @@ public class PageSettings extends VBox {
         Parseable parserOut = null;
         String ext = "";
         switch (this.outputDatabaseType) {
-            // TODO: change this to correlated reference list objects
             case "JSON":
                 parserOut = new ParserJSON(this.pathLabel);
                 ext = ".json";
