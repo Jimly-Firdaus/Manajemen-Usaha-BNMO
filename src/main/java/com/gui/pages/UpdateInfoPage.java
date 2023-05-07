@@ -123,7 +123,11 @@ public class UpdateInfoPage extends Stage {
                         c.setName(name);
                         c.setPhoneNumber(phone);
                         if (level.equals("VIP")) {
-                            storeVIP.add(c.upgradeToVIP(name, phone));
+                            VIP cVIP = c.upgradeToVIP(name, phone);
+                            cVIP.setPaymentHistory(c.getPaymentHistory());
+                            cVIP.setPoint(c.getPoint());
+                            cVIP.setDeactivate(c.isDeactivate());
+                            storeVIP.add(cVIP);
                             memberIterator.remove();
                         }
                         isMember = true;
@@ -139,7 +143,11 @@ public class UpdateInfoPage extends Stage {
                             c.setName(name);
                             c.setPhoneNumber(phone);
                             if (level.equals("Member")) {
-                                storeMember.add(new Member(userId, name, phone));
+                                Member m = new Member(userId, name, phone);
+                                m.setPaymentHistory(c.getPaymentHistory());
+                                m.setPoint(c.getPoint());
+                                m.setDeactivate(c.isDeactivate());
+                                storeMember.add(m);
                                 vipIterator.remove();
                             }
                             router.notifyListeners();
