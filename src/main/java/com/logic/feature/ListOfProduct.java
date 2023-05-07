@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.*;
 import lombok.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
