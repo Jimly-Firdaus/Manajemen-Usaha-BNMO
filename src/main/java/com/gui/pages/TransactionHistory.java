@@ -20,6 +20,8 @@ import com.logic.store.ParserJSON;
 import com.logic.store.ParserXML;
 import com.logic.store.ParserOBJ;
 import com.logic.feature.Bill;
+import com.logic.feature.Customer;
+import com.logic.feature.Inventory;
 
 public class TransactionHistory extends VBox {
 
