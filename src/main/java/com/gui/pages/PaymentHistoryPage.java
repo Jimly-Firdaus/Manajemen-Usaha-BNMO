@@ -125,14 +125,7 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
         paymentBox.getChildren().add(paymentTable);
         paymentBox.setPadding(new Insets(20, 20, 20, 20));
 
-        BaseButton backButton = new BaseButton("Back");
-        
-        HBox backHLayout = new HBox(backButton);
-        backHLayout.setAlignment(Pos.BOTTOM_RIGHT);
-        backHLayout.setPadding(new Insets(0, 20, 20, 20));
-
         container.setCenter(paymentBox);
-        container.setBottom(backHLayout);
 
         // Append to VBox    
         getChildren().addAll(container);
