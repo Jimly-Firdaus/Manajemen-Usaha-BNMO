@@ -29,6 +29,7 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
 
     private TableView<Payment> paymentTable;
     private ObservableList<Payment> payments = FXCollections.observableArrayList();
+    private List<Integer> userIds;
     private Stage stage;
     private Router router;
     private ComboBox<Integer> userIDComboBox = new ComboBox<>();
@@ -63,27 +64,10 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
         paymentBox.setSpacing(10);
 
         Label userIDLabel = new Label("User ID: ");
-        userIDLabel.setStyle (
-            "-fx-font-size = 16px;"
-        );
 
-        // SAMPLE (List of Payments made by Many Users)
-        List<Payment> sample = new ArrayList<>();
-        // Add sample payment data to the table
-        List<Product> products1 = new ArrayList<>();
-        products1.add(new Product(1, "Product 1", 10, 10.0f, "Category 1"));
-        products1.add(new Product(1, "Product 2", 15, 15.0f, "Category 1"));
-        Payment payment1 = new Payment(1, products1, 25);
-
-        List<Product> products2 = new ArrayList<>();
-        products2.add(new Product(2, "Product 3", 20, 20.0f, "Category 2"));
-        products2.add(new Product(3, "Product 4", 30, 25.0f, "Category 2"));
-        Payment payment2 = new Payment(2, products2, 75);
-        sample.add(payment1);
-        sample.add(payment2);
-
-        List<Integer> userIds = new ArrayList<>();
-        for (Payment p : sample) {
+        userIds = new ArrayList<>();
+        List<Payment> paymentList = router.getSystemPayments();
+        for (Payment p : paymentList) {
             int userId = p.getUserID();
             if (!userIds.contains(userId)) {
                 userIds.add(userId);
@@ -99,7 +83,7 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
                 payments.clear();
                 // Add only the payments corresponding to the selected user ID
                 // TODO: change to router.getSystemPayments()
-                for (Payment p : sample) {
+                for (Payment p : paymentList) {
                     if (p.getUserID() == selectedUserId) {
                         payments.add(p);
                     }
@@ -124,6 +108,8 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
         TableColumn<Payment, String> itemsColumn = new TableColumn<>("Items");
         itemsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBoughtItems().toString()));
 
+        // Custom TableCell to display products in different rows
+        
         TableColumn<Payment, Float> totalPriceColumn = new TableColumn<>("Total Price");
         totalPriceColumn.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getTotalPrice()).asObject());
 
@@ -155,11 +141,15 @@ public class PaymentHistoryPage extends VBox implements RouterListener {
 
     @Override
     public void onResourceUpdate() {
+        this.userIds.clear();
         this.payments.clear();
         List<Payment> storedPayments = this.router.getSystemPayments();
         for (Payment p : storedPayments) {
+            this.userIds.add(p.getUserID());
             this.payments.add(p);
         }
+        ObservableList<Integer> newItems = FXCollections.observableArrayList(this.userIds);
+        this.userIDComboBox.setItems(newItems);
         this.paymentTable.refresh();
     }
 }
