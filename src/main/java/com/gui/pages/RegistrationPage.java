@@ -144,6 +144,7 @@ public class RegistrationPage extends VBox {
             // Clear the input field
             nameField.clear();
             phoneField.clear();
+            idField.clear();
         });
 
         // Append to VBox    
