@@ -45,19 +45,26 @@ public class RegistrationPage extends VBox {
         gridPane.setHgap(5);
 
         // Create labels and text fields for name and phone number input
+        Label idLabel = new Label("ID: ");
+        idLabel.setFont(textFont);
+        gridPane.add(idLabel, 0, 0);
+
+        TextField idField = new TextField();
+        gridPane.add(idField, 1, 0);
+
         Label nameLabel = new Label("Name:");
         nameLabel.setFont(textFont);
-        gridPane.add(nameLabel, 0, 0);
+        gridPane.add(nameLabel, 0, 1);
 
         TextField nameField = new TextField();
-        gridPane.add(nameField, 1, 0);
+        gridPane.add(nameField, 1, 1);
 
         Label phoneLabel = new Label("Phone Number:");
         phoneLabel.setFont(textFont);
-        gridPane.add(phoneLabel, 0, 1);
+        gridPane.add(phoneLabel, 0, 2);
 
         TextField phoneField = new TextField();
-        gridPane.add(phoneField, 1, 1);
+        gridPane.add(phoneField, 1, 2);
 
         // Create a HBox container and add the GridPane to it
         HBox inputHLayout = new HBox(gridPane);
@@ -84,8 +91,8 @@ public class RegistrationPage extends VBox {
         VBox container = new VBox();
         container.getChildren().addAll(titleHLayout, inputHLayout, submitHLayout, backHLayout);
 
-        VBox.setMargin(titleHLayout, new Insets(200, 0, 35, 0));
-        VBox.setMargin(submitHLayout, new Insets(15, 0, 75, 0));
+        VBox.setMargin(titleHLayout, new Insets(160, 0, 35, 0));
+        VBox.setMargin(submitHLayout, new Insets(15, 0, 20, 0));
         VBox.setMargin(backHLayout, new Insets(95, 30, 0, 0));
 
         // Submit Button
