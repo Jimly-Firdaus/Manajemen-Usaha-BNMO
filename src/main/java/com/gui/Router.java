@@ -80,9 +80,7 @@ public class Router implements PageSwitcher {
 
     public void notifyListeners() {
         for (RouterListener listener : listeners) {
-            // if (listener != null) {
-                listener.onResourceUpdate();
-            // }
+            listener.onResourceUpdate();
         }
     }
 
@@ -115,6 +113,7 @@ public class Router implements PageSwitcher {
     public Node gotoUserInfosPage() {
         this.pageUserInfos = new UserInfosPage(this, this.stage);
         this.listeners.add(pageUserInfos);
+        notifyListeners();
         this.pageUserInfos.setPrefSize(1080, 608);
         return this.pageUserInfos;
     }
@@ -122,6 +121,7 @@ public class Router implements PageSwitcher {
     public Node gotoMembershipDeactivationPage() {
         this.pageMembershipDeactivation = new MembershipDeactivationPage(this, this.stage);
         this.listeners.add(pageMembershipDeactivation);
+        notifyListeners();
         this.pageMembershipDeactivation.setPrefSize(1080, 608);
         return this.pageMembershipDeactivation;
     }
@@ -129,6 +129,7 @@ public class Router implements PageSwitcher {
     public Node gotoUserPage(){
         this.pageUser = new UserPage(this, this.stage);
         this.listeners.add(pageUser);
+        notifyListeners();
         this.pageUser.setPrefSize(1080, 608);
         return this.pageUser;
     }
@@ -142,6 +143,7 @@ public class Router implements PageSwitcher {
     public Node gotoInventoryPage(){ 
         this.pageInventory = new InventoryManagement(this, this.stage); 
         this.listeners.add(pageInventory);
+        notifyListeners();
         this.pageInventory.setPrefSize(1080, 608);
         return this.pageInventory;
     }
@@ -149,6 +151,7 @@ public class Router implements PageSwitcher {
     public Node gotoPaymentPage(){  
         this.pagePayment = new PaymentPage(this, this.stage);
         this.listeners.add(pagePayment);
+        notifyListeners();
         this.pagePayment.setPrefSize(1080, 608);
         return this.pagePayment;
     }
@@ -156,6 +159,7 @@ public class Router implements PageSwitcher {
     public Node gotoPaymentHistoryPage(){  
         this.pagePaymentHistory = new PaymentHistoryPage(this, this.stage);
         this.listeners.add(pagePaymentHistory);
+        notifyListeners();
         this.pagePaymentHistory.setPrefSize(1080, 608);
         return this.pagePaymentHistory;
     }
