@@ -39,6 +39,7 @@ public class Router implements PageSwitcher {
     private PageSettings pageSettings;
     private InventoryManagement pageInventory;
     private UserPage pageUser;
+    private PaymentPage pagePayment;
     private PaymentHistoryPage pagePaymentHistory;
 
     // System Data
@@ -99,6 +100,7 @@ public class Router implements PageSwitcher {
         this.pageMembershipDeactivation = new MembershipDeactivationPage(this, this.stage);
         this.pageUser = new UserPage(this, this.stage);
         this.pageInventory = new InventoryManagement(this, this.stage);
+        this.pagePayment = new PaymentPage(this, this.stage);
         this.pagePaymentHistory = new PaymentHistoryPage(this, this.stage);
         this.listeners.add(pagePaymentHistory);
         this.listeners.add(pageInventory);
@@ -146,6 +148,11 @@ public class Router implements PageSwitcher {
     public Node gotoInventoryPage(){  
         this.pageInventory.setPrefSize(1080, 608);
         return this.pageInventory;
+    }
+
+    public Node gotoPaymentPage(){  
+        this.pagePayment.setPrefSize(1080, 608);
+        return this.pagePayment;
     }
 
     public Node gotoPaymentHistoryPage(){  

@@ -59,11 +59,13 @@ public class Main extends Application {
         halaman6.setOnAction(event -> createNewTab("User Page"));
         MenuItem halaman7 = new MenuItem("Inventory Management");
         halaman7.setOnAction(event -> createNewTab("Inventory Management"));
-        MenuItem halaman8 = new MenuItem("Payment History");
-        halaman8.setOnAction(event -> createNewTab("Payment History"));
-        MenuItem halaman9 = new MenuItem("Settings");
-        halaman9.setOnAction(event -> createNewTab("Settings"));
-        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6, halaman7, halaman8, halaman9);
+        MenuItem halaman8 = new MenuItem("Payment");
+        halaman8.setOnAction(event -> createNewTab("Payment"));
+        MenuItem halaman9 = new MenuItem("Payment History");
+        halaman9.setOnAction(event -> createNewTab("Payment History"));
+        MenuItem halaman10 = new MenuItem("Settings");
+        halaman10.setOnAction(event -> createNewTab("Settings"));
+        halamanMenu.getItems().addAll(halaman1, halaman2, halaman3, halaman4, halaman5, halaman6, halaman7, halaman8, halaman9, halaman10);
         menuBar.getMenus().add(halamanMenu);
         menuBar.setPadding(new Insets(10));
 
@@ -106,6 +108,9 @@ public class Main extends Application {
                 break;
             case "Inventory Management":
                 tab.setContent(router.gotoInventoryPage());
+                break;
+            case "Payment":
+                tab.setContent(router.gotoPaymentPage());
                 break;
             case "Payment History":
                 tab.setContent(router.gotoPaymentHistoryPage());

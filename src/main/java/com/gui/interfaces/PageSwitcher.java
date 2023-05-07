@@ -11,5 +11,6 @@ public interface PageSwitcher {
     Node gotoUserPage();
     Node gotoSettingsPage();
     Node gotoInventoryPage();
+    Node gotoPaymentPage();
     Node gotoPaymentHistoryPage();
 }
