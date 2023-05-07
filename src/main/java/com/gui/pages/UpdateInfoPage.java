@@ -3,6 +3,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,7 +18,7 @@ import javafx.collections.ObservableList;
 import com.gui.Router;
 import com.gui.components.*;
 
-public class UpdateInfoPage extends VBox {
+public class UpdateInfoPage extends Stage {
     private Stage stage;
 
     public UpdateInfoPage(
@@ -83,17 +84,21 @@ public class UpdateInfoPage extends VBox {
                         "-fx-pref-width: 250px"
         );
 
-        BaseButton backButton = new BaseButton("Back");
-        HBox backHLayout = new HBox(backButton);
-        backHLayout.setAlignment(Pos.BOTTOM_RIGHT);
+        BaseButton saveButton = new BaseButton("Back");
+        saveButton.setOnAction(
+            // TODO: Save the data changes
+            event -> close()
+        );
+        HBox saveHLayout = new HBox(saveButton);
+        saveHLayout.setAlignment(Pos.BOTTOM_RIGHT);
 
         // Create a VBox as a container
         VBox container = new VBox();
-        container.getChildren().addAll(titleHLayout, inputHLayout, submitHLayout, backHLayout);
+        container.getChildren().addAll(titleHLayout, inputHLayout, submitHLayout, saveHLayout);
 
-        VBox.setMargin(titleHLayout, new Insets(165, 0, 35, 0));
-        VBox.setMargin(submitHLayout, new Insets(15, 0, 75, 0));
-        VBox.setMargin(backHLayout, new Insets(105, 30, 0, 0));
+        VBox.setMargin(titleHLayout, new Insets(80, 0, 35, 0));
+        VBox.setMargin(submitHLayout, new Insets(15, 0, 0, 0));
+        VBox.setMargin(saveHLayout, new Insets(65, 30, 0, 0));
 
         // Handle the button click event to save the member's information
         submitButton.setOnAction(event -> {
@@ -106,9 +111,9 @@ public class UpdateInfoPage extends VBox {
             nameField.clear();
             phoneField.clear();
         });
-
-        // Append to VBox    
-        getChildren().addAll(container);
-        this.setAlignment(Pos.CENTER);
+ 
+        // Set the scene of the popup window
+        Scene scene = new Scene(container, 608, 405);
+        setScene(scene);
     }
 }

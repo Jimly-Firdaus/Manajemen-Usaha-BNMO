@@ -127,11 +127,6 @@ public class Router implements PageSwitcher {
         return this.pageUserInfos;
     }
 
-    public Node gotoUpdateInfoPage() {
-        this.pageUpdateInfo.setPrefSize(1080, 608);
-        return this.pageUpdateInfo;
-    }
-
     public Node gotoMembershipDeactivationPage() {
         this.pageMembershipDeactivation.setPrefSize(1080, 608);
         return this.pageMembershipDeactivation;

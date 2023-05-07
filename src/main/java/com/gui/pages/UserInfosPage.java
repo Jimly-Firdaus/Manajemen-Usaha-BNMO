@@ -84,7 +84,12 @@ public class UserInfosPage extends VBox implements RouterListener {
             "-fx-border-radius: 5px;" +
             "-fx-background-radius: 5px;"
         );
-        // TODO: When the updateButton is clicked, user go to updateInfoPage
+        updateButton.setOnAction(
+            event -> {
+                UpdateInfoPage pageUpdateInfo = new UpdateInfoPage(router, stage);
+                pageUpdateInfo.show();
+            }
+        );
 
         BaseButton backButton = new BaseButton("Back");
         HBox backHLayout = new HBox();

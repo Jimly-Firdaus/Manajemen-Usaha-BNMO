@@ -7,7 +7,6 @@ public interface PageSwitcher {
     Node gotoPageLaporan();
     Node gotoRegistrationPage();
     Node gotoUserInfosPage();
-    Node gotoUpdateInfoPage();
     Node gotoMembershipDeactivationPage();
     Node gotoUserPage();
     Node gotoSettingsPage();
