@@ -14,21 +14,25 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.List;
 
 import com.gui.Router;
+import com.gui.interfaces.RouterListener;
 import com.gui.components.*;
 import com.logic.feature.*;
 
-public class MembershipDeactivationPage extends VBox {
+public class MembershipDeactivationPage extends VBox implements RouterListener {
 
     private TableView<Member> userTable;
     private ObservableList<Member> users = FXCollections.observableArrayList();
     private Stage stage;
+    private Router router;
 
     public MembershipDeactivationPage(
             Router router,
             Stage stage) {
         this.stage = stage;
+        this.router = router;
         
         BorderPane container = new BorderPane();
 
@@ -65,10 +69,10 @@ public class MembershipDeactivationPage extends VBox {
         userTable = new TableView<>();
 
         // Sample
-        Member member1 = new Member(1, "abc", "123");
-        VIP member2 = new VIP(2, "cde", "456");
+        // Member member1 = new Member(1, "abc", "123");
+        // VIP member2 = new VIP(2, "cde", "456");
 
-        users.addAll(member1, member2);
+        // users.addAll(member1, member2);
         userTable.getColumns().addAll(userIDColumn, nameColumn, phoneNumberColumn);
         
         userTable.setItems(users);
@@ -105,4 +109,15 @@ public class MembershipDeactivationPage extends VBox {
         getChildren().addAll(container);
         this.setAlignment(Pos.CENTER);
     }
+
+    @Override
+    public void onResourceUpdate() {
+        List<Member> systemMember = this.router.getSystemMembers();
+        List<VIP> systemVIPs = this.router.getSystemVIPs();
+        this.users.clear();
+        this.users.addAll(systemMember);
+        this.users.addAll(systemVIPs);
+        this.userTable.refresh();
+    }
+
 }

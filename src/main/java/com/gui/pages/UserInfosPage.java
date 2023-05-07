@@ -62,10 +62,10 @@ public class UserInfosPage extends VBox implements RouterListener {
         userTable = new TableView<>();
 
         // Sample
-        Member member1 = new Member(1, "abc", "123");
-        VIP member2 = new VIP(2, "cde", "456");
+        // Member member1 = new Member(1, "abc", "123");
+        // VIP member2 = new VIP(2, "cde", "456");
 
-        users.addAll(member1, member2);
+        // users.addAll(member1, member2);
         userTable.getColumns().addAll(userIDColumn);
         
         userTable.setItems(users);

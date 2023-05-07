@@ -103,6 +103,7 @@ public class Router implements PageSwitcher {
         this.listeners.add(pagePaymentHistory);
         this.listeners.add(pageInventory);
         this.listeners.add(pageUserInfos);
+        this.listeners.add(pageMembershipDeactivation);
     }
 
     public Node gotoMainPage() {
