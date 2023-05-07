@@ -16,6 +16,7 @@ import java.util.List;
 import com.gui.interfaces.PageSwitcher;
 import com.gui.Router;
 import com.gui.components.*;
+import com.logic.feature.Customer;
 import com.logic.feature.Member;
 
 public class RegistrationPage extends VBox {
@@ -93,8 +94,11 @@ public class RegistrationPage extends VBox {
             String phone = phoneField.getText();
 
             List<Member> storeMember = router.getSystemMembers();
-
+            List<Customer> storeCustomer = router.getSystemCustomers();
             if (!name.equals("")) {
+                // Perform checking to system customer here, if exits then check if eligible to upgrade
+
+                // if eligible
                 storeMember.add(new Member(storeMember.size() + 1, name, phone));
                 System.out.println("pass here");
                 List<Member> res = router.getSystemMembers();
