@@ -193,7 +193,7 @@ public class PaymentPage extends VBox implements RouterListener {
                                     break;
                                 }
                             }
-                            totalPrice += boughtItem.getBasePrice();
+                            totalPrice += boughtItem.getBasePrice() * boughtItem.getCount();
                         }
                         Payment newPayment = new Payment(selectedBill.getIdCustomer(), boughtItems, totalPrice);
                         // Update user list
