@@ -81,9 +81,6 @@ public class ProductClick extends Stage {
             }
         }));
 
-        String numberProduct = textNumber.getText();
-        int value = Integer.parseInt(numberProduct);
-
         HBox productNumberLayout = new HBox(productNumberMethod, new Region(), textNumber);
         HBox.setHgrow(productNumberLayout.getChildren().get(1), Priority.ALWAYS);
         productNumberLayout.setStyle("-fx-padding: 10px 30px;");
@@ -100,6 +97,8 @@ public class ProductClick extends Stage {
         VBox root = new VBox(checkProduct, headerLayout, productNumberLayout);
 
         addBillBtn.setOnAction(e -> {
+            String numberProduct = textNumber.getText();
+        int value = Integer.parseInt(numberProduct);
             boolean check = this.updateStorage(productData, value, productName);
             if(check){
                 this.priceOnTotal = currentProduct.getBasePrice() * value;
