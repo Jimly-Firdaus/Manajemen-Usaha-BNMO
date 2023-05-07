@@ -13,22 +13,27 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.List;
 
 import com.gui.Router;
+import com.gui.interfaces.RouterListener;
 import com.gui.components.*;
 import com.logic.feature.*;
 
-public class UserInfosPage extends VBox {
+public class UserInfosPage extends VBox implements RouterListener {
 
     private TableView<Member> userTable;
     private ObservableList<Member> users = FXCollections.observableArrayList();
+    // private ObservableList<VIP> vips = FXCollections.observableArrayList();
     private Stage stage;
+    private Router router;
 
     public UserInfosPage(
             Router router,
             Stage stage) {
         this.stage = stage;
-        
+        this.router = router;
+
         BorderPane container = new BorderPane();
 
         // Create a label for the title of the page
@@ -95,6 +100,16 @@ public class UserInfosPage extends VBox {
         // Append to VBox    
         getChildren().addAll(container);
         this.setAlignment(Pos.CENTER);
+    }
+
+    @Override
+    public void onResourceUpdate() {
+        List<Member> systemMember = this.router.getSystemMembers();
+        List<VIP> systemVIPs = this.router.getSystemVIPs();
+        this.users.clear();
+        this.users.addAll(systemMember);
+        this.users.addAll(systemVIPs);
+        this.userTable.refresh();
     }
 }
 
