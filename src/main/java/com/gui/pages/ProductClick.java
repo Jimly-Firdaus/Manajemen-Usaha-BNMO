@@ -1,5 +1,6 @@
 package com.gui.pages;
 
+import com.gui.Router;
 import com.gui.components.BaseButton;
 import com.logic.feature.Inventory;
 import com.logic.feature.Product;
@@ -25,17 +26,26 @@ import lombok.Getter;
 
 @Getter
 public class ProductClick extends Stage {
-    private float priceOnTotal = 0.0f;
+    private float priceOnTotal;
 
-    public ProductClick(String productName, Inventory inventory, ObservableList<Product> cartData){
+    private Product currentProduct = new Product();
+
+    private Router router;
+
+    public ProductClick(String productName, ObservableList<Product> productData, ObservableList<Product> cartData){
+
         BaseButton cancelBtn = new BaseButton("Cancel");
         BaseButton addBillBtn = new BaseButton("Add to Bill");
+        BaseButton checkProduct = new BaseButton("Checking");
 
         float basePrice = 0.0f;
-        Product currentProduct = inventory.searchInventoryProduct(productName);
+
+
+        Product currentProduct = productData.filtered(p -> p.getProductName().equals(productName)).get(0);
 
         if(currentProduct != null){
             basePrice = currentProduct.getBasePrice();
+            System.out.println(basePrice);
         }
 
         String basePriceString = Float.toString(basePrice);
@@ -58,7 +68,7 @@ public class ProductClick extends Stage {
         Label productNumberMethod = new Label("Product Number : ");
 
         TextField textNumber = new TextField();
-        textNumber.setText("0");
+        textNumber.setText("1");
         textNumber.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
             if (newText.isEmpty() || newText == null) {
@@ -78,20 +88,53 @@ public class ProductClick extends Stage {
         HBox.setHgrow(productNumberLayout.getChildren().get(1), Priority.ALWAYS);
         productNumberLayout.setStyle("-fx-padding: 10px 30px;");
 
-        VBox root = new VBox(headerLayout, productNumberLayout);
+
+        checkProduct.setOnAction(
+            e->{
+                System.out.println(currentProduct.getProductName());
+            }
+        );
+
+        cancelBtn.setOnAction(e->close());
+
+        VBox root = new VBox(checkProduct, headerLayout, productNumberLayout);
+
+        addBillBtn.setOnAction(e -> {
+            boolean check = this.updateStorage(productData, value, productName);
+            if(check){
+                this.priceOnTotal = currentProduct.getBasePrice() * value;
+                System.out.println(this.getPriceOnTotal());
+                Product cartProduct = new Product(value, currentProduct.getProductName(), currentProduct.getBasePrice(), currentProduct.getBoughtPrice(), currentProduct.getCategory());
+                cartData.add(cartProduct);
+                close();
+                // If there was an error label in the root, remove it
+                root.getChildren().removeIf(node -> node instanceof Label && ((Label) node).getText().equals("The amount is not enough"));
+            }else{
+                Label errorLabel = new Label("The amount is not enough");
+                // If there was already an error label in the root, remove it before adding the new one
+                root.getChildren().removeIf(node -> node instanceof Label && ((Label) node).getText().equals("The amount is not enough"));
+                root.getChildren().add(errorLabel); // add errorLabel to the root
+            }
+        });
+    
         root.setAlignment(Pos.CENTER);
         
         // Set the scene of the popup window
         Scene scene = new Scene(root, 480, 108);
         setScene(scene);
+    }
 
-        cancelBtn.setOnAction(e->close());
-
-        addBillBtn.setOnAction(e -> {
-            this.priceOnTotal = currentProduct.getBasePrice() * value;
-            Product cartProduct = new Product(value, currentProduct.getProductName(), currentProduct.getBasePrice(), currentProduct.getBoughtPrice(), currentProduct.getCategory());
-            cartData.add(cartProduct);
-            close();
-        });
+    public boolean updateStorage(ObservableList<Product> products, int value, String productName){
+        for (Product p : products) {
+            if (p.getProductName().equals(productName)) {
+                if(p.getCount() - value < 0){
+                    return false;
+                }else{
+                    p.setCount(p.getCount() - value);
+                    break;
+                }
+            }
+        }
+        return true;
     }
 }
