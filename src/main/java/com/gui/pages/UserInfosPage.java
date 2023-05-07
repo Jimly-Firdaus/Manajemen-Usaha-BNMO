@@ -7,6 +7,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
@@ -72,7 +73,8 @@ public class UserInfosPage extends VBox implements RouterListener {
         userTable.widthProperty().addListener((source, oldWidth, newWidth) -> {
             userIDColumn.setPrefWidth(newWidth.doubleValue());
         });
-
+        
+        userTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         userBox.getChildren().add(userTable);
         userBox.setPadding(new Insets(20, 20, 20, 20));
 
@@ -86,7 +88,9 @@ public class UserInfosPage extends VBox implements RouterListener {
         );
         updateButton.setOnAction(
             event -> {
-                UpdateInfoPage pageUpdateInfo = new UpdateInfoPage(router, stage);
+                // Pass in the selected id for search inside update info page
+                Integer userId = userTable.getSelectionModel().getSelectedItem().getId();
+                UpdateInfoPage pageUpdateInfo = new UpdateInfoPage(router, userId, stage);
                 pageUpdateInfo.show();
             }
         );
