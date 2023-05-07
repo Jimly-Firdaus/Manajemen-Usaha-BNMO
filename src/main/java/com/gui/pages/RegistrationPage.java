@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.gui.Router;
+import com.gui.components.*;
+import com.logic.constant.Payment;
 import com.logic.feature.Customer;
 import com.logic.feature.Member;
 import com.logic.feature.VIP;
@@ -107,10 +109,17 @@ public class RegistrationPage extends VBox {
                     int userId = Integer.parseInt(id);
                     boolean isCustomer = false;
                     Iterator<Customer> customerIterator = storeCustomer.iterator();
+                    List<Payment> storePayments = router.getSystemPayments();
                     while (customerIterator.hasNext()) {
                         Customer c = customerIterator.next();
                         if (c.getId() == userId && c.getFirstPurchaseStatus()) {
-                            storeMember.add(c.upgradeToMember(name, phone));
+                            Member upgrade = c.upgradeToMember(name, phone);
+                            for (Payment p : storePayments) {
+                                if (p.getUserID() == c.getId()) {
+                                    upgrade.getPaymentHistory().add(p);
+                                }
+                            }
+                            storeMember.add(upgrade);
                             customerIterator.remove(); // Remove customer from storeCustomer list
                             isCustomer = true;
                             router.notifyListeners();

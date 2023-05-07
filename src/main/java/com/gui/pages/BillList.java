@@ -32,13 +32,16 @@ public class BillList extends Stage {
 
     private ObservableList<Bill> notFixedBillData = FXCollections.observableArrayList();
 
-    private Bill chooseBill = new Bill();
+    private Bill chooseBill;
+
+    private boolean isNew;
 
     private boolean cancelBtn;
 
     private boolean newBill;
     
     public BillList(ObservableList<Bill> systemBills){
+        this.chooseBill = new Bill();
         this.cancelBtn = false;
         this.newBill = false;
         this.notFixedBillData = systemBills.filtered(b -> !(b.isBillFixed()));
@@ -84,31 +87,7 @@ public class BillList extends Stage {
             }
         });
 
-        ContextMenu contextMenu = new ContextMenu();
-        MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(event -> {
-            String item = billListView.getSelectionModel().getSelectedItem();
-
-            this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
-            systemBills.removeIf(bill -> Integer.toString(bill.getIdCustomer()).equals(item));
-        });
-        contextMenu.getItems().add(deleteMenuItem);
-
-        billListView.setCellFactory(lv -> {
-            ListCell<String> cell = new ListCell<>();
-            cell.textProperty().bind(cell.itemProperty());
-            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                if (isNowEmpty) {
-                    cell.setContextMenu(null);
-                } else {
-                    cell.setContextMenu(contextMenu);
-                }
-            });
-            return cell ;
-        });
-
         billListView.setOnMouseClicked(event -> {
-            System.out.println("hello");
             if (event.getClickCount() == 2) {
                 String selectedItem = billListView.getSelectionModel().getSelectedItem();
                 this.chooseBill = this.notFixedBillData.filtered(bill -> Integer.toString(bill.getIdCustomer()).equals(selectedItem)).get(0);

@@ -2,7 +2,6 @@ package com.gui.pages;
 
 import com.gui.Router;
 import com.gui.components.BaseButton;
-import com.logic.feature.Inventory;
 import com.logic.feature.Product;
 
 import javafx.collections.ObservableList;
@@ -36,7 +35,6 @@ public class ProductClick extends Stage {
 
         BaseButton cancelBtn = new BaseButton("Cancel");
         BaseButton addBillBtn = new BaseButton("Add to Bill");
-        BaseButton checkProduct = new BaseButton("Checking");
 
         float basePrice = 0.0f;
 
@@ -45,7 +43,6 @@ public class ProductClick extends Stage {
 
         if(currentProduct != null){
             basePrice = currentProduct.getBasePrice();
-            System.out.println(basePrice);
         }
 
         String basePriceString = Float.toString(basePrice);
@@ -85,16 +82,9 @@ public class ProductClick extends Stage {
         HBox.setHgrow(productNumberLayout.getChildren().get(1), Priority.ALWAYS);
         productNumberLayout.setStyle("-fx-padding: 10px 30px;");
 
-
-        checkProduct.setOnAction(
-            e->{
-                System.out.println(currentProduct.getProductName());
-            }
-        );
-
         cancelBtn.setOnAction(e->close());
 
-        VBox root = new VBox(checkProduct, headerLayout, productNumberLayout);
+        VBox root = new VBox(headerLayout, productNumberLayout);
 
         addBillBtn.setOnAction(e -> {
             String numberProduct = textNumber.getText();
@@ -102,7 +92,6 @@ public class ProductClick extends Stage {
             boolean check = this.updateStorage(productData, value, productName);
             if(check){
                 this.priceOnTotal = currentProduct.getBasePrice() * value;
-                System.out.println(this.getPriceOnTotal());
                 Product cartProduct = new Product(value, currentProduct.getProductName(), currentProduct.getBasePrice(), currentProduct.getBoughtPrice(), currentProduct.getCategory());
                 cartData.add(cartProduct);
                 close();
