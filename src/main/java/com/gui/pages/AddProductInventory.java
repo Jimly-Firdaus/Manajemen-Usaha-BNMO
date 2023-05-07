@@ -1,6 +1,7 @@
 package com.gui.pages;
 
 import com.gui.components.BaseButton;
+import com.logic.feature.Product;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,9 +18,21 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import lombok.Getter;
 
+@Getter
 public class AddProductInventory extends Stage{
+
+    private Product product = new Product();
+
+    private boolean cancelBtn;
+
+    private boolean validProduct;
+
     public AddProductInventory(){
+
+        this.validProduct = false;
+        this.cancelBtn = false;
         BaseButton cancelBtn = new BaseButton("Cancel");
         BaseButton saveBtn = new BaseButton("Save");
         Label title = new Label("{Harga}");
@@ -99,12 +112,48 @@ public class AddProductInventory extends Stage{
 
         VBox root = new VBox(headerLayout, productNumberLayout, productNameLayout, productBasePriceLayout, productBoughtPriceLayout, productCategoryLayout);
 
+        cancelBtn.setOnAction(e->{
+            this.cancelBtn = true;
+            close();
+        });
+
+        saveBtn.setOnAction(
+            e->{
+                String numberText = textNumber.getText();
+                System.out.println(numberText);
+                int numberResult = 0;
+                if(numberText != null){
+                    numberResult = Integer.parseInt(numberText);
+                }
+                String productNameResult = textName.getText();
+                String basePriceText = basePrice.getText();
+                int basePriceResult = 0;
+                if(basePriceText != null){
+                    basePriceResult = Integer.parseInt(basePriceText);
+                }
+                String boughtPriceText = boughtPrice.getText();
+                int boughtPriceResult = 0;
+                if(boughtPriceText != null){
+                    boughtPriceResult = Integer.parseInt(boughtPriceText);
+                }
+                String productCategoryResult = category.getText();
+                if(numberText != null && (productNameResult != null) && basePriceText != null && boughtPriceText != null && productCategoryResult != null){
+                    Product tempProduct = new Product(numberResult, productNameResult, basePriceResult, boughtPriceResult, productCategoryResult);
+                    this.product = tempProduct;
+                    this.validProduct = true;
+                    close();
+                }else{
+                    Label errorLabel = new Label("Invalid product");
+                    root.getChildren().add(errorLabel);
+                }
+
+            }
+        );
+
         root.setAlignment(Pos.CENTER);
         
         // Set the scene of the popup window
         Scene scene = new Scene(root, 508, 308);
         setScene(scene);
-
-        cancelBtn.setOnAction(e->close());
     }
 }
