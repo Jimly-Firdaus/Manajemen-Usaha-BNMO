@@ -15,9 +15,7 @@ import javafx.geometry.Insets;
 import java.util.Iterator;
 import java.util.List;
 
-import com.gui.interfaces.PageSwitcher;
 import com.gui.Router;
-import com.gui.components.*;
 import com.logic.feature.Customer;
 import com.logic.feature.Member;
 import com.logic.feature.VIP;
@@ -85,18 +83,14 @@ public class RegistrationPage extends VBox {
                 "-fx-pref-width: 250px"
         );
 
-        // Back Button
-        BaseButton backButton = new BaseButton("Back");
-        HBox backHLayout = new HBox(backButton);
-        backHLayout.setAlignment(Pos.BOTTOM_RIGHT);
+    
 
         // Create a VBox as a container
         VBox container = new VBox();
-        container.getChildren().addAll(titleHLayout, inputHLayout, submitHLayout, backHLayout);
+        container.getChildren().addAll(titleHLayout, inputHLayout, submitHLayout);
 
-        VBox.setMargin(titleHLayout, new Insets(160, 0, 35, 0));
+        VBox.setMargin(titleHLayout, new Insets(35, 0, 35, 0));
         VBox.setMargin(submitHLayout, new Insets(15, 0, 20, 0));
-        VBox.setMargin(backHLayout, new Insets(95, 30, 0, 0));
 
         // Submit Button
         submitButton.setOnAction(event -> {
